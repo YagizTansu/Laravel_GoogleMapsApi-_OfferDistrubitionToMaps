@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\adminController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use App\Models\Ship;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +20,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/ships', function () {
+    $ships = Ship::get();
+    return view('ships',compact('ships'));
+})->name('ships');
+
+Route::group( ['middleware' => ['auth:sanctum', 'verified'],'prefix' =>'admin'], function () {
+    Route::resource('ships',adminController::class);
+});
