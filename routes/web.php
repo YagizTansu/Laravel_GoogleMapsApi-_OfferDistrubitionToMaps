@@ -5,17 +5,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ship;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -25,7 +14,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
     return view('ships',compact('ships'));
 })->name('ships');
 
-Route::group( ['middleware' => ['auth:sanctum', 'verified'],'prefix' =>'admin'], function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/ships', function () {
+    $ships = Ship::get();
+    return view('ships',compact('ships'));
+})->name('ships');
+
+Route::group( ['middleware' => ['auth:sanctum', 'verified','isAdmin'],'prefix' =>'admin'], function () {
     Route::get('ships/{id}',[adminController::class,'destroy'])->whereNumber('id')->name('ships.destroy');
     Route::resource('ships',adminController::class);
 });
