@@ -1,8 +1,5 @@
 <x-guest-layout>
     <x-jet-authentication-card>
-        <x-slot name="logo">
-            <x-jet-authentication-card-logo />
-        </x-slot>
 
         <x-jet-validation-errors class="mb-4" />
 
@@ -45,8 +42,10 @@
                 <x-jet-button class="ml-4">
                     {{ __('Log in') }}
                 </x-jet-button>
-                <a href="{{ route('register') }}" class="btn btn-warning ml-4 text-sm text-gray-700 underline">Register</a>
+                <a href="{{ route('register') }}"
+                    class="btn btn-warning ml-4 text-sm text-gray-700 underline">Register</a>
             </div>
         </form>
     </x-jet-authentication-card>
+
 </x-guest-layout>
