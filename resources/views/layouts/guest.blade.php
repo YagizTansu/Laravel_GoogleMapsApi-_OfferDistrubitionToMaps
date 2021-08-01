@@ -26,7 +26,7 @@
                 {{ $slot }}
             </div>
             <div class="col-6">
-                <i class="fas fa-font-awesome-logo-full"></i>
+
             </div>
         </div>
 
