@@ -45,7 +45,8 @@ class adminController extends Controller
         $ship->radius=$request->radius;
 
         $ship->save();
-         return redirect()->route('ships');
+
+         return redirect()-> route('ships.index')-> withSuccess('Adding Succesful');
     }
 
     /**
@@ -92,7 +93,7 @@ class adminController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('users')->where('id', '=', $id)->delete();
-        return redirect()->route('ships.index');
+        DB::table('ships')->where('id', '=', $id)->delete();
+        return redirect()->route('ships.index')-> withSuccess('Delete Succesful');
     }
 }

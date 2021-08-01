@@ -26,5 +26,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/ships', function () {
 })->name('ships');
 
 Route::group( ['middleware' => ['auth:sanctum', 'verified'],'prefix' =>'admin'], function () {
+    Route::get('ships/{id}',[adminController::class,'destroy'])->whereNumber('id')->name('ships.destroy');
     Route::resource('ships',adminController::class);
 });
