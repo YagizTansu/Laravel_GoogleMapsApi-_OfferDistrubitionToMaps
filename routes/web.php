@@ -17,10 +17,10 @@ use App\Models\Ship;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/ships', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
     $ships = Ship::get();
     return view('ships',compact('ships'));
 })->name('ships');
