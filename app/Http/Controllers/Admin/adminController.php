@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ship;
+use App\Http\Requests\ShipCreateRequest;
 
 class adminController extends Controller
 {
@@ -35,7 +36,7 @@ class adminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ShipCreateRequest $request)
     {
         $ship = new Ship;
         $ship->name=$request->name;
@@ -77,7 +78,7 @@ class adminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ShipCreateRequest $request, $id)
     {
         Ship::Where('id',$id)->update($request->except(['_method','_token']));
         return redirect()->route('ships.index');

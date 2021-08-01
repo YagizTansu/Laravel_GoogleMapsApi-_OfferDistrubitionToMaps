@@ -4,7 +4,16 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <form method="POST" action="{{ route('ships.store') }}" >
+                @if ($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        @foreach ($errors->all() as $error)
+                            <strong>
+                                <li>{{ $error }}</li>
+                            </strong>
+                        @endforeach
+                    </div>
+                @endif
+                <form method="POST" action="{{ route('ships.store') }}">
                     @csrf
                     <div class="form-group">
                         <label>Ship Name</label>
