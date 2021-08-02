@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ship;
 use App\Http\Requests\ShipCreateRequest;
+use Illuminate\Support\Facades\Auth;
 
 class adminController extends Controller
 {
@@ -39,6 +40,7 @@ class adminController extends Controller
     public function store(ShipCreateRequest $request)
     {
         $ship = new Ship;
+        $ship->user_id= Auth::id();
         $ship->name=$request->name;
         $ship->latitude=$request->latitude;
         $ship->longitude=$request->longitude;

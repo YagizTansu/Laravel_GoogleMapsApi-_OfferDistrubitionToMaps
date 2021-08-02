@@ -14,6 +14,7 @@ class ShipMigration extends Migration
     public function up()
     {
         Schema::create('ships', function (Blueprint $table) {
+            $table->string('user_id');
             $table->id();
             $table->string('name');
             $table->string('latitude');

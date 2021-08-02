@@ -22,6 +22,7 @@ class shipFactory extends Factory
     public function definition()
     {
         return [
+            'user_id' => $this->faker->numerify('#'),
             'name' => $this->faker->name(),
             "latitude" => $this->faker->latitude($min = -90, $max = 90),
             "longitude" => $this->faker->longitude($min = -180, $max = 180),
