@@ -12,12 +12,10 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-
 Route::group( ['middleware' => ['auth:sanctum', 'verified','isAdmin'],'prefix' =>'admin'], function () {
     Route::get('ships/{id}',[adminController::class,'destroy'])->whereNumber('id')->name('ships.destroy');
     Route::resource('ships',adminController::class);
 });
-
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/',[ShipController::class, 'show'])->name('ships');
 Route::middleware(['auth:sanctum', 'verified'])->get('/ships',[ShipController::class, 'show'])->name('ships');
