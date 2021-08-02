@@ -13,11 +13,11 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('ships') }}" :active="request()->routeIs('ships')">
-                        {{ __('ships') }}
+                        {{ __('Ships') }}
                     </x-jet-nav-link>
 
                     <x-jet-nav-link href="{{ route('trucks') }}" :active="request()->routeIs('trucks')">
-                        {{ __('trucks') }}
+                        {{ __('Trucks') }}
                     </x-jet-nav-link>
                 </div>
             </div>
