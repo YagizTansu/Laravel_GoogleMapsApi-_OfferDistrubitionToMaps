@@ -45,7 +45,6 @@ class adminController extends Controller
         $ship->latitude=$request->latitude;
         $ship->longitude=$request->longitude;
         $ship->radius=$request->radius;
-
         $ship->save();
 
          return redirect()-> route('ships.index')-> withSuccess('Adding Succesful');

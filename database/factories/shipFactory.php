@@ -1,7 +1,6 @@
 <?php
 
 namespace Database\Factories;
-
 use App\Models\Ship;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,7 +26,8 @@ class shipFactory extends Factory
             "latitude" => $this->faker->latitude($min = -90, $max = 90),
             "longitude" => $this->faker->longitude($min = -180, $max = 180),
             'radius' => $this->faker->numerify('#######'),
-
+            'price' =>  $this->faker->numberBetween($min = 1500, $max = 6000),
+            'currency_id' =>  $this->faker->numberBetween($min = 1, $max = 3),
         ];
     }
 }

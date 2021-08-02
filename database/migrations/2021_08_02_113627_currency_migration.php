@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ShipMigration extends Migration
+class CurrencyMigration extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class ShipMigration extends Migration
      */
     public function up()
     {
-        Schema::create('ships', function (Blueprint $table) {
-            $table->string('user_id');
+        Schema::create('currency', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->string('radius');
-            $table->integer('price');
-            $table->unsignedBigInteger('currency_id');
+            $table->string('code');
+            $table->string('symbol');
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ class ShipMigration extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ships');
+        //
     }
 }
