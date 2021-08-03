@@ -45,6 +45,9 @@ class adminController extends Controller
         $ship->latitude=$request->latitude;
         $ship->longitude=$request->longitude;
         $ship->radius=$request->radius;
+        $ship->price=$request->price;
+        $ship->currency_id=$request->currency_id;
+
         $ship->save();
 
          return redirect()-> route('ships.index')-> withSuccess('Adding Succesful');

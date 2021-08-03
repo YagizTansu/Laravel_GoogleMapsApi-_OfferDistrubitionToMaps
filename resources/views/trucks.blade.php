@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">Trucks</x-slot>
 
-    <p class="text-center fs-3">Truck Distrubition of Firm </p>
+    <p class="text-center fs-3">Truck Distribution of Firm </p>
     <div class="container">
         <div class="row">
 

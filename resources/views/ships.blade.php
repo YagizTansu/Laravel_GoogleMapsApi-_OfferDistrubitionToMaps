@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">Ships</x-slot>
 
-    <p class="text-center fs-3">Truck Distrubition of Firm </p>
+    <p class="text-center fs-3">Ship Distrubition of Firm </p>
     <div class="container">
         <div class="row">
 
@@ -15,35 +15,54 @@
                 </div>
             @endif
 
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    <strong>{{ session('success') }}</strong>
+                </div>
+            @endif
+
             <div class="col-md-10">
                 <div id="map"> </div>
             </div>
             <div class="col-md-2">
 
-                <form method="POST" action="{{ route('ships.store') }}">
+                <form method="POST" action="{{ route('ship-add') }}">
                     @csrf
                     <div class="form-group">
-                        <label>Truck Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Titanic"
-                            value="{{ old('name') }}">
+                        <label>Ship Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="ship name">
                     </div>
 
                     <div class="form-group">
                         <label>Latitude</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="34.45"
-                            value="{{ old('latitude') }}">
+                        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="34.45">
                     </div>
 
                     <div class="form-group">
                         <label>Longitude</label>
-                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="54.64"
-                            value="{{ old('longitude') }}">
+                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="54.64">
                     </div>
 
                     <div class="form-group">
                         <label>Radius</label>
-                        <input type="text" class="form-control" id="radius" name="radius" placeholder="3.67"
-                            value="{{ old('radius') }}">
+                        <input type="text" class="form-control" id="radius" name="radius" placeholder="3.67">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" class="form-control" id="price" name="price" placeholder="1000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Currency</label>
+                        <select class="form-select form-select-sm" name="currency_id"
+                            aria-label=".form-select-sm example">
+
+                            <option value="1">Dollar</option>
+                            <option value="2">Euro</option>
+                            <option value="3">Pound</option>
+                            <option value="4">TL</option>
+                        </select>
                     </div>
 
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Add</button></p>
@@ -56,10 +75,10 @@
     <div id="map"></div>
 
     <script>
-        function priceToColor(price) {
+        function priceToColor(min, max, price) {
 
             var r, g, b = 0;
-            if (price < 3575) {
+            if (price < ((min + max) / 2)) {
                 r = 255;
                 g = Math.round(5.1 * price);
             } else {
@@ -81,6 +100,9 @@
                 mapTypeId: "terrain",
             });
             var data = {!! json_encode($ships, JSON_HEX_TAG) !!};
+            var priceMax = {!! json_encode($priceMax, JSON_HEX_TAG) !!};
+            var priceMin = {!! json_encode($priceMin, JSON_HEX_TAG) !!};
+
 
             data.forEach(element => {
                 const marker = new google.maps.Marker({
@@ -89,18 +111,18 @@
                 });
 
                 const infowindow = new google.maps.InfoWindow({
-                    content: element.price.toString() + ' ' ,
+                    content: element.price.toString() + ' ',
                 });
                 marker.addListener("click", () => {
                     infowindow.open(marker.get("map"), marker);
                 });
 
                 const cityCircle = new google.maps.Circle({
-                    strokeColor: priceToColor(element.price),
+                    strokeColor: priceToColor(priceMax,priceMin,element.price),
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
-                    fillColor: priceToColor(element.price),
-                    fillOpacity: 0.30,
+                    fillColor: priceToColor(priceMax,priceMin,element.price),
+                    fillOpacity: 0.50,
                     map,
                     center: new google.maps.LatLng(element.latitude, element.longitude),
                     radius: element.radius * 0.05,

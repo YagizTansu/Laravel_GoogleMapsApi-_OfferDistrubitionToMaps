@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Ship;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ShipCreateRequest;
+use App\Models\Currency;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,24 @@ class ShipController extends Controller
     public function show(){
         //$ships = DB::table('ships')->where('user_id','=', Auth::id())->get();
         $ships=Ship::where('user_id','=', Auth::id())->with('currency')->get();
-        //dd($ships);
-        return view('ships',compact('ships'));
+        $priceMax=Ship::max('price');
+        $priceMin=Ship::min('price');
+        return view('ships',compact(['ships','priceMax','priceMin']));
+    }
+
+    public function add(ShipCreateRequest $request){
+
+        $ship = new Ship;
+        $ship->user_id= Auth::id();
+        $ship->name=$request->name;
+        $ship->latitude=$request->latitude;
+        $ship->longitude=$request->longitude;
+        $ship->radius=$request->radius;
+        $ship->price=$request->price;
+        $ship->currency_id=$request->currency_id;
+
+        $ship->save();
+
+         return redirect()-> route('ships')-> withSuccess('Adding Succesful');
     }
 }

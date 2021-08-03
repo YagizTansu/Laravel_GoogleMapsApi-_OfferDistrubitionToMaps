@@ -35,6 +35,23 @@
                         <input type="text" class="form-control" id="radius" name="radius" placeholder="3.67">
                     </div>
 
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" class="form-control" id="price" name="price" placeholder="1000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Currency</label>
+                        <select class="form-select form-select-sm" name="currency_id" aria-label=".form-select-sm example">
+                            <option value="1">Dollar</option>
+                            <option value="2">Euro</option>
+                            <option value="3">Pound</option>
+                            <option value="4">TL</option>
+                        </select>
+                    </div>
+
+
+
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Add</button></p>
 
                 </form>

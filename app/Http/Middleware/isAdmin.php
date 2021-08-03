@@ -19,6 +19,7 @@ class isAdmin
         if(auth()->user()->type !== 'admin'){
             return redirect()->route('ships');
         }
+
         return $next($request);
     }
 }
