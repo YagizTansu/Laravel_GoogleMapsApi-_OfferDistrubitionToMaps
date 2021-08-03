@@ -21,6 +21,7 @@
                         <th scope="col">radius</th>
                         <th scope="col">Price</th>
                         <th scope="col">Currency</th>
+                        <th scope="col">Currency</th>
                         <th scope="col">operation</th>
                     </tr>
                 </thead>
@@ -34,6 +35,7 @@
                             <td>{{ $ship->radius }}</td>
                             <td>{{ $ship->price }}</td>
                             <td>{{ $ship->currency_id }}</td>
+                            <td> <?php  echo $ship->currency_id ?> </td>
                             <td>
                                 <a href="{{ route('ships.edit', $ship->id) }}" class="btn btn-primary">edit</a>
                                 <a href="{{ route('ships.destroy', $ship->id) }}" class="btn btn-danger">delete</a>
