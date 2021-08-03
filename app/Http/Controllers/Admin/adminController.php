@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Currency;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ship;
 use App\Http\Requests\ShipCreateRequest;
@@ -28,7 +29,8 @@ class adminController extends Controller
      */
     public function create()
     {
-        return view('Admin.Ships.create');
+        $currency = Currency::get();
+        return view('Admin.Ships.create',compact('currency'));
     }
 
     /**

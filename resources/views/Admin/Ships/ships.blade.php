@@ -19,6 +19,8 @@
                         <th scope="col">latitude</th>
                         <th scope="col">longitude</th>
                         <th scope="col">radius</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Currency</th>
                         <th scope="col">operation</th>
                     </tr>
                 </thead>
@@ -30,6 +32,8 @@
                             <td>{{ $ship->latitude }}</td>
                             <td>{{ $ship->longitude }}</td>
                             <td>{{ $ship->radius }}</td>
+                            <td>{{ $ship->price }}</td>
+                            <td>{{ $ship->currency_id }}</td>
                             <td>
                                 <a href="{{ route('ships.edit', $ship->id) }}" class="btn btn-primary">edit</a>
                                 <a href="{{ route('ships.destroy', $ship->id) }}" class="btn btn-danger">delete</a>

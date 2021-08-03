@@ -32,7 +32,6 @@ class ShipController extends Controller
         $ship->currency_id=$request->currency_id;
 
         $ship->save();
-
          return redirect()-> route('ships')-> withSuccess('Adding Succesful');
     }
 }
