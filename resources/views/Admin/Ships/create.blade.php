@@ -42,11 +42,17 @@
 
                     <div class="form-group">
                         <label>Currency</label>
-                        <select class="form-select form-select-sm" name="currency_id" aria-label=".form-select-sm example">
-                            <option value="1">Dollar</option>
-                            <option value="2">Euro</option>
-                            <option value="3">Pound</option>
-                            <option value="4">TL</option>
+                        <select class="form-select form-select-sm" name="currency_id"
+                            aria-label=".form-select-sm example">
+
+                            <?php
+                            foreach ($currency as $value) {
+                            ?>
+                            <option value="<?php echo $value['id'];?>"> <?php echo $value['name']; ?> </option>
+                            <?php
+                            }
+                            ?>
+
                         </select>
                     </div>
 
@@ -60,13 +66,6 @@
         </div>
     </div>
 
-    <x-slot name="js">
-        <script>
-            $("#latitude").change(function() {
-                alert("asdasd");
-            });
-        </script>
-
-    </x-slot>
+    <x-slot name="js"> </x-slot>
 
 </x-app-layout>
