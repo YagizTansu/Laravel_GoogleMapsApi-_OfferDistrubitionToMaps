@@ -14,7 +14,7 @@ class UsertypesMigration extends Migration
     public function up()
     {
         Schema::create('usertypes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('userType');
             $table->timestamps();
         });

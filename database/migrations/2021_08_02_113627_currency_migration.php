@@ -14,7 +14,7 @@ class CurrencyMigration extends Migration
     public function up()
     {
         Schema::create('currency', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('code');
             $table->string('symbol');

@@ -14,16 +14,17 @@ class ShipMigration extends Migration
     public function up()
     {
         Schema::create('ships', function (Blueprint $table) {
+            $table->id();
             $table->string('user_id');
-            $table->bigIncrements('id');
+
             $table->string('name');
             $table->string('latitude');
             $table->string('longitude');
             $table->string('radius');
             $table->integer('price');
-            $table->BigInteger('currency_id')->unsigned();
+
             $table->timestamps();
-           // $table->foreign('currency_id')->references('id')->on('currency');
+            $table->foreignId('currency_id');
         });
     }
 
