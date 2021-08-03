@@ -58,10 +58,14 @@
                         <select class="form-select form-select-sm" name="currency_id"
                             aria-label=".form-select-sm example">
 
-                            <option value="1">Dollar</option>
-                            <option value="2">Euro</option>
-                            <option value="3">Pound</option>
-                            <option value="4">TL</option>
+                            <?php
+                            foreach ($currency as $value) {
+                            ?>
+                            <option value="<?php echo $value['id'];?>"> <?php echo $value['name']; ?> </option>
+                            <?php
+                            }
+                            ?>
+
                         </select>
                     </div>
 
@@ -118,10 +122,10 @@
                 });
 
                 const cityCircle = new google.maps.Circle({
-                    strokeColor: priceToColor(priceMax,priceMin,element.price),
+                    strokeColor: priceToColor(priceMax, priceMin, element.price),
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
-                    fillColor: priceToColor(priceMax,priceMin,element.price),
+                    fillColor: priceToColor(priceMax, priceMin, element.price),
                     fillOpacity: 0.50,
                     map,
                     center: new google.maps.LatLng(element.latitude, element.longitude),

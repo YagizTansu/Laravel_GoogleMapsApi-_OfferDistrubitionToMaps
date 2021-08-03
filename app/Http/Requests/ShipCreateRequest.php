@@ -29,7 +29,6 @@ class ShipCreateRequest extends FormRequest
             'longitude' =>'required|numeric|min:-180|max:180',
             'radius' =>'required|numeric|max:9999999|gt:0',
             'price' =>'required|numeric|gt:0',
-            'currency_id' =>'required',
         ];
     }
 }

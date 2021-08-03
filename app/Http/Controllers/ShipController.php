@@ -16,7 +16,8 @@ class ShipController extends Controller
         $ships=Ship::where('user_id','=', Auth::id())->with('currency')->get();
         $priceMax=Ship::max('price');
         $priceMin=Ship::min('price');
-        return view('ships',compact(['ships','priceMax','priceMin']));
+        $currency = Currency::get();
+        return view('ships',compact(['ships','priceMax','priceMin','currency']));
     }
 
     public function add(ShipCreateRequest $request){
