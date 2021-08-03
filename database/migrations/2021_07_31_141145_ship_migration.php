@@ -15,14 +15,15 @@ class ShipMigration extends Migration
     {
         Schema::create('ships', function (Blueprint $table) {
             $table->string('user_id');
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('name');
             $table->string('latitude');
             $table->string('longitude');
             $table->string('radius');
             $table->integer('price');
-            $table->unsignedBigInteger('currency_id');
+            $table->BigInteger('currency_id')->unsigned();
             $table->timestamps();
+           // $table->foreign('currency_id')->references('id')->on('currency');
         });
     }
 
@@ -31,6 +32,7 @@ class ShipMigration extends Migration
      *
      * @return void
      */
+
     public function down()
     {
         Schema::dropIfExists('ships');

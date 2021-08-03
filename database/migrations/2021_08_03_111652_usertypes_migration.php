@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CurrencyMigration extends Migration
+class UsertypesMigration extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CurrencyMigration extends Migration
      */
     public function up()
     {
-        Schema::create('currency', function (Blueprint $table) {
+        Schema::create('usertypes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('code');
-            $table->string('symbol');
+            $table->string('userType');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CurrencyMigration extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('currency');
+        Schema::dropIfExists('usertypes');
     }
 }

@@ -27,7 +27,7 @@ class shipFactory extends Factory
             "longitude" => $this->faker->longitude($min = -180, $max = 180),
             'radius' => $this->faker->numerify('#######'),
             'price' =>  $this->faker->numberBetween($min = 1500, $max = 6000),
-            'currency_id' =>  $this->faker->numberBetween($min = 1, $max = 3),
+            'currency_id' =>  $this->faker->numberBetween($min = 1, $max = 5),
         ];
     }
 }
