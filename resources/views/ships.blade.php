@@ -126,6 +126,7 @@
                              "<strong>" + 'Ship Price: ' + "</strong>" + element.price.toString() + "<br>" +
                              "<a href=/ship-detail/"+element.id+" class='btn btn-sm btn-primary'> "+'ship detail' + "</a>",
                 });
+
                 marker.addListener("click", () => {
                     infowindow.open(marker.get("map"), marker);
                 });
