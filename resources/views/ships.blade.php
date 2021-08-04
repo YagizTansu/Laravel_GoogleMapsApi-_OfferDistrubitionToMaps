@@ -97,7 +97,6 @@
 
             //alert(mapped);
             return '#' + ('000000' + h.toString(16)).slice(-6);
-
         }
 
         function initMap() {
