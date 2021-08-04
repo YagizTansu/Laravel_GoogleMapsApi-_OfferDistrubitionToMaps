@@ -21,4 +21,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/',[ShipController::class,
 Route::middleware(['auth:sanctum', 'verified'])->get('/ships',[ShipController::class, 'show'])->name('ships');
 
 Route::get('/trucks', [TruckController::class, 'show'])->name('trucks');
+Route::get('ship-detail/{id}', [ShipController::class, 'detail'])->whereNumber('id')->name('detail');
+
 Route::post('/ship-add',[ShipController::class, 'add'])->name('ship-add');

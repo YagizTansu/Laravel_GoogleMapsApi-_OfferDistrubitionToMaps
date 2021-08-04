@@ -34,4 +34,9 @@ class ShipController extends Controller
         $ship->save();
          return redirect()-> route('ships')-> withSuccess('Adding Succesful');
     }
+
+    public function detail($id){
+        $ship = Ship::find($id);
+        return view('ship_detail',compact('ship'));
+    }
 }

@@ -25,12 +25,12 @@
                 <div id="map"> </div>
             </div>
             <div class="col-md-2">
-
+                <h3>Add Ship</h3>
                 <form method="POST" action="{{ route('ship-add') }}">
                     @csrf
                     <div class="form-group">
                         <label>Ship Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="ship name">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Titanic">
                     </div>
 
                     <div class="form-group">
@@ -45,7 +45,7 @@
 
                     <div class="form-group">
                         <label>Radius</label>
-                        <input type="text" class="form-control" id="radius" name="radius" placeholder="3.67">
+                        <input type="text" class="form-control" id="radius" name="radius" placeholder="100000.28">
                     </div>
 
                     <div class="form-group">
@@ -61,7 +61,7 @@
                             <?php
                             foreach ($currency as $value) {
                             ?>
-                            <option value="<?php echo $value['id'];?>"> <?php echo $value['name']; ?> </option>
+                            <option value="<?php echo $value['id']; ?>"> <?php echo $value['name']; ?> </option>
                             <?php
                             }
                             ?>
@@ -79,33 +79,40 @@
     <div id="map"></div>
 
     <script>
-        function priceToColor(min, max, price) {
+        function map(price, price_min, price_max) {
+            return (price - price_min) * (100 - 0) / (price_max - price_min) + 0;
+        }
 
+        function priceToColor(min, max, price) {
+            var mapped = map(price, min, max);
             var r, g, b = 0;
-            if (price < ((min + max) / 2)) {
-                r = 255;
-                g = Math.round(5.1 * price);
-            } else {
+            if (mapped < 50) {
                 g = 255;
-                r = Math.round(510 - 5.10 * price);
+                r = Math.round(5.1 * mapped);
+            } else {
+                r = 255;
+                g = Math.round(510 - 5.10 * mapped);
             }
             var h = r * 0x10000 + g * 0x100 + b * 0x1;
+
+            //alert(mapped);
             return '#' + ('000000' + h.toString(16)).slice(-6);
+
         }
 
         function initMap() {
             // Create the map.
             const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 3,
+                zoom: 4.8,
                 center: {
-                    lat: 40,
-                    lng: 40
+                    lat: 47.5162,
+                    lng: 14.5501
                 },
                 mapTypeId: "terrain",
             });
-            var data = {!! json_encode($ships, JSON_HEX_TAG) !!};
-            var priceMax = {!! json_encode($priceMax, JSON_HEX_TAG) !!};
-            var priceMin = {!! json_encode($priceMin, JSON_HEX_TAG) !!};
+            var data = {!! json_encode($ships) !!};
+            var priceMax = {!! json_encode($priceMax) !!};
+            var priceMin = {!! json_encode($priceMin) !!};
 
 
             data.forEach(element => {
@@ -115,32 +122,28 @@
                 });
 
                 const infowindow = new google.maps.InfoWindow({
-                    content: element.price.toString() + ' ',
+
+                    content: "<strong>" + 'Ship Name: ' + "</strong>" + element.name.toString() + "<br>" +
+                             "<strong>" + 'Ship Price: ' + "</strong>" + element.price.toString() + "<br>" +
+                             "<a href=/ship-detail/"+element.id+" class='btn btn-sm btn-primary'> "+'ship detail' + "</a>",
                 });
                 marker.addListener("click", () => {
                     infowindow.open(marker.get("map"), marker);
                 });
 
                 const cityCircle = new google.maps.Circle({
-                    strokeColor: priceToColor(priceMax, priceMin, element.price),
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: priceToColor(priceMax, priceMin, element.price),
-                    fillOpacity: 0.50,
+                    strokeColor: priceToColor(priceMin, priceMax, element.price),
+                    strokeOpacity: 0.99,
+                    strokeWeight: 3,
+                    fillColor: priceToColor(priceMin, priceMax, element.price),
+                    fillOpacity: 0.20,
                     map,
                     center: new google.maps.LatLng(element.latitude, element.longitude),
-                    radius: element.radius * 0.05,
+                    radius: element.radius * 0.1,
                 });
             });
-
-            var latitude;
-            var longitude;
-            var radius;
-
         }
     </script>
-
-
 
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMU4r64e98czgUSW1_V6ESAend_wpYY6Q&callback=initMap&libraries=&v=weekly"
@@ -148,5 +151,4 @@
     </script>
 
     <x-slot name="js"></x-slot>
-
 </x-app-layout>
