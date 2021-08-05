@@ -79,6 +79,12 @@
     <div id="map"></div>
 
     <script>
+        function distanceBetweenCenter(firstCordinate_lat, firstCordinate_lng, secondCordinate_lat, secondCordinate_lng) {
+            return Math.sqrt(Math.pow((Math.abs(secondCordinate_lat) - Math.abs(firstCordinate_lat)), 2) + Math.pow((Math
+                .abs(secondCordinate_lng) -
+                Math.abs(firstCordinate_lng)), 2));
+        }
+
         function map(price, price_min, price_max) {
             return (price - price_min) * (100 - 0) / (price_max - price_min) + 0;
         }
@@ -113,23 +119,73 @@
             var priceMax = {!! json_encode($priceMax) !!};
             var priceMin = {!! json_encode($priceMin) !!};
 
-
             data.forEach(element => {
-                const marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(element.latitude, element.longitude),
-                    map,
-                });
+                const hasMultiPrice = [];
+                data.forEach(secondElement => {
+                    var distance = distanceBetweenCenter(element.latitude, element.longitude, secondElement
+                        .latitude, secondElement.longitude);
 
-                const infowindow = new google.maps.InfoWindow({
+                    if ((element.radius) > (distance * 1000000) && distance != 0) {
+                        if (((distance * 1000000) + secondElement.radius) < element.radius) {
 
-                    content: "<strong>" + 'Ship Name: ' + "</strong>" + element.name.toString() + "<br>" +
-                             "<strong>" + 'Ship Price: ' + "</strong>" + element.price.toString() + "<br>" +
-                             "<a href=/ship-detail/"+element.id+" class='btn btn-sm btn-primary'> "+'ship detail' + "</a>",
-                });
+                            hasMultiPrice.push(element.id);
 
-                marker.addListener("click", () => {
-                    infowindow.open(marker.get("map"), marker);
+                            const marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(element.latitude, element
+                                    .longitude),
+                                map,
+                            });
+
+                            const infowindow = new google.maps.InfoWindow({
+                                content: "<strong>" + 'Ship Name: ' + "</strong>" + element.name
+                                    .toString() + "<br>" +
+                                    "<strong>" + 'Ship Price: ' + "</strong>" + element.price
+                                    .toString() + "<br>" +
+                                    "<a href=/ship-detail/" + element.id +
+                                    " class='btn btn-sm btn-primary'> " +
+                                    'ship detail' + "</a>" + "<br> <br>" + "<strong>" +
+                                    'Ship Name: ' + "</strong>" + secondElement.name
+                                    .toString() + "<br>" +
+                                    "<strong>" + 'Ship Price: ' + "</strong>" + secondElement.price
+                                    .toString() + "<br>" +
+                                    "<a href=/ship-detail/" + secondElement.id +
+                                    " class='btn btn-sm btn-primary'> " +
+                                    'ship detail' + "</a>" + "<br> <br>" + "<strong>" +
+                                    "Average Price : " + "</strong>" + (element.price +
+                                        secondElement
+                                        .price) / 2
+                            });
+
+                            marker.addListener("click", () => {
+                                infowindow.open(marker.get("map"), marker);
+                            });
+                            //alert(hasMultiPrice[0]);
+                        }
+                    }
                 });
+                //alert(element.id)
+
+                //alert(element.id + ' ' + hasMultiPrice.length);
+                    if (element.id !== hasMultiPrice[0]) {
+                        const marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(element.latitude, element.longitude),
+                            map,
+                        });
+
+                        const infowindow = new google.maps.InfoWindow({
+                            content: "<strong>" + 'Ship Name: ' + "</strong>" + element.name
+                                .toString() + "<br>" +
+                                "<strong>" + 'Ship Price: ' + "</strong>" + element.price
+                                .toString() + "<br>" +
+                                "<a href=/ship-detail/" + element.id +
+                                " class='btn btn-sm btn-primary'> " +
+                                'ship detail' + "</a>"
+                        });
+
+                        marker.addListener("click", () => {
+                            infowindow.open(marker.get("map"), marker);
+                        });
+                    }
 
                 const cityCircle = new google.maps.Circle({
                     strokeColor: priceToColor(priceMin, priceMax, element.price),
