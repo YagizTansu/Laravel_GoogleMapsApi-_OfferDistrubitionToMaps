@@ -107,7 +107,7 @@
 
         const hasMultiPrice = [];
 
-        let map;
+        var map;
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
@@ -121,7 +121,7 @@
 
         setInterval(function() {
             //document.getElementById('map').innerHTML = "";
-
+            //$('#map').empty();
             $.ajax({
                 url: "{{ route('ajax-post') }}",
                 type: "POST",
@@ -132,7 +132,8 @@
                     $.each(response['ships'], function(key, ship) {
                         $.each(response['ships'], function(key, secondShip) {
                             const marker = new google.maps.Marker({
-                                position: new google.maps.LatLng(ship.latitude,ship.longitude),
+                                position: new google.maps.LatLng(ship.latitude,
+                                    ship.longitude),
                                 map,
                             });
                             var distance = distanceBetweenCenter(ship.latitude, ship
@@ -140,7 +141,8 @@
                                 .longitude);
 
                             if ((ship.radius) > (distance * 1000000) && distance != 0) {
-                                if (((distance * 1000000) + secondShip.radius) < ship.radius) {
+                                if (((distance * 1000000) + secondShip.radius) < ship
+                                    .radius) {
 
                                     hasMultiPrice.push(ship.id);
                                     hasMultiPrice.push(secondShip.id);
