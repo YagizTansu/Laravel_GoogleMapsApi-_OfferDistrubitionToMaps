@@ -122,33 +122,35 @@
             var priceMax = {!! json_encode($priceMax) !!};
             var priceMin = {!! json_encode($priceMin) !!};
 
+
             data.forEach(element => {
-                data.forEach(secondElement => {
-                    var distance = calcDistance(element.latitude, element.longitude, secondElement
-                        .latitude, secondElement.longitude);
-
-                   //alert(element.name + ' ' + secondElement.name + ' ' + element.radius +  ' distance : ' + distance)
-                    if ((element.radius/10) > (distance) && distance != 0) {
-                        if (((distance) + secondElement.radius/10) < element.radius/10) {
-
-                            hasMultiPrice.push(element.id);
-                            hasMultiPrice.push(secondElement.id);
-
-                            const marker = new google.maps.Marker({
-                                position: new google.maps.LatLng(element.latitude, element
-                                    .longitude),
-                                map,
-                            });
-
-                            const infowindow = new google.maps.InfoWindow({
-
-                                content: "<strong>" + 'Ship Name: ' + "</strong>" + element.name
+                var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + element.name
                                     .toString() + "<br>" +
                                     "<strong>" + 'Ship Price: ' + "</strong>" + element.price
                                     .toString() + "<br>" +
                                     "<a href=/ship-detail/" + element.id +
                                     " class='btn btn-sm btn-primary'> " +
-                                    'ship detail' + "</a>" + "<br> <br>" + "<strong>" +
+                                    'ship detail' + "</a>" + "<br> <br>";
+
+                var totalElement = 1;
+                var totalPrice = element.price ;
+                data.forEach(secondElement => {
+
+                    var distance = calcDistance(element.latitude, element.longitude, secondElement.latitude, secondElement.longitude);
+
+                    if ((element.radius/10) > (distance) && distance != 0) {
+                        if (((distance) + secondElement.radius/10) < element.radius/10) {
+                            totalElement++;
+                            hasMultiPrice.push(element.id);
+                            hasMultiPrice.push(secondElement.id);
+
+                            const marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(element.latitude, element.longitude),
+                                map,
+                            });
+
+                            totalPrice += secondElement.price;
+                            contentString += " <strong>" +
                                     'Ship Name: ' + "</strong>" + secondElement.name
                                     .toString() + "<br>" +
                                     "<strong>" + 'Ship Price: ' + "</strong>" + secondElement.price
@@ -156,15 +158,16 @@
                                     "<a href=/ship-detail/" + secondElement.id +
                                     " class='btn btn-sm btn-primary'> " +
                                     'ship detail' + "</a>" + "<br> <br>" + "<strong>" +
-                                    "Average Price : " + "</strong>" + (element.price +
-                                        secondElement.price) / 2
+                                    "Average Price : " + "</strong>" + (totalPrice)/totalElement + "<br> <br>";
 
+
+                            const infowindow = new google.maps.InfoWindow({
+                                content: contentString,
                             });
 
                             marker.addListener("click", () => {
                                 infowindow.open(marker.get("map"), marker);
                             });
-                            //alert(hasMultiPrice[0]);
                         }
                     }
                 });
@@ -222,6 +225,7 @@
             }
         });
     </script>
+
     <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry" type="text/javascript"></script>
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMU4r64e98czgUSW1_V6ESAend_wpYY6Q&callback=initMap&libraries=&v=weekly"
