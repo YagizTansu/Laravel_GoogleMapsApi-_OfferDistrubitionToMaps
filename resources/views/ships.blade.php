@@ -71,6 +71,8 @@
 
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Add</button></p>
 
+                    <input class="form-check-input" type="checkbox" value="" name="subCircle">
+                    <label class="form-check-label" for="flexCheckDefault">Show Sub Circle</label>
                 </form>
 
             </div>
@@ -79,10 +81,8 @@
     <div id="map"></div>
 
     <script>
-        function distanceBetweenCenter(firstCordinate_lat, firstCordinate_lng, secondCordinate_lat, secondCordinate_lng) {
-            return Math.sqrt(Math.pow((Math.abs(secondCordinate_lat) - Math.abs(firstCordinate_lat)), 2) + Math.pow((Math
-                .abs(secondCordinate_lng) -
-                Math.abs(firstCordinate_lng)), 2));
+        function calcDistance(fromLat, fromLng, toLat, toLng) {
+            return google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(fromLat, fromLng), new google.maps.LatLng(toLat, toLng));
         }
 
         function map(price, price_min, price_max) {
@@ -105,6 +105,8 @@
             return '#' + ('000000' + h.toString(16)).slice(-6);
         }
 
+        const hasMultiPrice = [];
+
         function initMap() {
             // Create the map.
             const map = new google.maps.Map(document.getElementById("map"), {
@@ -115,20 +117,22 @@
                 },
                 mapTypeId: "terrain",
             });
+
             var data = {!! json_encode($ships) !!};
             var priceMax = {!! json_encode($priceMax) !!};
             var priceMin = {!! json_encode($priceMin) !!};
 
             data.forEach(element => {
-                const hasMultiPrice = [];
                 data.forEach(secondElement => {
-                    var distance = distanceBetweenCenter(element.latitude, element.longitude, secondElement
+                    var distance = calcDistance(element.latitude, element.longitude, secondElement
                         .latitude, secondElement.longitude);
 
-                    if ((element.radius) > (distance * 1000000) && distance != 0) {
-                        if (((distance * 1000000) + secondElement.radius) < element.radius) {
+                   //alert(element.name + ' ' + secondElement.name + ' ' + element.radius +  ' distance : ' + distance)
+                    if ((element.radius/10) > (distance) && distance != 0) {
+                        if (((distance) + secondElement.radius/10) < element.radius/10) {
 
                             hasMultiPrice.push(element.id);
+                            hasMultiPrice.push(secondElement.id);
 
                             const marker = new google.maps.Marker({
                                 position: new google.maps.LatLng(element.latitude, element
@@ -137,6 +141,7 @@
                             });
 
                             const infowindow = new google.maps.InfoWindow({
+
                                 content: "<strong>" + 'Ship Name: ' + "</strong>" + element.name
                                     .toString() + "<br>" +
                                     "<strong>" + 'Ship Price: ' + "</strong>" + element.price
@@ -152,8 +157,8 @@
                                     " class='btn btn-sm btn-primary'> " +
                                     'ship detail' + "</a>" + "<br> <br>" + "<strong>" +
                                     "Average Price : " + "</strong>" + (element.price +
-                                        secondElement
-                                        .price) / 2
+                                        secondElement.price) / 2
+
                             });
 
                             marker.addListener("click", () => {
@@ -163,29 +168,6 @@
                         }
                     }
                 });
-                //alert(element.id)
-
-                //alert(element.id + ' ' + hasMultiPrice.length);
-                    if (element.id !== hasMultiPrice[0]) {
-                        const marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(element.latitude, element.longitude),
-                            map,
-                        });
-
-                        const infowindow = new google.maps.InfoWindow({
-                            content: "<strong>" + 'Ship Name: ' + "</strong>" + element.name
-                                .toString() + "<br>" +
-                                "<strong>" + 'Ship Price: ' + "</strong>" + element.price
-                                .toString() + "<br>" +
-                                "<a href=/ship-detail/" + element.id +
-                                " class='btn btn-sm btn-primary'> " +
-                                'ship detail' + "</a>"
-                        });
-
-                        marker.addListener("click", () => {
-                            infowindow.open(marker.get("map"), marker);
-                        });
-                    }
 
                 const cityCircle = new google.maps.Circle({
                     strokeColor: priceToColor(priceMin, priceMax, element.price),
@@ -198,9 +180,49 @@
                     radius: element.radius * 0.1,
                 });
             });
-        }
-    </script>
 
+            data.forEach(element => {
+                let j = 0;
+                for (let i = 0; i < hasMultiPrice.length; i++) {
+                    //alert(hasMultiPrice[i]);
+                    if (element.id != parseInt(hasMultiPrice[i])) {
+                        j = j+1;
+                        if (j == (hasMultiPrice.length)) {
+                            const marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(element.latitude, element.longitude),
+                                map,
+                            });
+
+                            const infowindow = new google.maps.InfoWindow({
+                                content: "<strong>" + 'Ship Name: ' + "</strong>" + element.name
+                                    .toString() + "<br>" +
+                                    "<strong>" + 'Ship Price: ' + "</strong>" + element.price
+                                    .toString() + "<br>" +
+                                    "<a href=/ship-detail/" + element.id +
+                                    " class='btn btn-sm btn-primary'> " +
+                                    'ship detail' + "</a>"
+                            });
+
+                            marker.addListener("click", () => {
+                                infowindow.open(marker.get("map"), marker);
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        var subCircle = document.querySelector("input[name=subCircle]");
+
+        subCircle.addEventListener('change', function() {
+            if (this.checked) {
+
+            } else {
+
+            }
+        });
+    </script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry" type="text/javascript"></script>
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMU4r64e98czgUSW1_V6ESAend_wpYY6Q&callback=initMap&libraries=&v=weekly"
         async>

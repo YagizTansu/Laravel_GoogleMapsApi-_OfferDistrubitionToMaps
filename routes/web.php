@@ -24,3 +24,6 @@ Route::get('/trucks', [TruckController::class, 'show'])->name('trucks');
 Route::get('ship-detail/{id}', [ShipController::class, 'detail'])->whereNumber('id')->name('detail');
 
 Route::post('/ship-add',[ShipController::class, 'add'])->name('ship-add');
+
+Route::get('/ajax', [ShipController::class, 'index'])->name('ajax');
+Route::post('/ajax-post', [ShipController::class, 'ajaxPost'])->name('ajax-post');

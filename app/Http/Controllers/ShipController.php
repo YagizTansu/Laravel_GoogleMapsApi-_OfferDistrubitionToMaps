@@ -30,8 +30,8 @@ class ShipController extends Controller
         $ship->radius=$request->radius;
         $ship->price=$request->price;
         $ship->currency_id=$request->currency_id;
-
         $ship->save();
+
          return redirect()-> route('ships')-> withSuccess('Adding Succesful');
     }
 
@@ -39,4 +39,18 @@ class ShipController extends Controller
         $ship = Ship::find($id);
         return view('ship_detail',compact('ship'));
     }
+
+    public function index(Request $request){
+         response()->json(["name" => "yagiz"],200);
+         return view('ajax');
+
+    }
+
+    public function ajaxPost(Request $request){
+        $ships=Ship::where('user_id','=', Auth::id())->with('currency')->get();
+        $priceMax=Ship::max('price');
+        $priceMin=Ship::min('price');
+        return response()->json(['ships' =>$ships,'priceMax' => $priceMax, 'priceMin' => $priceMin]);
+
+   }
 }
