@@ -120,10 +120,12 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
+                    //alert('girdi');
                     $.each(response['currency'], function(key, currency) {
-                        $('#currency').append('<option value=' + currency.id + '> ' + currency.name + '</option>');
+                        $('#currency').append('<option value=' + currency.id + '> ' + currency
+                            .name + '</option>');
                     });
-                    //initMap();
+
                     var subCircleController = subCirleController;
                     $.each(response['ships'], function(key, ship) {
                         var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship
@@ -208,14 +210,14 @@
                         if (subCircleController == true) {
                             const cityCircle = new google.maps.Circle({
                                 strokeColor: priceToColor(response[
-                                                'priceMin'], response[
-                                                'priceMax'], ship
+                                        'priceMin'], response[
+                                        'priceMax'], ship
                                     .price),
                                 strokeOpacity: 0.99,
                                 strokeWeight: 3,
                                 fillColor: priceToColor(response[
-                                                'priceMin'], response[
-                                                'priceMax'], ship
+                                        'priceMin'], response[
+                                        'priceMax'], ship
                                     .price),
                                 fillOpacity: 0.20,
                                 map,
@@ -285,6 +287,7 @@
                             $("#map").empty();
                             initMap(false);
                         }
+
                     });
                 }
             });
