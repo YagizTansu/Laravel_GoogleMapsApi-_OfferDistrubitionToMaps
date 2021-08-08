@@ -20,17 +20,7 @@
 
 <body>
     <div class="font-sans text-gray-900 antialiased">
-
-        <div class="row">
-            <div class="col-6">
                 {{ $slot }}
-            </div>
-            <div class="col-6">
-
-            </div>
-        </div>
-
-
     </div>
 </body>
 
