@@ -50,7 +50,8 @@ class ShipController extends Controller
         $ships=Ship::where('user_id','=', Auth::id())->with('currency')->get();
         $priceMax=Ship::max('price');
         $priceMin=Ship::min('price');
-        return response()->json(['ships' =>$ships,'priceMax' => $priceMax, 'priceMin' => $priceMin]);
+        $currency = Currency::get();
+        return response()->json(['ships' =>$ships,'priceMax' => $priceMax, 'priceMin' => $priceMin ,'currency' => $currency]);
 
    }
 }

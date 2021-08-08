@@ -4958,8 +4958,7 @@ alpinejs__WEBPACK_IMPORTED_MODULE_0__.default.start();
 __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 
-window.jQuery = (jquery__WEBPACK_IMPORTED_MODULE_1___default());
-window.$ = (jquery__WEBPACK_IMPORTED_MODULE_1___default());
+window.$ = window.jQuery = (jquery__WEBPACK_IMPORTED_MODULE_1___default());
 
 /***/ }),
 
