@@ -63,7 +63,7 @@
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Add</button></p>
 
                     <input class="form-check-input" type="checkbox" value="" name="subCircle">
-                    <label class="form-check-label" for="flexCheckDefault">Show Sub Circle</label>
+                    <label class="form-check-label" for="flexCheckDefault">Show subcircle</label>
 
                 </form>
 
@@ -96,7 +96,6 @@
 
             return '#' + ('000000' + h.toString(16)).slice(-6);
         }
-
 
         const hasMultiPrice = [];
         function initMap(subCirleController) {}
@@ -291,7 +290,6 @@
             });
         });
     </script>
-
 
     <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry" type="text/javascript"></script>
     <script

@@ -72,7 +72,7 @@
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Add</button></p>
 
                     <input class="form-check-input" type="checkbox" value="" name="subCircle">
-                    <label class="form-check-label" for="flexCheckDefault">Show Sub Circle</label>
+                    <label class="form-check-label" for="flexCheckDefault">Show subcircle on map</label>
                 </form>
 
             </div>
