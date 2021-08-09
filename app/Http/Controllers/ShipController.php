@@ -41,8 +41,8 @@ class ShipController extends Controller
     }
 
     public function index(Request $request){
-         response()->json(["name" => "yagiz"],200);
-         return view('ajax');
+        $ships=Ship::where('user_id','=', Auth::id())->with('currency')->get();
+         return view('ajax', compact('ships'));
 
     }
 

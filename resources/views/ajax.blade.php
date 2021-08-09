@@ -99,12 +99,10 @@
 
 
         const hasMultiPrice = [];
-
-        var map;
-
         function initMap(subCirleController) {}
 
         $(function initMap(subCirleController) {
+            var map;
             map = new google.maps.Map(document.getElementById("map"), {
                 center: {
                     lat: 47.5162,
@@ -127,7 +125,9 @@
                     });
 
                     var subCircleController = subCirleController;
+
                     $.each(response['ships'], function(key, ship) {
+
                         var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship
                             .name
                             .toString() + "<br>" +
@@ -139,6 +139,7 @@
 
                         var totalElement = 1;
                         var totalPrice = ship.price;
+                        var priceArray = [ship.price];
                         $.each(response['ships'], function(key, secondShip) {
                             var distance = calcDistance(ship.latitude, ship
                                 .longitude, secondShip.latitude,
@@ -150,6 +151,7 @@
                                     totalElement++;
                                     hasMultiPrice.push(ship.id);
                                     hasMultiPrice.push(secondShip.id);
+                                    priceArray.push(secondShip.price);
 
                                     const marker = new google.maps.Marker({
                                         position: new google.maps.LatLng(ship
@@ -167,16 +169,9 @@
                                         .toString() + "<br>" +
                                         "<a href=/ship-detail/" + secondShip.id +
                                         " class='btn btn-sm btn-primary'> " +
-                                        'ship detail' + "</a>" + "<br> <br>" +
-                                        "<strong>" +
-                                        "Average Price : " + "</strong>" + (
-                                            totalPrice) / totalElement +
-                                        "<br> <br>";
+                                        'ship detail' + "</a>" + "<br> <br>";
 
 
-                                    const infowindow = new google.maps.InfoWindow({
-                                        content: contentString,
-                                    });
 
                                     marker.addListener("click", () => {
                                         infowindow.open(marker.get("map"),
@@ -206,6 +201,10 @@
                                 }
                             }
                         });
+
+                        const infowindow = new google.maps.InfoWindow({
+                                        content: contentString +" <strong>"+  " Average Price :" +" </strong>"+ totalPrice/totalElement +  "<br>" + " Min Price : "+Math.min.apply(null, priceArray)+  "<br> "+  " Max Price : " + +Math.max.apply(null, priceArray),
+                                    });
 
                         if (subCircleController == true) {
                             const cityCircle = new google.maps.Circle({
