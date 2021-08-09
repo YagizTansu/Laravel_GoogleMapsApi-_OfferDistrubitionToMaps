@@ -33,7 +33,7 @@
 
                     <div class="form-group">
                         <label>Currency</label>
-                        <input type="text" class="form-control" id="price" name="price" value="{{ $ship->currency_id }}" readonly>
+                        <input type="text" class="form-control" id="price" name="price" value="{{ $ship->currency->name }}" readonly>
                     </div>
                 </form>
             </div>

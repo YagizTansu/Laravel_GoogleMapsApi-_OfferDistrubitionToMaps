@@ -131,8 +131,7 @@
                         var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship
                             .name
                             .toString() + "<br>" +
-                            "<strong>" + 'Ship Price: ' + "</strong>" + ship.price
-                            .toString() + "<br>" +
+                            "<strong>" + 'Ship Price: ' + "</strong>" + ship.price .toString() + " " + ship.currency.symbol + "<br>" +
                             "<a href=/ship-detail/" + ship.id +
                             " class='btn btn-sm btn-primary'> " +
                             'ship detail' + "</a>" + "<br> <br>";
@@ -166,7 +165,7 @@
                                         .toString() + "<br>" +
                                         "<strong>" + 'Ship Price: ' + "</strong>" +
                                         secondShip.price
-                                        .toString() + "<br>" +
+                                        .toString() + " "+ secondShip.currency.symbol +"<br>" +
                                         "<a href=/ship-detail/" + secondShip.id +
                                         " class='btn btn-sm btn-primary'> " +
                                         'ship detail' + "</a>" + "<br> <br>";
@@ -247,7 +246,7 @@
                                             .toString() + "<br>" +
                                             "<strong>" + 'Ship Price: ' + "</strong>" +
                                             ship.price
-                                            .toString() + "<br>" +
+                                            .toString() + " " + ship.currency.symbol + "<br>" +
                                             "<a href=/ship-detail/" + ship.id +
                                             " class='btn btn-sm btn-primary'> " +
                                             'ship detail' + "</a>"
