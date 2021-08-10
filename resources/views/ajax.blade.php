@@ -48,6 +48,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Add Ship</h5>
+                        <hr>
                         <form method="POST" action="{{ route('ship-add') }}">
                             @csrf
                             <div class="form-group">
@@ -118,11 +119,11 @@
     const hasMultiPrice = [];
     var map;
     var subCircleController = null;
-    var currencyFilterValue = null;
+    var subCircleFilterValue = null;
+    var currencyFilterValue = 8.6361;
 
     function markersAndCircles(map, response) {
         map = null;
-
         map = new google.maps.Map(document.getElementById("map"), {
             center: {
                 lat: 47.5162,
@@ -136,15 +137,15 @@
             var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship
                 .name
                 .toString() + "<br>" +
-                "<strong>" + 'Ship Price: ' + "</strong>" + ship.price.toString() + " " + ship.currency.symbol +
+                "<strong>" + 'Ship Price: ' + "</strong>" +changeCurrency(ship.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue).toString()  + " " +
                 "<br>" +
                 "<a href=/ship-detail/" + ship.id +
                 " class='btn btn-sm btn-primary'> " +
                 'ship detail' + "</a>" + "<br> <br>";
 
             var totalElement = 1;
-            var totalPrice = ship.price;
-            var priceArray = [ship.price];
+            var totalPrice = changeCurrency(ship.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue);
+            var priceArray = [changeCurrency(ship.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue)];
             $.each(response['ships'], function(key, secondShip) {
                 var distance = calcDistance(ship.latitude, ship
                     .longitude, secondShip.latitude,
@@ -156,7 +157,7 @@
                         totalElement++;
                         hasMultiPrice.push(ship.id);
                         hasMultiPrice.push(secondShip.id);
-                        priceArray.push(secondShip.price);
+                        priceArray.push(changeCurrency(secondShip.price,secondShip.currency.currency_exchange_rates[0].selling,currencyFilterValue).toString());
 
                         const marker = new google.maps.Marker({
                             position: new google.maps.LatLng(ship
@@ -165,13 +166,12 @@
                             map,
                         });
 
-                        totalPrice += secondShip.price;
+                        totalPrice +=changeCurrency(secondShip.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue);
                         contentString += " <strong>" +
                             'Ship Name: ' + "</strong>" + secondShip.name
                             .toString() + "<br>" +
                             "<strong>" + 'Ship Price: ' + "</strong>" +
-                            secondShip.price
-                            .toString() + " " + secondShip.currency.symbol + "<br>" +
+                            changeCurrency(secondShip.price,secondShip.currency.currency_exchange_rates[0].selling,currencyFilterValue).toString()  + " "  + "<br>" +
                             "<a href=/ship-detail/" + secondShip.id +
                             " class='btn btn-sm btn-primary'> " +
                             'ship detail' + "</a>" + "<br> <br>";
@@ -191,7 +191,7 @@
             const infowindow = new google.maps.InfoWindow({
                 content: contentString + " <strong>" + " Average Price :" + " </strong>" + totalPrice /
                     totalElement + "<br>" + " Min Price : " + Math.min.apply(null, priceArray) +
-                    "<br> " + " Max Price : " + +Math.max.apply(null, priceArray),
+                    "<br> " + " Max Price : "  +Math.max.apply(null, priceArray),
             });
 
             if (subCircleController == true) {
@@ -201,6 +201,7 @@
 
         });
         $.each(response['ships'], function(key, ship) {
+            //alert(ship.currency.currency_exchange_rates[0].buyying);
             let j = 0;
             for (let i = 0; i < hasMultiPrice.length; i++) {
                 //alert(hasMultiPrice[i]);
@@ -246,8 +247,7 @@
                 "</strong>" + ship.name
                 .toString() + "<br>" +
                 "<strong>" + 'Ship Price: ' + "</strong>" +
-                ship.price
-                .toString() + " " + ship.currency.symbol + "<br>" +
+                changeCurrency(ship.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue).toString() + " " + "<br>" +
                 "<a href=/ship-detail/" + ship.id +
                 " class='btn btn-sm btn-primary'> " +
                 'ship detail' + "</a>"
@@ -293,7 +293,6 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             success: function(response) {
-                getDisplayExchangeRates();
                 $.each(response['currency'], function(key, currency) {
                     $('#currency').append('<option value=' + currency.id + '> ' + currency
                         .name + '</option>');
@@ -309,19 +308,18 @@
     }
 
     function getDisplayExchangeRates() {
-        $('#showCurrency').empty();
         $.ajax({
             url: "{{ route('get-exchange-rate') }}",
             type: "GET",
             success: function(response) {
                 $.each(response['CurrencyExchangeRate'], function(key, exchange) {
-                    $('#showCurrency').append('<option value=' + exchange.currency.id + '> ' +
+                    $('#showCurrency').append('<option value=' + exchange.selling + '> ' +
                         exchange.currency.name + '</option>');
                 });
             }
         });
     }
-
+    getDisplayExchangeRates();
     var subCircle = document.querySelector("#subCircle");
     subCircle.addEventListener('change', function() {
         subCircleController = this.checked;
@@ -338,7 +336,7 @@
     function updateFilter() {
         subCircleFilterValue = getSubCircleFilterValue();
         currencyFilterValue = getCurrencyFilterValue();
-        alert(subCircleFilterValue + " " + currencyFilterValue);
+        //alert(subCircleFilterValue + " " + currencyFilterValue);
         loadMap(map, subCircleFilterValue, currencyFilterValue);
     }
 
