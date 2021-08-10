@@ -17,8 +17,8 @@ Route::group( ['middleware' => ['auth:sanctum', 'verified'],'prefix' =>'admin'],
     Route::resource('ships',adminController::class);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/',[ShipController::class, 'index']);
-Route::middleware(['auth:sanctum', 'verified'])->get('/ships',[ShipController::class, 'index'])->name('ajax');
+Route::middleware(['auth:sanctum', 'verified'])->get('/',[ShipController::class, 'show']);
+Route::middleware(['auth:sanctum', 'verified'])->get('/ships',[ShipController::class, 'show'])->name('ships');
 
 Route::get('/trucks', [TruckController::class, 'show'])->name('trucks');
 Route::get('ship-detail/{id}', [ShipController::class, 'detail'])->whereNumber('id')->name('detail');
@@ -27,3 +27,5 @@ Route::post('/ship-add',[ShipController::class, 'add'])->name('ship-add');
 
 Route::get('/ajax', [ShipController::class, 'index'])->name('ajax');
 Route::post('/ajax-post', [ShipController::class, 'ajaxPost'])->name('ajax-post');
+
+Route::get('/ajax-get-exchange-rate', [ShipController::class, 'getExchangeRate'])->name('get-exchange-rate');

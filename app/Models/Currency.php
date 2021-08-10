@@ -10,4 +10,14 @@ class Currency extends Model
     use HasFactory;
 
     protected $table='currency';
+
+    public function currencyExchangeRate()
+    {
+        return $this->hasOne(CurrencyExchangeRate::class)->latest();
+    }
+
+    public function currencyExchangeRates()
+    {
+        return $this->hasMany(CurrencyExchangeRate::class);
+    }
 }
