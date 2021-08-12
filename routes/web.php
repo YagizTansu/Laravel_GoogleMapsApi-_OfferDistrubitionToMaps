@@ -29,4 +29,4 @@ Route::get('/ajax', [ShipController::class, 'index'])->name('ajax');
 Route::post('/ajax-post', [ShipController::class, 'ajaxPost'])->name('ajax-post');
 
 Route::get('/ajax-get-exchange-rate', [ShipController::class, 'getExchangeRate'])->name('get-exchange-rate');
-
+Route::post('/addCircle', [ShipController::class, 'addCircle'])->name('addCircle');

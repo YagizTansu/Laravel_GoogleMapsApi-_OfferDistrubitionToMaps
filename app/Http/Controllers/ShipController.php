@@ -101,19 +101,32 @@ class ShipController extends Controller
             }
         }
 
-        $currencyExchangeRate = CurrencyExchangeRate::where('currency_id', 1)->where('date', Carbon::now()->format('Y-m-d'))->first();
+        //$currencyExchangeRate = CurrencyExchangeRate::where('currency_id', 113)->where('date', Carbon::now()->format('Y-m-d'))->first();
 
         if (empty($currencyExchangeRate)) {
             CurrencyExchangeRate::create([
-                'currency_id' => 1,
+                'currency_id' => 113,
                 'buyying' => 1,
                 'selling' => 1,
                 'date' => Carbon::now()->format('Y-m-d')
             ]);
         }
 
-        $CurrencyExchangeRate = CurrencyExchangeRate::with('currency')->get();
-        $load = ['CurrencyExchangeRate' => $CurrencyExchangeRate];
+        $currencyExchangeRate = CurrencyExchangeRate::with('currency')->where('date', Carbon::now()->format('Y-m-d'))->get();
+        $load = ['CurrencyExchangeRate' => $currencyExchangeRate];
         return response()->json($load);
+    }
+    public function addCircle(Request $request){
+        $ship = new Ship;
+        $ship->user_id =Auth::id();
+        $ship->name = "";
+        $ship->latitude =$request->latitude;
+        $ship->longitude = $request->longitude;
+        $ship->radius = $request->radius;
+        //$ship->price =0;
+        $ship->currency_id =1;
+        $ship->save();
+
+        return redirect()->route('ajax')->withSuccess('Adding Succesful');
     }
 }

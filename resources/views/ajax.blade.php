@@ -42,6 +42,8 @@
             @endif
 
             <div class="col-md-10">
+                <div id="floating-panel"></div>
+                <br>
                 <div id="map"> </div>
             </div>
             <div class="col-md-2">
@@ -87,6 +89,7 @@
                             </div>
 
                             <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Add</button></p>
+                        </form>
                     </div>
                 </div>
                 <br>
@@ -105,12 +108,19 @@
                     </div>
                 </div>
                 <br>
-                </form>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Edit</h5>
+                        <hr>
+                        <button id="addCirleMode" class="btn btn-primary">Add Cirle</button>
+                    </div>
+                </div>
+                <br>
 
             </div>
         </div>
     </div>
-    <div id="map"></div>
 </body>
 
 </html>
@@ -120,67 +130,48 @@
     var map;
     var subCircleController = null;
     var subCircleFilterValue = null;
-    var currencyFilterValue = 8.6361;
+    var currencyFilterValue = null;
 
     function markersAndCircles(map, response) {
-        map = null;
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: {
-                lat: 47.5162,
-                lng: 14.5501
-            },
-            zoom: 4.8,
-        });
+        map = createMap(map); // create main map
+
+        if (currencyFilterValue == null) { // control display currency value
+            currencyFilterValue = response['defaultCurrency'];
+        }
 
         $.each(response['ships'], function(key, ship) {
 
-            var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship
-                .name
-                .toString() + "<br>" +
-                "<strong>" + 'Ship Price: ' + "</strong>" +changeCurrency(ship.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue).toString()  + " " +
-                "<br>" +
-                "<a href=/ship-detail/" + ship.id +
-                " class='btn btn-sm btn-primary'> " +
-                'ship detail' + "</a>" + "<br> <br>";
+            var contentString = createContentString(ship); // create String for ship info window
 
             var totalElement = 1;
-            var totalPrice = changeCurrency(ship.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue);
-            var priceArray = [changeCurrency(ship.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue)];
-            $.each(response['ships'], function(key, secondShip) {
-                var distance = calcDistance(ship.latitude, ship
-                    .longitude, secondShip.latitude,
-                    secondShip.longitude);
+            var totalPrice = changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling,
+                currencyFilterValue);
+            var priceArray = [changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling,
+                currencyFilterValue)];
 
-                if ((ship.radius / 10) > (distance) && distance != 0) {
-                    if (((distance) + secondShip.radius / 10) < ship
-                        .radius / 10) {
+            $.each(response['ships'], function(key, secondShip) {
+                var distance = calcDistance(ship.latitude, ship.longitude, secondShip.latitude,
+                    secondShip.longitude); // take distance between 2 ships
+
+                if ((ship.radius / 10) > (distance) && distance !=
+                    0) { // control block: if small circle included bu big cicle
+                    if (((distance) + secondShip.radius / 10) < ship.radius / 10) {
                         totalElement++;
                         hasMultiPrice.push(ship.id);
                         hasMultiPrice.push(secondShip.id);
-                        priceArray.push(changeCurrency(secondShip.price,secondShip.currency.currency_exchange_rates[0].selling,currencyFilterValue).toString());
+                        priceArray.push(changeCurrency(secondShip.price, secondShip.currency
+                            .currency_exchange_rates[0].selling, currencyFilterValue));
 
-                        const marker = new google.maps.Marker({
-                            position: new google.maps.LatLng(ship
-                                .latitude, ship
-                                .longitude),
-                            map,
-                        });
+                        var marker = createMarker(map, ship,
+                            marker); // create Markers if coordinate has multi prices
 
-                        totalPrice +=changeCurrency(secondShip.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue);
-                        contentString += " <strong>" +
-                            'Ship Name: ' + "</strong>" + secondShip.name
-                            .toString() + "<br>" +
-                            "<strong>" + 'Ship Price: ' + "</strong>" +
-                            changeCurrency(secondShip.price,secondShip.currency.currency_exchange_rates[0].selling,currencyFilterValue).toString()  + " "  + "<br>" +
-                            "<a href=/ship-detail/" + secondShip.id +
-                            " class='btn btn-sm btn-primary'> " +
-                            'ship detail' + "</a>" + "<br> <br>";
+                        totalPrice += changeCurrency(secondShip.price, secondShip.currency
+                            .currency_exchange_rates[0].selling, currencyFilterValue);
 
-
+                        contentString += createContentString(secondShip);
 
                         marker.addListener("click", () => {
-                            infowindow.open(marker.get("map"),
-                                marker);
+                            infowindow.open(marker.get("map"), marker);
                         });
 
                         createCirle(map, response, ship, 0.99, 3, 0.2);
@@ -189,17 +180,16 @@
             });
 
             const infowindow = new google.maps.InfoWindow({
-                content: contentString + " <strong>" + " Average Price :" + " </strong>" + totalPrice /
-                    totalElement + "<br>" + " Min Price : " + Math.min.apply(null, priceArray) +
-                    "<br> " + " Max Price : "  +Math.max.apply(null, priceArray),
+                content: contentString + " <strong class='text-warning' >" + " Average Price :" + " </strong>" + totalPrice /
+                    totalElement + "<br>" +  " <strong class='text-success' >" +" Min Price : " + " </strong>" + Math.min.apply(null, priceArray) +
+                    "<br> " + " <strong class='text-danger' >" + " Max Price : "+ " </strong>" + Math.max.apply(null, priceArray),
             });
 
             if (subCircleController == true) {
                 createCirle(map, response, ship, 0.99, 3, 0.2);
             }
-
-
         });
+
         $.each(response['ships'], function(key, ship) {
             //alert(ship.currency.currency_exchange_rates[0].buyying);
             let j = 0;
@@ -209,12 +199,44 @@
                     j = j + 1;
                     if (j == (hasMultiPrice.length)) {
 
-                        createMarker(map, ship);
+                        var marker = createMarker(map, ship, marker);
+                        var contentString = contentString = createContentString(ship);
+
+                        const infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
+
+                        marker.addListener("click", () => {
+                            infowindow.open(marker.get("map"), marker);
+                        });
+
                         createCirle(map, response, ship, 0.99, 3, 0.2);
                     }
                 }
             }
         });
+    }
+
+    function createContentString(ship) {
+        contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship.name.toString() + "<br>" +
+            "<strong>" + 'Ship Price: ' + "</strong>" + changeCurrency(ship.price, ship.currency
+                .currency_exchange_rates[0].selling, currencyFilterValue).toString() + " " +
+            "<br>" + "<a href=/ship-detail/" + ship.id + " class='btn btn-sm btn-primary'> " + 'ship detail' + "</a>" +
+            "<br> <br>";
+
+        return contentString;
+    }
+
+    function createMap(map) { //create only map
+        map = null;
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: {
+                lat: 47.5162,
+                lng: 14.5501
+            },
+            zoom: 4.8,
+        });
+        return map;
     }
 
     function createCirle(map, response, ship, strokeOpacity, strokeWeight, fillOpacity) {
@@ -235,27 +257,13 @@
         });
     }
 
-    function createMarker(map, ship) {
-        const marker = new google.maps.Marker({
+    function createMarker(map, ship, marker) {
+        marker = new google.maps.Marker({
             position: new google.maps.LatLng(ship
                 .latitude, ship.longitude),
             map,
         });
-
-        const infowindow = new google.maps.InfoWindow({
-            content: "<strong>" + 'Ship Name: ' +
-                "</strong>" + ship.name
-                .toString() + "<br>" +
-                "<strong>" + 'Ship Price: ' + "</strong>" +
-                changeCurrency(ship.price,ship.currency.currency_exchange_rates[0].selling,currencyFilterValue).toString() + " " + "<br>" +
-                "<a href=/ship-detail/" + ship.id +
-                " class='btn btn-sm btn-primary'> " +
-                'ship detail' + "</a>"
-        });
-
-        marker.addListener("click", () => {
-            infowindow.open(marker.get("map"), marker);
-        });
+        return marker;
     }
 
     function calcDistance(fromLat, fromLng, toLat, toLng) {
@@ -281,11 +289,12 @@
 
         return '#' + ('000000' + h.toString(16)).slice(-6);
     }
-    function changeCurrency(price,currency,exchangeCurrency) {
-        return(price*currency)/exchangeCurrency;
-      }
 
-    function ajaxFunc() {
+    function changeCurrency(price, currency, exchangeCurrency) {
+        return (price * currency) / exchangeCurrency;
+    }
+
+    function masterAjax() {
         $.ajax({
             url: "{{ route('ajax-post') }}",
             type: "POST",
@@ -303,8 +312,8 @@
         });
     }
 
-    function loadMap(map) {
-        ajaxFunc(map);
+    function loadMap(map) { // Load all maps proporties
+        masterAjax(map);
     }
 
     function getDisplayExchangeRates() {
@@ -320,18 +329,18 @@
         });
     }
     getDisplayExchangeRates();
+
     var subCircle = document.querySelector("#subCircle");
-    subCircle.addEventListener('change', function() {
+    subCircle.addEventListener('change', function() { //control subcircle filter checkbox
         subCircleController = this.checked;
         updateFilter();
     });
 
     const currencyValue = document.querySelector('#showCurrency');
-    currencyValue.addEventListener('change', (event) => {
+    currencyValue.addEventListener('change', (event) => { //control display currency filter
         currencyFilterValue = event.target.value;
         updateFilter();
     });
-
 
     function updateFilter() {
         subCircleFilterValue = getSubCircleFilterValue();
@@ -353,6 +362,78 @@
         });
         return currencyFilterValue;
     }
+
+    $("#addCirleMode").click(function() {
+        $('#floating-panel').empty();
+        $('#floating-panel').append('<a href="{{route('ajax')}}" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
+        $('#floating-panel').append('<a id="hide-markers" class="btn btn-primary mr-2"> Hide Marker</a>');
+        $('#floating-panel').append('<a id="show-markers" class="btn btn-primary  mr-2"> Show Marker</a>');
+        $('#floating-panel').append('<a id="delete-markers" class="btn btn-primary  mr-2"> Delete Marker</a>');
+
+        map = null;
+        map = createMap(map);
+
+        const myLatlng = {
+            lat: 47.5162,
+            lng: 14.5501
+        };
+
+        // Create the initial InfoWindow.
+        let infoWindow = new google.maps.InfoWindow({
+            content: "Click the map to add Circle",
+            position: myLatlng,
+        });
+        infoWindow.open(map);
+
+        var clicked = 0;
+        var cityCircle;
+        // Configure the click listener.
+        map.addListener("click", (mapsMouseEvent) => {
+            clicked++;
+
+            if (clicked != 1) {
+                $("#saveCircleButton").click(function() {
+                    //save cityCirle to db
+                    $.ajax({
+                        url: "{{ route('addCircle') }}",
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        data :{radius: cityCircle.getRadius()*10,latitude : cityCircle.getCenter().lat,longitude : cityCircle.getCenter().lng},
+                        success: function(response) {
+                        }
+                    });
+                    clicked = 0;
+                });
+            }
+
+            if (clicked == 1) {
+                cityCircle = new google.maps.Circle({
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: "#FF0000",
+                    fillOpacity: 0.35,
+                    map,
+                    center: mapsMouseEvent.latLng,
+                    radius: 0,
+                });
+
+                var firstX = 0;
+                var firstY = 0;
+                google.maps.event.addListener(map, "mousemove", function(event) {
+                    if (clicked == 1) {
+                        if (firstX == 0) {
+                            firstX = event.domEvent.clientX;
+                            firstY = event.domEvent.clientY;
+                        }
+                        cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) *1000) - ((event.domEvent.clientY - firstY) * 1000));
+                    }
+                });
+            }
+        });
+    });
 </script>
 
 <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry" type="text/javascript"></script>
