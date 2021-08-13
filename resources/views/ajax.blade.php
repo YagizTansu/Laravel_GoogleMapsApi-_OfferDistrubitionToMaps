@@ -158,9 +158,7 @@
                         priceArray.push(changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[0].selling, currencyFilterValue));
 
                         var marker = Create.createMarker(map, ship,marker); // create Markers if coordinate has multi prices
-
                         totalPrice += changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[0].selling, currencyFilterValue);
-
                         contentString += InfoWindow.createContentString(secondShip);
 
                         marker.addListener("click", () => {
@@ -340,6 +338,10 @@
         return (price * currency) / exchangeCurrency;
     }
 
+    function loadMap(map) { // Load all maps proporties
+        masterAjax(map);
+    }
+
     function masterAjax() {
         $.ajax({
             url: "{{ route('ajax-post') }}",
@@ -356,10 +358,6 @@
                 markersAndCircles(map, response);
             }
         });
-    }
-
-    function loadMap(map) { // Load all maps proporties
-        masterAjax(map);
     }
 
     function getDisplayExchangeRates() {
