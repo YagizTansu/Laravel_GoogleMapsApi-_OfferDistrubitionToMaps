@@ -17,11 +17,11 @@
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
 
-    <title>Ships</title>
+    <title>Distrubition</title>
 </head>
 
 <body>
-    <p class="text-center fs-3">Ship Distrubition of Firm </p>
+    <p class="text-center fs-3"> Distrubition Map </p>
     <div class="container">
         <div class="row">
 
@@ -45,8 +45,31 @@
                 <div id="map"> </div>
                 <div id="floating-panel"></div>
             </div>
-            <div class="col-md-2">
+            <div id="rightPanel" class="col-md-2">
                 <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Add</h5>
+                        <hr>
+                        <button id="addCirleMode" class="btn btn-primary">Add Cirle</button>
+                    </div>
+                </div>
+                <br>
+                <div id="filterCard" class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filters</h5>
+                        <hr>
+                        <input class="form-check-input" type="checkbox" value="" id="subCircle">
+                        <label class="form-check-label" for="flexCheckDefault">Show subcircle</label>
+                        <br><br>
+                        <label>Display Currency</label>
+                        <select id="showCurrency" class="form-select form-select-sm"aria-label=".form-select-sm example">
+                        </select>
+
+                    </div>
+                </div>
+                <br>
+
+                <div id="formCard" class="card">
                     <div class="card-body">
                         <h5 class="card-title">Add Ship</h5>
                         <hr>
@@ -92,30 +115,6 @@
                     </div>
                 </div>
                 <br>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Filters</h5>
-                        <hr>
-                        <input class="form-check-input" type="checkbox" value="" id="subCircle">
-                        <label class="form-check-label" for="flexCheckDefault">Show subcircle</label>
-                        <br><br>
-                        <label>Display Currency</label>
-                        <select id="showCurrency" class="form-select form-select-sm"aria-label=".form-select-sm example">
-                        </select>
-
-                    </div>
-                </div>
-                <br>
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Add</h5>
-                        <hr>
-                        <button id="addCirleMode" class="btn btn-primary">Add Cirle</button>
-                    </div>
-                </div>
-                <br>
-
             </div>
         </div>
     </div>
@@ -134,7 +133,7 @@
     var currencySymbol = null;
 
     function markersAndCircles(map, response) {
-        map = createMap(map); // create main map
+        map = Create.createMap(map); // create main map
 
         if (currencyFilterValue == null) { // control display currency value
             currencyFilterValue = response['defaultCurrency'];
@@ -158,7 +157,7 @@
                         hasMultiPrice.push(secondShip.id);
                         priceArray.push(changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[0].selling, currencyFilterValue));
 
-                        var marker = createMarker(map, ship,marker); // create Markers if coordinate has multi prices
+                        var marker = Create.createMarker(map, ship,marker); // create Markers if coordinate has multi prices
 
                         totalPrice += changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[0].selling, currencyFilterValue);
 
@@ -168,7 +167,7 @@
                             infowindow.open(marker.get("map"), marker);
                         });
 
-                        createCirle(map, response, ship, 0.99, 3, 0.2);
+                        Create.createCirle(map, response, ship, 0.99, 3, 0.2);
                     }
                 }
             });
@@ -178,7 +177,7 @@
             });
 
             if (subCircleController == true) {
-                createCirle(map, response, ship, 0.99, 3, 0.2);
+                Create.createCirle(map, response, ship, 0.99, 3, 0.2);
             }
         });
 
@@ -190,7 +189,7 @@
                     j = j + 1;
                     if (j == (hasMultiPrice.length)) {
 
-                        var marker = createMarker(map, ship, marker);
+                        var marker = Create.createMarker(map, ship, marker);
                         var contentString = contentString = InfoWindow.createContentString(ship);
 
                         const infowindow = new google.maps.InfoWindow({
@@ -201,12 +200,13 @@
                             infowindow.open(marker.get("map"), marker);
                         });
 
-                        createCirle(map, response, ship, 0.99, 3, 0.2);
+                        Create.createCirle(map, response, ship, 0.99, 3, 0.2);
                     }
                 }
             }
         });
     }
+
     class InfoWindow{
         static createContentString(ship) {
             var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship.name.toString() + "<br>" +
@@ -269,67 +269,71 @@
         }
     }
 
-    function createMap(map) { //create only map
-        map = null;
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: {
-                lat: 47.5162,
-                lng: 14.5501
-            },
-            zoom: 4.8,
-        });
-        return map;
+    class Create{
+        static createMap(map) { //create only map
+            map = null;
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: {
+                    lat: 47.5162,
+                    lng: 14.5501
+                },
+                zoom: 4.8,
+            });
+            return map;
+        }
+
+        static createCirle(map, response, ship, strokeOpacity, strokeWeight, fillOpacity) {
+            const cityCircle = new google.maps.Circle({
+                strokeColor: ColorMap.priceToColor(response['priceMin'],
+                    response['priceMax'],
+                    ship.price),
+                strokeOpacity: strokeOpacity,
+                strokeWeight: strokeWeight,
+                fillColor: ColorMap.priceToColor(response['priceMin'],
+                    response['priceMax'],
+                    ship.price),
+                fillOpacity: fillOpacity,
+                map,
+                center: new google.maps.LatLng(ship.latitude,
+                    ship.longitude),
+                radius: ship.radius * 0.1,
+            });
+        }
+
+        static createMarker(map, ship, marker) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(ship
+                    .latitude, ship.longitude),
+                map,
+            });
+            return marker;
+        }
     }
 
-    function createCirle(map, response, ship, strokeOpacity, strokeWeight, fillOpacity) {
-        const cityCircle = new google.maps.Circle({
-            strokeColor: priceToColor(response['priceMin'],
-                response['priceMax'],
-                ship.price),
-            strokeOpacity: strokeOpacity,
-            strokeWeight: strokeWeight,
-            fillColor: priceToColor(response['priceMin'],
-                response['priceMax'],
-                ship.price),
-            fillOpacity: fillOpacity,
-            map,
-            center: new google.maps.LatLng(ship.latitude,
-                ship.longitude),
-            radius: ship.radius * 0.1,
-        });
-    }
+    class ColorMap{
+        static mapping(price, price_min, price_max) {
+            return (price - price_min) * (100 - 0) / (price_max - price_min) + 0;
+        }
 
-    function createMarker(map, ship, marker) {
-        marker = new google.maps.Marker({
-            position: new google.maps.LatLng(ship
-                .latitude, ship.longitude),
-            map,
-        });
-        return marker;
+        static priceToColor(min, max, price) {
+            var mapped = ColorMap.mapping(price, min, max);
+            var r, g, b = 0;
+            if (mapped < 50) {
+                g = 255;
+                r = Math.round(5.1 * mapped);
+            } else {
+                r = 255;
+                g = Math.round(510 - 5.10 * mapped);
+            }
+            var h = r * 0x10000 + g * 0x100 + b * 0x1;
+
+            return '#' + ('000000' + h.toString(16)).slice(-6);
+        }
     }
 
     function calcDistance(fromLat, fromLng, toLat, toLng) {
         return google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(fromLat, fromLng),
             new google.maps.LatLng(toLat, toLng));
-    }
-
-    function mapping(price, price_min, price_max) {
-        return (price - price_min) * (100 - 0) / (price_max - price_min) + 0;
-    }
-
-    function priceToColor(min, max, price) {
-        var mapped = mapping(price, min, max);
-        var r, g, b = 0;
-        if (mapped < 50) {
-            g = 255;
-            r = Math.round(5.1 * mapped);
-        } else {
-            r = 255;
-            g = Math.round(510 - 5.10 * mapped);
-        }
-        var h = r * 0x10000 + g * 0x100 + b * 0x1;
-
-        return '#' + ('000000' + h.toString(16)).slice(-6);
     }
 
     function changeCurrency(price, currency, exchangeCurrency) {
@@ -349,7 +353,6 @@
                     $('#currency').append('<option value=' + currency.id + '>' + currency
                         .name + '</option>');
                 });
-
                 markersAndCircles(map, response);
             }
         });
@@ -387,22 +390,24 @@
     });
 
     $("#addCirleMode").click(function() {
+        $("#formCard").empty();
+        $("#filterCard").empty();
         $('#floating-panel').empty();
-        $('#floating-panel').append('<h5 class="text-warning">Add Circle Mode</h5>');
+
+        $('#floating-panel').append('<h5 class="text-success">Add Circle Mode</h5>');
         $('#floating-panel').append('<a href="{{ route('ajax') }}" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
         $('#floating-panel').append('<a id="delete-markers" class="btn btn-danger  mr-2"> Delete Markers</a>');
+        $('#floating-panel').append('<a href="/ajax" class="btn btn-warning mr-2 ">Exit</a>');
 
         $("#delete-markers").click(function() {
             AddCircleMode(map);
         });
-
         AddCircleMode(map);
     });
 
     function AddCircleMode(map) {
-
         map = null;
-        map = createMap(map);
+        map = Create.createMap(map);
         const myLatlng = {
             lat: 47.5162,
             lng: 14.5501
@@ -467,8 +472,7 @@
                 });
             }
         });
-
-      }
+    }
 
 </script>
 
