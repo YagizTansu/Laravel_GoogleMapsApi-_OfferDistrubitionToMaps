@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
-use App\Models\Ship;
-use App\Models\CurrencyExchangeRate;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ShipCreateRequest;
-use App\Models\Currency;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use App\Models\CurrencyExchangeRate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Currency;
+use App\Models\Ship;
+use Carbon\Carbon;
+
+use Illuminate\Support\Facades\DB;
 
 class ShipController extends Controller
 {
