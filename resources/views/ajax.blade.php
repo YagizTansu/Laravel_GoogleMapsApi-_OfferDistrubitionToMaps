@@ -142,34 +142,27 @@
 
         $.each(response['ships'], function(key, ship) {
 
-            var contentString = createContentString(ship); // create String for ship info window
+            var contentString = InfoWindow.createContentString(ship); // create String for ship info window
 
             var totalElement = 1;
-            var totalPrice = changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling,
-                currencyFilterValue);
-            var priceArray = [changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling,
-                currencyFilterValue)];
+            var totalPrice = changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling,currencyFilterValue);
+            var priceArray = [changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling,currencyFilterValue)];
 
             $.each(response['ships'], function(key, secondShip) {
-                var distance = calcDistance(ship.latitude, ship.longitude, secondShip.latitude,
-                    secondShip.longitude); // take distance between 2 ships
+                var distance = calcDistance(ship.latitude, ship.longitude, secondShip.latitude,secondShip.longitude); // take distance between 2 ships
 
-                if ((ship.radius / 10) > (distance) && distance !=
-                    0) { // control block: if small circle included bu big cicle
+                if ((ship.radius / 10) > (distance) && distance !=0) { // control block: if small circle included bu big cicle
                     if (((distance) + secondShip.radius / 10) < ship.radius / 10) {
                         totalElement++;
                         hasMultiPrice.push(ship.id);
                         hasMultiPrice.push(secondShip.id);
-                        priceArray.push(changeCurrency(secondShip.price, secondShip.currency
-                            .currency_exchange_rates[0].selling, currencyFilterValue));
+                        priceArray.push(changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[0].selling, currencyFilterValue));
 
-                        var marker = createMarker(map, ship,
-                            marker); // create Markers if coordinate has multi prices
+                        var marker = createMarker(map, ship,marker); // create Markers if coordinate has multi prices
 
-                        totalPrice += changeCurrency(secondShip.price, secondShip.currency
-                            .currency_exchange_rates[0].selling, currencyFilterValue);
+                        totalPrice += changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[0].selling, currencyFilterValue);
 
-                        contentString += createContentString(secondShip);
+                        contentString += InfoWindow.createContentString(secondShip);
 
                         marker.addListener("click", () => {
                             infowindow.open(marker.get("map"), marker);
@@ -180,11 +173,8 @@
                 }
             });
 
-            const infowindow = new google.maps.InfoWindow({ // max min average value for each multi cirle info window
-                content: contentString + " <strong class='text-warning' >" + " Average Price :" +
-                    " </strong>" + (totalPrice /totalElement).toFixed(2)  + ' ' + currencySymbols(currencyText)+  "<br>" + " <strong class='text-success' >" +
-                    " Min Price : " + " </strong>" + Math.min.apply(null, priceArray).toFixed(2) +' '+ currencySymbols(currencyText) +
-                    "<br> " + " <strong class='text-danger' >" + " Max Price : " + " </strong>" + Math.max.apply(null, priceArray).toFixed(2) + ' ' + currencySymbols(currencyText),
+             const infowindow = new google.maps.InfoWindow({ // max min average value for each multi cirle info window
+                content: contentString + InfoWindow.createAveragePriceString(totalPrice,totalElement,currencyText,priceArray)
             });
 
             if (subCircleController == true) {
@@ -201,7 +191,7 @@
                     if (j == (hasMultiPrice.length)) {
 
                         var marker = createMarker(map, ship, marker);
-                        var contentString = contentString = createContentString(ship);
+                        var contentString = contentString = InfoWindow.createContentString(ship);
 
                         const infowindow = new google.maps.InfoWindow({
                             content: contentString
@@ -217,15 +207,66 @@
             }
         });
     }
-
-    function createContentString(ship) {
-        contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship.name.toString() + "<br>" +
-            "<strong>" + 'Ship Price: ' + "</strong>" + changeCurrency(ship.price, ship.currency
-                .currency_exchange_rates[0].selling, currencyFilterValue).toFixed(2).toString() +' '+currencySymbols(currencyText) +  " " +
-            "<br>" + "<a href=/ship-detail/" + ship.id + " class='btn btn-sm btn-primary'> " + 'ship detail' + "</a>" +
-            "<br> <br>";
+    class InfoWindow{
+        static createContentString(ship) {
+            var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship.name.toString() + "<br>" +
+                "<strong>" + 'Ship Price: ' + "</strong>" + changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling, currencyFilterValue).toFixed(2).toString() +' '+Filter.currencySymbols(currencyText) +  " " +
+                "<br>" + "<a href=/ship-detail/" + ship.id + " class='btn btn-sm btn-primary'> " + 'ship detail' + "</a>" +
+                "<br> <br>";
 
         return contentString;
+        }
+
+        static createAveragePriceString(totalPrice,totalElement,currencyText,priceArray) {
+            var contentString = " <strong class='text-warning' >" + " Average Price :" +
+                " </strong>" + (totalPrice /totalElement).toFixed(2)  + ' ' + Filter.currencySymbols(currencyText)+  "<br>" + " <strong class='text-success' >" +
+                " Min Price : " + " </strong>" + Math.min.apply(null, priceArray).toFixed(2) +' '+ Filter.currencySymbols(currencyText) +
+                "<br> " + " <strong class='text-danger' >" + " Max Price : " + " </strong>" + Math.max.apply(null, priceArray).toFixed(2) + ' ' + Filter.currencySymbols(currencyText);
+
+        return contentString;
+        }
+    }
+
+    class Filter{
+        static updateFilter() {
+            subCircleFilterValue = Filter.getSubCircleFilterValue();
+            currencyFilterValue = Filter.getCurrencyFilterValue();
+            loadMap(map, subCircleFilterValue, currencyFilterValue);
+        }
+
+        static getSubCircleFilterValue() {
+            subCircle.addEventListener('change', function() {
+                subCircleController = this.checked;
+            });
+            return subCircleController;
+        }
+
+        static getCurrencyFilterValue() {
+            currencyValue.addEventListener('change', (event) => {
+                currencyFilterValue = event.target.value;
+            });
+            Filter.currencySymbols(currencyText);
+            return currencyFilterValue;
+        }
+
+        static currencySymbols(currencyText) {
+        currencyText = $( "#showCurrency option:selected" ).text();
+            switch (currencyText.trim()) {
+                case "Dollar":
+                    currencySymbol = "$";
+                    break;
+                case "Euro":
+                    currencySymbol = "€";
+                    break;
+                case "Turkish Lira":
+                    currencySymbol = "₺";
+                    break;
+                default:
+                    currencySymbol = "$";
+                    break;
+            }
+            return currencySymbol ;
+        }
     }
 
     function createMap(map) { //create only map
@@ -336,65 +377,29 @@
     var subCircle = document.querySelector("#subCircle");
     subCircle.addEventListener('change', function() { //control subcircle filter checkbox
         subCircleController = this.checked;
-        updateFilter();
+        Filter.updateFilter();
     });
 
     const currencyValue = document.querySelector('#showCurrency');
     currencyValue.addEventListener('change', (event) => { //control display currency filter
         currencyFilterValue = event.target.value;
-        updateFilter();
+        Filter.updateFilter();
     });
-
-    function updateFilter() {
-        subCircleFilterValue = getSubCircleFilterValue();
-        currencyFilterValue = getCurrencyFilterValue();
-        //alert(subCircleFilterValue + " " + currencyFilterValue);
-        loadMap(map, subCircleFilterValue, currencyFilterValue);
-    }
-
-    function getSubCircleFilterValue() {
-        subCircle.addEventListener('change', function() {
-            subCircleController = this.checked;
-        });
-        return subCircleController;
-    }
-
-    function getCurrencyFilterValue() {
-        currencyValue.addEventListener('change', (event) => {
-            currencyFilterValue = event.target.value;
-        });
-        currencySymbols(currencyText);
-        return currencyFilterValue;
-
-    }
-
-    function currencySymbols(currencyText) {
-       currencyText = $( "#showCurrency option:selected" ).text();
-        switch (currencyText.trim()) {
-            case "Dollar":
-                 currencySymbol = "$";
-                break;
-            case "Euro":
-                currencySymbol = "€";
-                break;
-            case "Turkish Lira":
-                currencySymbol = "₺";
-                break;
-            default:
-                currencySymbol = "$";
-                break;
-        }
-        return currencySymbol ;
-    }
 
     $("#addCirleMode").click(function() {
         $('#floating-panel').empty();
         $('#floating-panel').append('<h5 class="text-warning">Add Circle Mode</h5>');
         $('#floating-panel').append('<a href="{{ route('ajax') }}" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
-        //$('#floating-panel').append('<a id="hide-markers" class="btn btn-success mr-2"> Hide Marker</a>');
-        //$('#floating-panel').append('<a id="show-markers" class="btn btn-success  mr-2"> Show Marker</a>');
         $('#floating-panel').append('<a id="delete-markers" class="btn btn-danger  mr-2"> Delete Markers</a>');
 
+        $("#delete-markers").click(function() {
+            AddCircleMode(map);
+        });
+
+        AddCircleMode(map);
+    });
+
+    function AddCircleMode(map) {
 
         map = null;
         map = createMap(map);
@@ -414,11 +419,6 @@
         var cityCircle;
         // Configure the click listener.
         map.addListener("click", (mapsMouseEvent) => {
-
-            $("#delete-markers").click(function() {
-                map = createMap(map);
-                return;
-            });
 
             clicked++;
             if (clicked != 1) {
@@ -467,7 +467,9 @@
                 });
             }
         });
-    });
+
+      }
+
 </script>
 
 <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry" type="text/javascript"></script>

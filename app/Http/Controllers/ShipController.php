@@ -26,7 +26,6 @@ class ShipController extends Controller
 
     public function add(ShipCreateRequest $request)
     {
-
         $ship = new Ship;
         $ship->user_id = Auth::id();
         $ship->name = $request->name;
