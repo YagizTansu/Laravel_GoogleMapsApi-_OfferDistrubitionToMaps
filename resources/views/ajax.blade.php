@@ -42,9 +42,8 @@
             @endif
 
             <div class="col-md-10">
-                <div id="floating-panel"></div>
-                <br>
                 <div id="map"> </div>
+                <div id="floating-panel"></div>
             </div>
             <div class="col-md-2">
                 <div class="card">
@@ -101,8 +100,7 @@
                         <label class="form-check-label" for="flexCheckDefault">Show subcircle</label>
                         <br><br>
                         <label>Display Currency</label>
-                        <select id="showCurrency" class="form-select form-select-sm"
-                            aria-label=".form-select-sm example">
+                        <select id="showCurrency" class="form-select form-select-sm"aria-label=".form-select-sm example">
                         </select>
 
                     </div>
@@ -111,7 +109,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Edit</h5>
+                        <h5 class="card-title">Add</h5>
                         <hr>
                         <button id="addCirleMode" class="btn btn-primary">Add Cirle</button>
                     </div>
@@ -131,6 +129,9 @@
     var subCircleController = null;
     var subCircleFilterValue = null;
     var currencyFilterValue = null;
+    var exchangeCurrencySymbol = null;
+    var currencyText= "Dollar";
+    var currencySymbol = null;
 
     function markersAndCircles(map, response) {
         map = createMap(map); // create main map
@@ -179,10 +180,11 @@
                 }
             });
 
-            const infowindow = new google.maps.InfoWindow({
-                content: contentString + " <strong class='text-warning' >" + " Average Price :" + " </strong>" + totalPrice /
-                    totalElement + "<br>" +  " <strong class='text-success' >" +" Min Price : " + " </strong>" + Math.min.apply(null, priceArray) +
-                    "<br> " + " <strong class='text-danger' >" + " Max Price : "+ " </strong>" + Math.max.apply(null, priceArray),
+            const infowindow = new google.maps.InfoWindow({ // max min average value for each multi cirle info window
+                content: contentString + " <strong class='text-warning' >" + " Average Price :" +
+                    " </strong>" + (totalPrice /totalElement).toFixed(2)  + ' ' + currencySymbols(currencyText)+  "<br>" + " <strong class='text-success' >" +
+                    " Min Price : " + " </strong>" + Math.min.apply(null, priceArray).toFixed(2) +' '+ currencySymbols(currencyText) +
+                    "<br> " + " <strong class='text-danger' >" + " Max Price : " + " </strong>" + Math.max.apply(null, priceArray).toFixed(2) + ' ' + currencySymbols(currencyText),
             });
 
             if (subCircleController == true) {
@@ -191,7 +193,6 @@
         });
 
         $.each(response['ships'], function(key, ship) {
-            //alert(ship.currency.currency_exchange_rates[0].buyying);
             let j = 0;
             for (let i = 0; i < hasMultiPrice.length; i++) {
                 //alert(hasMultiPrice[i]);
@@ -220,7 +221,7 @@
     function createContentString(ship) {
         contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship.name.toString() + "<br>" +
             "<strong>" + 'Ship Price: ' + "</strong>" + changeCurrency(ship.price, ship.currency
-                .currency_exchange_rates[0].selling, currencyFilterValue).toString() + " " +
+                .currency_exchange_rates[0].selling, currencyFilterValue).toFixed(2).toString() +' '+currencySymbols(currencyText) +  " " +
             "<br>" + "<a href=/ship-detail/" + ship.id + " class='btn btn-sm btn-primary'> " + 'ship detail' + "</a>" +
             "<br> <br>";
 
@@ -302,8 +303,9 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             success: function(response) {
+                $('#currency').empty();
                 $.each(response['currency'], function(key, currency) {
-                    $('#currency').append('<option value=' + currency.id + '> ' + currency
+                    $('#currency').append('<option value=' + currency.id + '>' + currency
                         .name + '</option>');
                 });
 
@@ -321,6 +323,7 @@
             url: "{{ route('get-exchange-rate') }}",
             type: "GET",
             success: function(response) {
+                $('#showCurrency').empty();
                 $.each(response['CurrencyExchangeRate'], function(key, exchange) {
                     $('#showCurrency').append('<option value=' + exchange.selling + '> ' +
                         exchange.currency.name + '</option>');
@@ -360,19 +363,41 @@
         currencyValue.addEventListener('change', (event) => {
             currencyFilterValue = event.target.value;
         });
+        currencySymbols(currencyText);
         return currencyFilterValue;
+
+    }
+
+    function currencySymbols(currencyText) {
+       currencyText = $( "#showCurrency option:selected" ).text();
+        switch (currencyText.trim()) {
+            case "Dollar":
+                 currencySymbol = "$";
+                break;
+            case "Euro":
+                currencySymbol = "€";
+                break;
+            case "Turkish Lira":
+                currencySymbol = "₺";
+                break;
+            default:
+                currencySymbol = "$";
+                break;
+        }
+        return currencySymbol ;
     }
 
     $("#addCirleMode").click(function() {
         $('#floating-panel').empty();
-        $('#floating-panel').append('<a href="{{route('ajax')}}" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
-        $('#floating-panel').append('<a id="hide-markers" class="btn btn-primary mr-2"> Hide Marker</a>');
-        $('#floating-panel').append('<a id="show-markers" class="btn btn-primary  mr-2"> Show Marker</a>');
-        $('#floating-panel').append('<a id="delete-markers" class="btn btn-primary  mr-2"> Delete Marker</a>');
+        $('#floating-panel').append('<h5 class="text-warning">Add Circle Mode</h5>');
+        $('#floating-panel').append('<a href="{{ route('ajax') }}" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
+        //$('#floating-panel').append('<a id="hide-markers" class="btn btn-success mr-2"> Hide Marker</a>');
+        //$('#floating-panel').append('<a id="show-markers" class="btn btn-success  mr-2"> Show Marker</a>');
+        $('#floating-panel').append('<a id="delete-markers" class="btn btn-danger  mr-2"> Delete Markers</a>');
+
 
         map = null;
         map = createMap(map);
-
         const myLatlng = {
             lat: 47.5162,
             lng: 14.5501
@@ -389,8 +414,13 @@
         var cityCircle;
         // Configure the click listener.
         map.addListener("click", (mapsMouseEvent) => {
-            clicked++;
 
+            $("#delete-markers").click(function() {
+                map = createMap(map);
+                return;
+            });
+
+            clicked++;
             if (clicked != 1) {
                 $("#saveCircleButton").click(function() {
                     //save cityCirle to db
@@ -400,9 +430,12 @@
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
-                        data :{radius: cityCircle.getRadius()*10,latitude : cityCircle.getCenter().lat,longitude : cityCircle.getCenter().lng},
-                        success: function(response) {
-                        }
+                        data: {
+                            radius: cityCircle.getRadius() * 10,
+                            latitude: cityCircle.getCenter().lat,
+                            longitude: cityCircle.getCenter().lng
+                        },
+                        success: function(response) {}
                     });
                     clicked = 0;
                 });
@@ -428,7 +461,8 @@
                             firstX = event.domEvent.clientX;
                             firstY = event.domEvent.clientY;
                         }
-                        cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) *1000) - ((event.domEvent.clientY - firstY) * 1000));
+                        cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) *
+                            1000) - ((event.domEvent.clientY - firstY) * 1000));
                     }
                 });
             }

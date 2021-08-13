@@ -52,15 +52,12 @@ class ShipController extends Controller
         return view('ajax', compact('ships'));
     }
 
-    public function ajaxPost(Request $request)
-    {
+    public function ajaxPost(){
         $ships = Ship::where('user_id', '=', Auth::id())->with('currency','currency.currencyExchangeRates')->get();
         $priceMax = Ship::max('price');
         $priceMin = Ship::min('price');
         $currency = Currency::get();
-        $defaultCurrency = CurrencyExchangeRate::where('id', '=',1)->value('selling');
-        //$var=$ships->last()->currency->currencyExchangeRate;
-        //return response()->json($var);
+        $defaultCurrency = CurrencyExchangeRate::where('currency_id', '=',1)->value('selling');
 
         $payLoad = ['ships' => $ships, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency];
         return response()->json($payLoad);
