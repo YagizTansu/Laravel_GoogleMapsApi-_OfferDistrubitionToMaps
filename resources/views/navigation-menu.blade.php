@@ -5,14 +5,14 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('ajax') }}">
+                    <a href="{{ route('distribution') }}">
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('ajax') }}" :active="request()->routeIs('ships')">
+                    <x-jet-nav-link href="{{ route('distribution') }}" :active="request()->routeIs('ships')">
                         {{ __('Ships') }}
                     </x-jet-nav-link>
 
@@ -150,7 +150,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('ajax') }}" :active="request()->routeIs('ajax')">
+            <x-jet-responsive-nav-link href="{{ route('distribution') }}" :active="request()->routeIs('distribution')">
                 {{ __('ships') }}
             </x-jet-responsive-nav-link>
         </div>

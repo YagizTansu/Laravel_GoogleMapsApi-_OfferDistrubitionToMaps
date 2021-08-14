@@ -21,7 +21,8 @@
 </head>
 
 <body>
-    <p class="text-center fs-3"> Distrubition Map </p>
+    @include('navbar')
+    <br>
     <div class="container">
         <div class="row">
 
