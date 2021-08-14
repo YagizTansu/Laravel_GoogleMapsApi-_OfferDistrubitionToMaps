@@ -25,7 +25,7 @@ Route::get('ship-detail/{id}', [ShipController::class, 'detail'])->whereNumber('
 
 Route::post('/ship-add',[ShipController::class, 'add'])->name('ship-add');
 
-Route::get('/ajax', [ShipController::class, 'index'])->name('ajax');
+Route::get('/distribution', [ShipController::class, 'index'])->name('distribution');
 Route::post('/ajax-post', [ShipController::class, 'ajaxPost'])->name('ajax-post');
 
 Route::get('/ajax-get-exchange-rate', [ShipController::class, 'getExchangeRate'])->name('get-exchange-rate');

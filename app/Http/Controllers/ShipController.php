@@ -37,7 +37,7 @@ class ShipController extends Controller
         $ship->currency_id = $request->currency_id;
         $ship->save();
 
-        return redirect()->route('ajax')->withSuccess('Adding Succesful');
+        return redirect()->route('distribution')->withSuccess('Adding Succesful');
     }
 
     public function detail($id)
@@ -49,7 +49,7 @@ class ShipController extends Controller
     public function index(Request $request)
     {
         $ships = Ship::where('user_id', '=', Auth::id())->with('currency')->get();
-        return view('ajax', compact('ships'));
+        return view('distribution', compact('ships'));
     }
 
     public function ajaxPost(){
@@ -124,6 +124,6 @@ class ShipController extends Controller
         $ship->currency_id =1;
         $ship->save();
 
-        return redirect()->route('ajax')->withSuccess('Adding Succesful');
+        return redirect()->route('distribution')->withSuccess('Adding Succesful');
     }
 }

@@ -393,13 +393,14 @@
         $('#floating-panel').empty();
 
         $('#floating-panel').append('<h5 class="text-success">Add Circle Mode</h5>');
-        $('#floating-panel').append('<a href="{{ route('ajax') }}" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
+        $('#floating-panel').append('<a href="/distribution" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
         $('#floating-panel').append('<a id="delete-markers" class="btn btn-danger  mr-2"> Delete Markers</a>');
-        $('#floating-panel').append('<a href="/ajax" class="btn btn-warning mr-2 ">Exit</a>');
+        $('#floating-panel').append('<a href="/distribution" class="btn btn-warning mr-2 ">Exit</a>');
 
         $("#delete-markers").click(function() {
             AddCircleMode(map);
         });
+
         AddCircleMode(map);
     });
 
