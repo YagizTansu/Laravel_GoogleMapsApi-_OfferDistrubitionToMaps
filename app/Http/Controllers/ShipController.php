@@ -57,7 +57,7 @@ class ShipController extends Controller
         $priceMax = Ship::max('price');
         $priceMin = Ship::min('price');
         $currency = Currency::get();
-        $defaultCurrency = CurrencyExchangeRate::where('currency_id', '=',1)->value('selling');
+        $defaultCurrency = CurrencyExchangeRate::where('currency_id', '=',1)->latest()->value('selling');
 
         $payLoad = ['ships' => $ships, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency];
         return response()->json($payLoad);

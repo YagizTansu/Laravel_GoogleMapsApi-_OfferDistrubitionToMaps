@@ -141,12 +141,12 @@
         }
 
         $.each(response['ships'], function(key, ship) {
-
+            debugger
             var contentString = InfoWindow.createContentString(ship); // create String for ship info window
 
             var totalElement = 1;
-            var totalPrice = changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling,currencyFilterValue);
-            var priceArray = [changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling,currencyFilterValue)];
+            var totalPrice = changeCurrency(ship.price, ship.currency.currency_exchange_rates[6].selling,currencyFilterValue);
+            var priceArray = [changeCurrency(ship.price, ship.currency.currency_exchange_rates[6].selling,currencyFilterValue)];
 
             $.each(response['ships'], function(key, secondShip) {
                 var distance = calcDistance(ship.latitude, ship.longitude, secondShip.latitude,secondShip.longitude); // take distance between 2 ships
@@ -156,10 +156,10 @@
                         totalElement++;
                         hasMultiPrice.push(ship.id);
                         hasMultiPrice.push(secondShip.id);
-                        priceArray.push(changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[0].selling, currencyFilterValue));
+                        priceArray.push(changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[6].selling, currencyFilterValue));
 
                         var marker = Create.createMarker(map, ship,marker); // create Markers if coordinate has multi prices
-                        totalPrice += changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[0].selling, currencyFilterValue);
+                        totalPrice += changeCurrency(secondShip.price, secondShip.currency.currency_exchange_rates[6].selling, currencyFilterValue);
                         contentString += InfoWindow.createContentString(secondShip);
 
                         marker.addListener("click", () => {
@@ -209,7 +209,7 @@
     class InfoWindow{
         static createContentString(ship) {
             var contentString = "<strong>" + 'Ship Name: ' + "</strong>" + ship.name.toString() + "<br>" +
-                "<strong>" + 'Ship Price: ' + "</strong>" + changeCurrency(ship.price, ship.currency.currency_exchange_rates[0].selling, currencyFilterValue).toFixed(2).toString() +' '+Filter.currencySymbols(currencyText) +  " " +
+                "<strong>" + 'Ship Price: ' + "</strong>" + changeCurrency(ship.price, ship.currency.currency_exchange_rates[6].selling, currencyFilterValue).toFixed(2).toString() +' '+Filter.currencySymbols(currencyText) +  " " +
                 "<br>" + "<a href=/ship-detail/" + ship.id + " class='btn btn-sm btn-primary'> " + 'ship detail' + "</a>" +
                 "<br> <br>";
 
@@ -336,6 +336,7 @@
     }
 
     function changeCurrency(price, currency, exchangeCurrency) {
+        //var excahngeCurrencyLength = exchangeCurrency.length;
         return (price * currency) / exchangeCurrency;
     }
 
@@ -356,20 +357,21 @@
             }
         });
     }
+
     function printCurrency(response) {
+
         $('#currency').empty();
                 $.each(response['currency'], function(key, currency) {
                     $('#currency').append('<option value=' + currency.id + '>' + currency
                         .name + '</option>');
                 });
-      }
+    }
 
     function getDisplayExchangeRates() {
         $.ajax({
             url: "{{ route('get-exchange-rate') }}",
             type: "GET",
             success: function(response) {
-                debugger
                 $('#showCurrency').empty();
                 $.each(response['CurrencyExchangeRate'], function(key, exchange) {
                     $('#showCurrency').append('<option value=' + exchange.selling + '> ' +
