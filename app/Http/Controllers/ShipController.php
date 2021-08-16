@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Currency;
 use App\Models\Ship;
-use Carbon\Carbon;
 use App\Services\ExchangeRateService;
-use Illuminate\Support\Facades\DB;
 
 class ShipController extends Controller
 {

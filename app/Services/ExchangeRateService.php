@@ -7,7 +7,6 @@ use App\Models\Currency;
 use Carbon\Carbon;
 
 class ExchangeRateService{
-
     function updateTodayCurrencyExchangeRate()
     {
         $currencies = [
