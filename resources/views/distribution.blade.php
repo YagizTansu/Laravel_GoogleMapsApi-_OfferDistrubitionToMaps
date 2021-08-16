@@ -351,21 +351,25 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             success: function(response) {
-                $('#currency').empty();
-                $.each(response['currency'], function(key, currency) {
-                    $('#currency').append('<option value=' + currency.id + '>' + currency
-                        .name + '</option>');
-                });
+                printCurrency(response);
                 markersAndCircles(map, response);
             }
         });
     }
+    function printCurrency(response) {
+        $('#currency').empty();
+                $.each(response['currency'], function(key, currency) {
+                    $('#currency').append('<option value=' + currency.id + '>' + currency
+                        .name + '</option>');
+                });
+      }
 
     function getDisplayExchangeRates() {
         $.ajax({
             url: "{{ route('get-exchange-rate') }}",
             type: "GET",
             success: function(response) {
+                debugger
                 $('#showCurrency').empty();
                 $.each(response['CurrencyExchangeRate'], function(key, exchange) {
                     $('#showCurrency').append('<option value=' + exchange.selling + '> ' +
