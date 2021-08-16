@@ -56,8 +56,6 @@
                         </select>
                     </div>
 
-
-
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Add</button></p>
 
                 </form>

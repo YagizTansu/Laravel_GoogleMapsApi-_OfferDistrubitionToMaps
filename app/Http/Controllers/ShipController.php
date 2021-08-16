@@ -41,6 +41,7 @@ class ShipController extends Controller
     public function detail($id)
     {
         $ship = Ship::find($id);
+        $currency = Currency::get();
         return view('ship_detail', compact('ship'));
     }
 

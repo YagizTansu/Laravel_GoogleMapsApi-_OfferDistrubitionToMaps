@@ -27,6 +27,12 @@
                         <input type="text" class="form-control" id="radius" name="radius" value={{$ship->radius}}>
                     </div>
 
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" class="form-control" id="price" name="price" value={{$ship->price}}>
+                    </div>
+
+
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Update</button></p>
 
                 </form>

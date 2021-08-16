@@ -460,6 +460,7 @@
                     fillColor: "#FF0000",
                     fillOpacity: 0.35,
                     map,
+                    draggable: true,
                     center: mapsMouseEvent.latLng,
                     radius: 0,
                 });
