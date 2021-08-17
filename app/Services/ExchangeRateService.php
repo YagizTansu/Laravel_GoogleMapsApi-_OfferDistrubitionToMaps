@@ -46,7 +46,7 @@ class ExchangeRateService{
 
         if (empty($currencyExchangeRate)) {
             CurrencyExchangeRate::create([
-                'currency_id' => 113,
+                'currency_id' => 3,
                 'buyying' => 1,
                 'selling' => 1,
                 'date' => Carbon::now()->format('Y-m-d')
@@ -64,8 +64,10 @@ class ExchangeRateService{
         if(empty($currencyExchangeRate)){
             $load = $this->updateTodayCurrencyExchangeRate();
         }else{
-            $load = ['CurrencyExchangeRate' => $currencyExchangeRate];
+            $load = $this->updateTodayCurrencyExchangeRate();
+            //$load = ['CurrencyExchangeRate' => $currencyExchangeRate];
         }
+
         return $load;
     }
 

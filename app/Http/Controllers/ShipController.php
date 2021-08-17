@@ -56,9 +56,10 @@ class ShipController extends Controller
         $priceMax = Ship::max('price');
         $priceMin = Ship::min('price');
         $currency = Currency::get();
+        $CurrencyExchangeRate = CurrencyExchangeRate::get();
         $defaultCurrency = CurrencyExchangeRate::where('currency_id', '=',1)->latest()->value('selling');
 
-        $payLoad = ['ships' => $ships, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency];
+        $payLoad = ['ships' => $ships, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
         return response()->json($payLoad);
     }
 
@@ -72,12 +73,13 @@ class ShipController extends Controller
     public function addCircle(Request $request){
         $ship = new Ship;
         $ship->user_id =Auth::id();
-        $ship->name = "";
+        $ship->name = "Edit Title";
         $ship->latitude =$request->latitude;
         $ship->longitude = $request->longitude;
         $ship->radius = $request->radius;
-        //$ship->price =0;
+        $ship->price = null;
         $ship->currency_id =1;
+
         $ship->save();
 
         return redirect()->route('distribution')->withSuccess('Adding Succesful');

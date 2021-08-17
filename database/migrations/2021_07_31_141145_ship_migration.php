@@ -16,15 +16,14 @@ class ShipMigration extends Migration
         Schema::create('ships', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-
             $table->string('name');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->string('radius');
-            $table->integer('price');
-
-            $table->timestamps();
+            $table->Decimal('latitude',8,4);
+            $table->Decimal('longitude',8,4);
+            $table->unsignedDecimal('radius',11,3);
+            $table->unsignedDecimal('price',8,4);
             $table->foreignId('currency_id');
+            $table->timestamps();
+
         });
     }
 
