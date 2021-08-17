@@ -72,7 +72,7 @@
 
                 <div id="formCard" class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Addd Ship</h5>
+                        <h5 class="card-title">Add Ship</h5>
                         <hr>
                         <form method="POST" action="{{ route('ship-add') }}">
                             @csrf
