@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\CurrencyExchangeRate;
 use App\Models\Currency;
 
-
 class CacheController extends Controller
 {
     public function getCacheFile()
