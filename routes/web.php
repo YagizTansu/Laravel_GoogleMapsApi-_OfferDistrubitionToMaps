@@ -27,9 +27,9 @@ Route::get('ship-detail/{id}', [ShipController::class, 'detail'])->whereNumber('
 Route::post('/ship-add',[ShipController::class, 'add'])->name('ship-add');
 
 Route::get('/distribution', [ShipController::class, 'index'])->name('distribution');
-Route::post('/ajax-post', [ShipController::class, 'ajaxPost'])->name('ajax-post');
+//Route::post('/ajax-post', [ShipController::class, 'ajaxPost'])->name('ajax-post');
 
 Route::get('/ajax-get-exchange-rate', [ShipController::class, 'getExchangeRate'])->name('get-exchange-rate');
 Route::post('/addCircle', [ShipController::class, 'addCircle'])->name('addCircle');
 
-Route::get('/getCacheFile', [CacheController::class, 'getCacheFile']);
+Route::get('/getCacheFile', [CacheController::class, 'getCacheFile'])->name('getCacheFile');

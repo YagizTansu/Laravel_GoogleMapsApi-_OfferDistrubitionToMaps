@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +16,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //\App\Models\User::factory(10)->create();
-        \App\Models\Ship::factory(100000)->create();
+        //\App\Models\Ship::factory(10000)->create();
+        //\App\Models\City::factory(1000)->create();
+        //\App\Models\Offer::factory(10000)->create();
+
+      /*  $this->call([
+            CountrySeeder::class,
+        ]);*/
+
     }
 }
 

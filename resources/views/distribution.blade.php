@@ -338,9 +338,10 @@
     }
 
     function masterAjax() {
+
         $.ajax({
-            url: "{{ route('ajax-post') }}",
-            type: "POST",
+            url: "{{ route('getCacheFile') }}",
+            type: "GET",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
@@ -363,6 +364,7 @@
             url: "{{ route('get-exchange-rate') }}",
             type: "GET",
             success: function(response) {
+
                 $('#showCurrency').empty();
                 $.each(response['CurrencyExchangeRate'], function(key, exchange) {
                     $('#showCurrency').append('<option value=' + exchange.selling + '> ' + exchange.currency.name + '</option>');

@@ -20,11 +20,11 @@ class CacheController extends Controller
 
         if (Cache::has('ships')) {
             $ships = Cache::get('ships');
-            //json_encode($ships);
+            json_encode($ships);
             $payLoad = ['ships' => $ships, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
             return response()->json($payLoad);
         }else{
-            $ships = Ship::all();
+            $ships = Ship::where('id', '<',1000)->where('user_id', '=', Auth::id())->with('currency','currency.currencyExchangeRates')->get();
             json_encode($ships);
             Cache::put('ships', $ships, 60);
 
