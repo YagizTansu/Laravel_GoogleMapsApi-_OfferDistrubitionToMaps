@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         //\App\Models\User::factory(10)->create();
         //\App\Models\Ship::factory(10000)->create();
         //\App\Models\City::factory(1000)->create();
-        //\App\Models\Offer::factory(10000)->create();
+        \App\Models\Offer::factory(700)->create();
 
       /*  $this->call([
             CountrySeeder::class,

@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\ShipController;
 use App\Http\Controllers\CacheController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\OfferController;
+use App\Models\Currency;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -33,3 +37,9 @@ Route::get('/ajax-get-exchange-rate', [ShipController::class, 'getExchangeRate']
 Route::post('/addCircle', [ShipController::class, 'addCircle'])->name('addCircle');
 
 Route::get('/getCacheFile', [CacheController::class, 'getCacheFile'])->name('getCacheFile');
+
+Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
+Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
+Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
+Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
+Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');

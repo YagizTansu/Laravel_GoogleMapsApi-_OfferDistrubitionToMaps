@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Cache;
 use App\Models\CurrencyExchangeRate;
 use App\Models\Currency;
 use App\Models\Offer;
+use Illuminate\Http\Request;
 
-class CacheController extends Controller
+class OfferController extends Controller
 {
-    public function getCacheFile()
+    public function getOffers(Request $request)
     {
         $priceMax = Offer::max('price');
         $priceMin = Offer::min('price');
@@ -23,13 +24,12 @@ class CacheController extends Controller
             $payLoad = ['offers' => $offers, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
             return response()->json($payLoad);
         }else{
-            $offers = Offer::where('city_id', '=', 1)->with('currency','currency.currencyExchangeRates')->get();
+            $offers = Offer::where('city_id', '=',$request->cityId)->with('currency','currency.currencyExchangeRates')->get();
             json_encode($offers);
-            Cache::put('offers', $offers, 10);
+            Cache::put('offers', $offers, 1);
 
             $payLoad = ['offers' => $offers, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
             return response()->json($payLoad);
         }
-
     }
 }
