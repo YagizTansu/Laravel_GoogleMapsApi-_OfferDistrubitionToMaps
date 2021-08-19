@@ -349,7 +349,8 @@
         return (price * currency) / exchangeCurrency;
     }
 
-   /* function getCurrencySellingValue(currencyId) {
+    var currencySellingValue;
+   function getCurrencySellingValue(currencyId) {
         $.ajax({
             url: "{{ route('getCurrencySellingValue') }}",
             type: "GET",
@@ -360,16 +361,21 @@
                     currencyId: currencyId
                 },
             success: function(response) {
-
+                currencySellingValue = response.selling;
+                debugger
             }
         });
-      }*/
+    }
+     getCurrencySellingValue(1);
+
+    alert(currencySellingValue);
 
 
     function loadMap() { // Load all maps proporties
         masterAjax();
         getCountries();
     }
+
     getDisplayExchangeRates();
 
 

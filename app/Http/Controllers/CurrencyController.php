@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Currency;
+use App\Models\CurrencyExchangeRate;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -14,6 +15,7 @@ class CurrencyController extends Controller
 
     public function getCurrencySellingValue(Request $request)
     {
-        # code...
+        $currencySellingValue =CurrencyExchangeRate::where('currency_id', '=',$request->currencyId)->latest('date')->first('selling');
+        return response()->json($currencySellingValue);
     }
 }
