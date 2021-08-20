@@ -23,8 +23,8 @@ class OfferFactory extends Factory
         return [
             'city_id' => $this->faker->numberBetween($min = 1, $max = 1000),
             'company_id' => $this->faker->numberBetween($min = 1, $max = 100),
-            "latitude" => $this->faker->latitude($min = -90, $max = 90),
-            "longitude" => $this->faker->longitude($min = -180, $max = 180),
+            "latitude" => $this->faker->latitude($min = 34, $max = 63),
+            "longitude" => $this->faker->longitude($min = 19.6990, $max = 34),
             'radius' => $this->faker->numerify('######'),
             'currency_id' =>  $this->faker->numberBetween($min = 1, $max = 1),
             'price' =>  $this->faker->numberBetween($min = 1500, $max = 6000),
