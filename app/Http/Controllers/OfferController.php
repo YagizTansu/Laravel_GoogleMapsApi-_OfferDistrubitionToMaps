@@ -32,4 +32,19 @@ class OfferController extends Controller
             return response()->json($payLoad);
         }
     }
+
+    public function addOffer(Request $request){
+        $offer = new Offer;
+        $offer->city_id = 5;
+        $offer->company_id =3;
+        $offer->latitude =$request->latitude;
+        $offer->longitude = $request->longitude;
+        $offer->radius = $request->radius;
+        $offer->price =1000;
+        $offer->currency_id =1;
+
+        $offer->save();
+        return redirect()->route('distribution')->withSuccess('Adding Succesful');
+    }
+
 }

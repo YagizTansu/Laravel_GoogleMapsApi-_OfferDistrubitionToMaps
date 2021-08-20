@@ -771,6 +771,8 @@ video {
 	margin-top: 0;
 }.prose > :last-child{
 	margin-bottom: 0;
+}.static{
+	position: static;
 }.fixed{
 	position: fixed;
 }.absolute{
@@ -845,6 +847,8 @@ video {
 	margin-bottom: 1rem;
 }.-mt-px{
 	margin-top: -1px;
+}.mr-auto{
+	margin-right: auto;
 }.mb-2{
 	margin-bottom: 0.5rem;
 }.block{

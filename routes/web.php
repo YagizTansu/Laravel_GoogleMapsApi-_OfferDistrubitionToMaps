@@ -43,3 +43,5 @@ Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCiti
 Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
 Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
 Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');
+
+Route::get('/addOffer', [OfferController::class, 'addOffer'])->name('addOffer');

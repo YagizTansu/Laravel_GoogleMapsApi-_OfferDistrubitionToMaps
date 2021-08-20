@@ -154,7 +154,7 @@
 
             var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[4].selling,exchangeSellingValue);
             // var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
-            debugger
+
             var totalPrice = changeCurrency(offerPirce);
             var priceArray = [offerPirce];
 
@@ -286,8 +286,8 @@
 
     class Create{
         static createMap(map) { //create only map
-            map = null;
-            map = new google.maps.Map(document.getElementById("map"), {
+
+            var map = new google.maps.Map(document.getElementById("map"), {
                 center: {
                     lat: 47.5162,
                     lng: 14.5501
@@ -476,12 +476,12 @@
         $('#floating-panel').append('<a href="/distribution" class="btn btn-warning mr-2 ">Exit</a>');
 
         $("#delete-markers").click(function() {
-            AddCircleMode(map);
+            AddCircleMode();
         });
 
-        AddCircleMode(map);
+        AddCircleMode();
     });
-    function AddCircleMode(map) {
+    function AddCircleMode() {
         map = null;
         map = Create.createMap(map);
 
@@ -497,31 +497,12 @@
         });
         infoWindow.open(map);
 
+
         var clicked = 0;
         var cityCircle;
         // Configure the click listener.
-        map.addListener("click", (mapsMouseEvent) => {
-
+        google.maps.event.addListener(map, 'click', function(event) {
             clicked++;
-            if (clicked != 1) {
-                $("#saveCircleButton").click(function() {
-                    //save cityCirle to db
-                    $.ajax({
-                        url: "{{ route('addCircle') }}",
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        data: {
-                            radius: parseInt(cityCircle.getRadius()) ,
-                            latitude: cityCircle.getCenter().lat,
-                            longitude: cityCircle.getCenter().lng
-                        },
-                        success: function(response) {}
-                    });
-                    clicked = 0;
-                });
-            }
 
             if (clicked == 1) {
                 cityCircle = new google.maps.Circle({
@@ -532,10 +513,10 @@
                     fillOpacity: 0.35,
                     map,
                     draggable: true,
-                    center: mapsMouseEvent.latLng,
+                    center: event.latLng,
                     radius: 0,
                 });
-
+                debugger
                 var firstX = 0;
                 var firstY = 0;
                 google.maps.event.addListener(map, "mousemove", function(event) {
@@ -544,17 +525,36 @@
                             firstX = event.domEvent.clientX;
                             firstY = event.domEvent.clientY;
                         }
-                        cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) *
-                            1000) - ((event.domEvent.clientY - firstY) * 1000));
+                        cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) *1000) - ((event.domEvent.clientY - firstY) * 1000));
                     }
+                });
+            }
+
+            if (clicked != 1) {
+                $("#saveCircleButton").click(function() {
+                    //save cityCirle to db
+                    $.ajax({
+                        url: "{{ route('addOffer') }}",
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        data: {
+                            radius: parseInt(cityCircle.getRadius()) ,
+                            latitude: cityCircle.getCenter().lat,
+                            longitude: cityCircle.getCenter().lng
+                        },
+                        success: function(response) {
+                        }
+                    });
+
+                    clicked = 0;
                 });
             }
         });
     }
 
 </script>
-
-
 
 <script type="text/javascript"
         src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMU4r64e98czgUSW1_V6ESAend_wpYY6Q&callback=loadMap">
