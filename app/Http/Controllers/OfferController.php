@@ -40,11 +40,19 @@ class OfferController extends Controller
         $offer->latitude =$request->latitude;
         $offer->longitude = $request->longitude;
         $offer->radius = $request->radius;
-        $offer->price =1000;
         $offer->currency_id =1;
+        $offer->price =1000;
 
         $offer->save();
-        return redirect()->route('distribution')->withSuccess('Adding Succesful');
+
+        return redirect()->route('distribution')->withSuccess('Offer Added Successfuly');
+    }
+
+    public function detail($id)
+    {
+        $offer = Offer::find($id);
+        $currency = Currency::get();
+        return view('offer_detail', compact('offer'));
     }
 
 }

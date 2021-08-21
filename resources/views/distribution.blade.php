@@ -134,7 +134,6 @@
 
 <script>
     const hasMultiPrice = [];
-
      async function markersAndCircles(map, response,subCircleFilterValue,currencyFilterValue,currencySymbol='$') {
         map = Create.createMap(map); // create main map
 
@@ -235,7 +234,7 @@
         static createContentString(offer,currencySymbols,exchangeCurrencySellingValue) {
             var contentString = "<strong>" + 'Company id: '+offer.company_id + "</strong>"  + "<br>" +
                 "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[4].selling,exchangeCurrencySellingValue).toFixed(2).toString() +' '+currencySymbols  +  " " +
-                "<br>" + "<a href=/ship-detail/" + offer.id + " class='btn btn-sm btn-primary'> " + 'offer detail' + "</a>" +
+                "<br>" + "<a href=/offer-detail/" + offer.id + " class='btn btn-sm btn-primary'> " + 'offer detail' + "</a>" +
                 "<br> <br>";
 
         return contentString;
@@ -285,7 +284,7 @@
     }
 
     class Create{
-        static createMap(map) { //create only map
+        static createMap() { //create only map
 
             var map = new google.maps.Map(document.getElementById("map"), {
                 center: {
@@ -476,14 +475,13 @@
         $('#floating-panel').append('<a href="/distribution" class="btn btn-warning mr-2 ">Exit</a>');
 
         $("#delete-markers").click(function() {
-            AddCircleMode();
+            AddCircleMode(map);
         });
 
         AddCircleMode();
     });
     function AddCircleMode() {
-        map = null;
-        map = Create.createMap(map);
+        var map = Create.createMap(map);
 
         const myLatlng = {
             lat: 47.5162,
@@ -501,11 +499,14 @@
         var clicked = 0;
         var cityCircle;
         // Configure the click listener.
-        google.maps.event.addListener(map, 'click', function(event) {
+
+//lat and lng is available in e object
+
+        map.addListener("click", (event) => {
             clicked++;
 
-            if (clicked == 1) {
-                cityCircle = new google.maps.Circle({
+            if (clicked == 1){
+            cityCircle = new google.maps.Circle({
                     strokeColor: "#FF0000",
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
@@ -516,7 +517,7 @@
                     center: event.latLng,
                     radius: 0,
                 });
-                debugger
+
                 var firstX = 0;
                 var firstY = 0;
                 google.maps.event.addListener(map, "mousemove", function(event) {
@@ -531,23 +532,25 @@
             }
 
             if (clicked != 1) {
+                alert( cityCircle.getCenter().lat());
+                debugger
                 $("#saveCircleButton").click(function() {
                     //save cityCirle to db
                     $.ajax({
                         url: "{{ route('addOffer') }}",
-                        type: "POST",
+                        type: "GET",
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         data: {
-                            radius: parseInt(cityCircle.getRadius()) ,
-                            latitude: cityCircle.getCenter().lat,
-                            longitude: cityCircle.getCenter().lng
+                            radius: cityCircle.getRadius(),
+                            latitude: cityCircle.getCenter().lat(),
+                            longitude: cityCircle.getCenter().lng()
+
                         },
                         success: function(response) {
                         }
                     });
-
                     clicked = 0;
                 });
             }
@@ -555,6 +558,7 @@
     }
 
 </script>
+
 
 <script type="text/javascript"
         src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMU4r64e98czgUSW1_V6ESAend_wpYY6Q&callback=loadMap">
