@@ -40,6 +40,7 @@ Route::get('/getCacheFile', [CacheController::class, 'getCacheFile'])->name('get
 Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
 Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
 Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
+Route::get('/offers-list', [OfferController::class, 'getOffersList'])->name('offers-list');
 Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
 Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');
 

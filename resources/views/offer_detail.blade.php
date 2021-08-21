@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <form method="POST" action="{{ route('ship-add') }}">
+                <form method="POST" action="">
                     @csrf
                     <div class="form-group">
                         <label>Offer Id</label>
@@ -30,7 +30,7 @@
                 </form>
               </div>
               <div class="col">
-                <form method="POST" action="{{ route('ship-add') }}">
+                <form method="POST" action="">
                     @csrf
                     <div class="form-group">
                         <label>Company Name</label>

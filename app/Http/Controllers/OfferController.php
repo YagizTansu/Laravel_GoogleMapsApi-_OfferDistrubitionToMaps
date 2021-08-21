@@ -12,7 +12,7 @@ class OfferController extends Controller
 {
     public function index()
     {
-        return view('distribution');
+        return view('offers');
     }
     public function getOffers(Request $request)
     {
@@ -56,6 +56,11 @@ class OfferController extends Controller
     {
         $offer = Offer::find($id);
         return view('offer_detail', compact('offer'));
+    }
+    public function getOffersList()
+    {
+        $offers = Offer::get();
+        return view('offers_list', compact('offers'));
     }
 
 }

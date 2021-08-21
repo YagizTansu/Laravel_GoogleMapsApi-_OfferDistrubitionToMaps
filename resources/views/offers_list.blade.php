@@ -15,30 +15,32 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th scope="col">name</th>
+                        <th scope="col">id</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Company</th>
                         <th scope="col">latitude</th>
                         <th scope="col">longitude</th>
                         <th scope="col">radius</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Currency</th>
                         <th scope="col">Currency</th>
                         <th scope="col">operation</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    @foreach ($ships as $ship)
+                    @foreach ($offers as $offer)
                         <tr>
-                            <td>{{ $ship->name }}</td>
-                            <td>{{ $ship->latitude }}</td>
-                            <td>{{ $ship->longitude }}</td>
-                            <td>{{ $ship->radius }}</td>
-                            <td>{{ $ship->price }}</td>
-                            <td>{{ $ship->currency_id }}</td>
-                            <td> <?php  echo $ship->currency_id ?> </td>
+                            <td>{{ $offer->id }}</td>
+                            <td></td>
+                            <td>{{ $offer->company->name }}</td>
+                            <td>{{ $offer->latitude }}</td>
+                            <td>{{ $offer->longitude }}</td>
+                            <td>{{ $offer->radius }}</td>
+                            <td>{{ $offer->price }}</td>
+                            <td>{{ $offer->currency->name }}</td>
                             <td>
-                                <a href="{{ route('ships.edit', $ship->id) }}" class="btn btn-primary">edit</a>
-                                <a href="{{ route('ships.destroy', $ship->id) }}" class="btn btn-danger">delete</a>
+                                <a href="{{ route('ships.edit', $offer->id) }}" class="btn btn-primary">edit</a>
+                                <a href="{{ route('ships.destroy', $offer->id) }}" class="btn btn-danger">delete</a>
                             </td>
                         </tr>
                     @endforeach
