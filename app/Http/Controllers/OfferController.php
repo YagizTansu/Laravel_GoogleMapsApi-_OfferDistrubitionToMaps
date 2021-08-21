@@ -51,7 +51,6 @@ class OfferController extends Controller
     public function detail($id)
     {
         $offer = Offer::find($id);
-        $currency = Currency::get();
         return view('offer_detail', compact('offer'));
     }
 
