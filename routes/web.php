@@ -29,7 +29,7 @@ Route::get('/trucks', [TruckController::class, 'show'])->name('trucks');
 
 Route::post('/ship-add',[ShipController::class, 'add'])->name('ship-add');
 
-Route::get('/distribution', [ShipController::class, 'index'])->name('distribution');
+Route::get('/offers', [OfferController::class, 'index'])->name('offers');
 //Route::post('/ajax-post', [ShipController::class, 'ajaxPost'])->name('ajax-post');
 
 Route::get('/ajax-get-exchange-rate', [ShipController::class, 'getExchangeRate'])->name('get-exchange-rate');

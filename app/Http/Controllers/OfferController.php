@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class OfferController extends Controller
 {
+    public function index()
+    {
+        return view('distribution');
+    }
     public function getOffers(Request $request)
     {
         $priceMax = Offer::max('price');
@@ -45,7 +49,7 @@ class OfferController extends Controller
 
         $offer->save();
 
-        return redirect()->route('distribution')->withSuccess('Offer Added Successfuly');
+        return redirect()->route('offers')->withSuccess('Offer Added Successfuly');
     }
 
     public function detail($id)
