@@ -37,12 +37,19 @@ Route::post('/addCircle', [ShipController::class, 'addCircle'])->name('addCircle
 
 Route::get('/getCacheFile', [CacheController::class, 'getCacheFile'])->name('getCacheFile');
 
+//Country controller
 Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
 Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
-Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
-Route::get('/offers-list', [OfferController::class, 'getOffersList'])->name('offers-list');
+
+//currency Controller
 Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
 Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');
 
+//offer Controller
+Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
+Route::get('/offers-list', [OfferController::class, 'getOffersList'])->name('offers-list');
 Route::get('/addOffer', [OfferController::class, 'addOffer'])->name('addOffer');
 Route::get('offer-detail/{id}', [OfferController::class, 'detail'])->whereNumber('id')->name('detail');
+
+Route::get('offer-edit/{id}', [OfferController::class, 'edit'])->whereNumber('id')->name('edit');
+Route::get('offer-update/{id}', [OfferController::class, 'update'])->whereNumber('id')->name('offer-update');

@@ -57,10 +57,22 @@ class OfferController extends Controller
         $offer = Offer::find($id);
         return view('offer_detail', compact('offer'));
     }
+
     public function getOffersList()
     {
-        $offers = Offer::get();
+        $offers = Offer::paginate(100);
         return view('offers_list', compact('offers'));
+    }
+
+    public function edit($id)
+    {
+        $offer = Offer::find($id);
+        return view('offer_edit', compact('offer'));
+    }
+    public function update(Request $request,$id)
+    {
+        Offer::Where('id',$id)->update($request->except(['_method','_token']));
+        return redirect()->view('offers_list');
     }
 
 }

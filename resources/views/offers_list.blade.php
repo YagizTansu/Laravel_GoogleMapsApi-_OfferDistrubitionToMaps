@@ -16,7 +16,6 @@
                 <thead>
                     <tr>
                         <th scope="col">id</th>
-                        <th scope="col">City</th>
                         <th scope="col">Company</th>
                         <th scope="col">latitude</th>
                         <th scope="col">longitude</th>
@@ -31,7 +30,6 @@
                     @foreach ($offers as $offer)
                         <tr>
                             <td>{{ $offer->id }}</td>
-                            <td></td>
                             <td>{{ $offer->company->name }}</td>
                             <td>{{ $offer->latitude }}</td>
                             <td>{{ $offer->longitude }}</td>
@@ -39,7 +37,7 @@
                             <td>{{ $offer->price }}</td>
                             <td>{{ $offer->currency->name }}</td>
                             <td>
-                                <a href="{{ route('ships.edit', $offer->id) }}" class="btn btn-primary">edit</a>
+                                <a href="{{ route('edit', $offer->id) }}" class="btn btn-primary">edit</a>
                                 <a href="{{ route('ships.destroy', $offer->id) }}" class="btn btn-danger">delete</a>
                             </td>
                         </tr>
@@ -47,6 +45,7 @@
 
                 </tbody>
             </table>
+            {{ $offers->links() }}
         </div>
     </div>
 
