@@ -152,7 +152,7 @@
 
         $.each(response['offers'], function(key, offer) {
             var contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue); // create String for ship info window
-            var totalElement = 11;
+            var totalElement = 1;
 
             var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[4].selling,exchangeSellingValue);
             //var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
