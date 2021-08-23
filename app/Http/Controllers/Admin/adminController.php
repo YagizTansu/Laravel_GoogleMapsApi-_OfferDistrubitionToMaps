@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Currency;
 use Illuminate\Support\Facades\DB;
 use App\Models\Ship;
+use App\Models\Offer;
 use App\Http\Requests\ShipCreateRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -85,10 +86,10 @@ class adminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ShipCreateRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        Ship::Where('id',$id)->update($request->except(['_method','_token']));
-        return redirect()->route('ships.index');
+        Offer::Where('id',$id)->update($request->except(['_method','_token']));
+        return redirect()->view('offers_list');
     }
 
     /**

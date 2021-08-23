@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Cache;
 use App\Models\CurrencyExchangeRate;
+use Illuminate\Http\Request;
 use App\Models\Currency;
 use App\Models\Offer;
-use Illuminate\Http\Request;
 
 class OfferController extends Controller
 {

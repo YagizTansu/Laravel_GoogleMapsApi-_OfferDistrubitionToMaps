@@ -1,11 +1,11 @@
 <x-app-layout>
-    <x-slot name="header">Update Ships</x-slot>
+    <x-slot name="header">Update Offer</x-slot>
 
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <form method="POST" action="{{ route('offer-updat,  """"""""""""""""""""""""""""""""""""e',$offer->id)}}" >
-                    @method('GET')
+                <form method="POST" action="{{ route('offer-update',$offer->id)}}" >
+                    @method('PUT')
                     @csrf
                     <div class="form-group">
                         <label>Latitude</label>
@@ -27,9 +27,7 @@
                         <input type="text" class="form-control" id="price" name="price" value={{$offer->price}}>
                     </div>
 
-
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Update</button></p>
-
                 </form>
 
             </div>

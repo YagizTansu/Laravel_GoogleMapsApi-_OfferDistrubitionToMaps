@@ -52,4 +52,4 @@ Route::get('/addOffer', [OfferController::class, 'addOffer'])->name('addOffer');
 Route::get('offer-detail/{id}', [OfferController::class, 'detail'])->whereNumber('id')->name('detail');
 
 Route::get('offer-edit/{id}', [OfferController::class, 'edit'])->whereNumber('id')->name('edit');
-Route::get('offer-update/{id}', [OfferController::class, 'update'])->whereNumber('id')->name('offer-update');
+Route::get('offer-update/{id}', [AdminController::class, 'update'])->whereNumber('id')->name('offer-update');

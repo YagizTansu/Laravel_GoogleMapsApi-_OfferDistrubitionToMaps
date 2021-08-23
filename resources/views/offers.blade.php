@@ -147,12 +147,12 @@
         var exchangeCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
         var exchangeSellingValue = exchangeCurrencySellingValue.selling;
 
-         $.each(response['offers'], function(key, offer) {
+         $.each(response['offers'], function(key, offerr) {
             var contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue); // create String for ship info window
             var totalElement = 1;
 
             var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[4].selling,exchangeSellingValue);
-            // var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
+            //var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
 
             var totalPrice = changeCurrency(offerPirce);
             var priceArray = [offerPirce];
