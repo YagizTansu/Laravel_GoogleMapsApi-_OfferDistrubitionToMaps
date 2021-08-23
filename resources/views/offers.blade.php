@@ -150,7 +150,7 @@
         var exchangeSellingValue = exchangeCurrencySellingValue.selling;
 
 
-         $.each(response['offers'], function(key, offer) {
+        $.each(response['offers'], function(key, offer) {
             var contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue); // create String for ship info window
             var totalElement = 1;
 
