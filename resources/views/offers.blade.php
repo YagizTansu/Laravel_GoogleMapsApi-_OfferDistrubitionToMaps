@@ -162,23 +162,23 @@
                 var sum = parseInt(distance)+parseInt(secondOffer.radius);
                 if (sum < offer.radius  && distance !=0  && distance < offer.radius) {   // control block: if small circle included  big cicle
 
-                if(secondOffer.price != null ){
-                    totalElement++;
-                }
+                    if(secondOffer.price != null ){
+                        totalElement++;
+                    }
 
-                 hasMultiPrice.push(offer.id);
-                 hasMultiPrice.push(secondOffer.id);
-                 priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[4].selling,));
+                    hasMultiPrice.push(offer.id);
+                    hasMultiPrice.push(secondOffer.id);
+                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[4].selling,));
 
-                 var marker = Create.createMarker(map, offer,marker); // create Markers if coordinate has multi prices
-                 totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[4].selling,);
-                 contentString += InfoWindow.createContentString(secondOffer,currencySymbol,exchangeSellingValue);
+                    var marker = Create.createMarker(map, offer,marker); // create Markers if coordinate has multi prices
+                    totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[4].selling,);
+                    contentString += InfoWindow.createContentString(secondOffer,currencySymbol,exchangeSellingValue);
 
-                 marker.addListener("click", () => {
-                     infowindow.open(marker.get("map"), marker);
-                 });
+                    marker.addListener("click", () => {
+                        infowindow.open(marker.get("map"), marker);
+                    });
 
-                 Create.createCirle(map, response, offer, 0.99, 3, 0.2);
+                    Create.createCirle(map, response, offer, 0.99, 3, 0.2);
                 }
             });
 
