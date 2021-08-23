@@ -141,11 +141,14 @@
             currencyFilterValue = 1;
         }
 
+        //display symbol
         symbol = await Filter.currencySymbols(currencyFilterValue);
         currencySymbol = symbol[0].symbol;
 
+        //display currency today Rate
         var exchangeCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
         var exchangeSellingValue = exchangeCurrencySellingValue.selling;
+
 
          $.each(response['offers'], function(key, offer) {
             var contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue); // create String for ship info window
