@@ -163,6 +163,7 @@
             $.each(response['offers'], function(key, secondOffer) {
                 var distance = calcDistance(offer.latitude, offer.longitude, secondOffer.latitude,secondOffer.longitude); // take distance between 2 offers
                 var sum = parseInt(distance)+parseInt(secondOffer.radius);
+
                 if (sum < offer.radius  && distance !=0  && distance < offer.radius) {   // control block: if small circle included  big cicle
 
                     if(secondOffer.price != null ){
