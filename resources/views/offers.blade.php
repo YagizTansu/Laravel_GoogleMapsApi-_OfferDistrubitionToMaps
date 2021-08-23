@@ -157,7 +157,7 @@
             var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[4].selling,exchangeSellingValue);
             //var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
 
-            var totalPrice = changeCurrency(offerPirce);
+            var totalPrice = offerPirce;
             var priceArray = [offerPirce];
 
             $.each(response['offers'], function(key, secondOffer) {
@@ -172,10 +172,10 @@
 
                     hasMultiPrice.push(offer.id);
                     hasMultiPrice.push(secondOffer.id);
-                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[4].selling,));
+                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[4].selling,exchangeSellingValue));
 
                     var marker = Create.createMarker(map, offer,marker); // create Markers if coordinate has multi prices
-                    totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[4].selling,);
+                    totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[4].selling,exchangeSellingValue);
                     contentString += InfoWindow.createContentString(secondOffer,currencySymbol,exchangeSellingValue);
 
                     marker.addListener("click", () => {
