@@ -154,7 +154,7 @@
             var contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue); // create String for ship info window
             var totalElement = 1;
 
-            var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[4].selling,exchangeSellingValue);
+            var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[7].selling,exchangeSellingValue);
             //var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
 
             var totalPrice = offerPirce;
@@ -172,10 +172,10 @@
 
                     hasMultiPrice.push(offer.id);
                     hasMultiPrice.push(secondOffer.id);
-                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[4].selling,exchangeSellingValue));
+                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[7].selling,exchangeSellingValue));
 
                     var marker = Create.createMarker(map, offer,marker); // create Markers if coordinate has multi prices
-                    totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[4].selling,exchangeSellingValue);
+                    totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[7].selling,exchangeSellingValue);
                     contentString += InfoWindow.createContentString(secondOffer,currencySymbol,exchangeSellingValue);
 
                     marker.addListener("click", () => {
@@ -237,7 +237,7 @@
     class InfoWindow{
         static createContentString(offer,currencySymbols,exchangeCurrencySellingValue) {
             var contentString = "<strong>" + 'Company id: '+offer.company_id + "</strong>"  + "<br>" +
-                "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[4].selling,exchangeCurrencySellingValue).toFixed(2).toString() +' '+currencySymbols  +  " " +
+                "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[7].selling,exchangeCurrencySellingValue).toFixed(2).toString() +' '+currencySymbols  +  " " +
                 "<br>" + "<a href=/offer-detail/" + offer.id + " class='btn btn-sm btn-primary'> " + 'offer detail' + "</a>" +
                 "<br> <br>";
 
