@@ -17,7 +17,7 @@
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
 
-    <title>Distrubition</title>
+    <title>Offers</title>
 </head>
 
 <body>
