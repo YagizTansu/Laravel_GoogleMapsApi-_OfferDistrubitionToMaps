@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Offer;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
@@ -12,7 +14,7 @@ class assignApitokenToUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'assignApitokenToUsers';
 
     /**
      * The console command description.
@@ -38,7 +40,10 @@ class assignApitokenToUsers extends Command
      */
     public function handle()
     {
-        $var =  bin2hex(random_bytes(16));
-        return $var;
+        $users = User::get('id');
+        foreach ($users as $user) {
+            $apitoken = bin2hex(random_bytes(16));
+            User::where('id',$user->id)->update(['apitoken'=>$apitoken]);
+        }
     }
 }
