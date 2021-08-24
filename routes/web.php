@@ -11,6 +11,7 @@ use App\Http\Controllers\CacheController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\UserController;
 use App\Models\Currency;
 
 Route::get('/', function () {
@@ -32,7 +33,7 @@ Route::post('/ship-add',[ShipController::class, 'add'])->name('ship-add');
 Route::get('/offers', [OfferController::class, 'index'])->name('offers');
 //Route::post('/ajax-post', [ShipController::class, 'ajaxPost'])->name('ajax-post');
 
-Route::get('/ajax-get-exchange-rate', [ShipController::class, 'getExchangeRate'])->name('get-exchange-rate');
+Route::get('/getExchangeRate', [CurrencyController::class, 'getExchangeRate'])->name('getExchangeRate');
 Route::post('/addCircle', [ShipController::class, 'addCircle'])->name('addCircle');
 
 Route::get('/getCacheFile', [CacheController::class, 'getCacheFile'])->name('getCacheFile');
@@ -53,3 +54,9 @@ Route::get('offer-detail/{id}', [OfferController::class, 'detail'])->whereNumber
 
 Route::get('offer-edit/{id}', [OfferController::class, 'edit'])->whereNumber('id')->name('edit');
 Route::get('offer-update/{id}', [AdminController::class, 'update'])->whereNumber('id')->name('offer-update');
+
+Route::get('/createApiToken', [UserController::class, 'createApiToken']);
+
+Route::get('/try', function () {
+    return view('try');
+});

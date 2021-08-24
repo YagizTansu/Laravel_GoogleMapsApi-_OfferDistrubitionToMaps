@@ -22,15 +22,17 @@ class OfferController extends Controller
         $CurrencyExchangeRate = CurrencyExchangeRate::get();
         $defaultCurrency = CurrencyExchangeRate::where('currency_id', '=',1)->latest()->value('selling');
 
-        if (Cache::has('offers')) {
-            $offers = Cache::get('offers');
+        $cityId = $request->cityId ;
+
+        if (Cache::has($cityId)) {
+            $offers = Cache::get($cityId);
             json_encode($offers);
             $payLoad = ['offers' => $offers, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
             return response()->json($payLoad);
         }else{
-            $offers = Offer::where('city_id', '=',$request->cityId)->with('currency','currency.currencyExchangeRates')->get();
+            $offers = Offer::where('city_id', '=',$cityId)->with('currency','currency.currencyExchangeRates')->get();
             json_encode($offers);
-            Cache::put('offers', $offers, 1);
+            Cache::put($cityId , $offers, 6000);
 
             $payLoad = ['offers' => $offers, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
             return response()->json($payLoad);
@@ -69,6 +71,7 @@ class OfferController extends Controller
         $offer = Offer::find($id);
         return view('offer_edit', compact('offer'));
     }
+
     public function update(Request $request,$id)
     {
         Offer::Where('id',$id)->update($request->except(['_method','_token']));

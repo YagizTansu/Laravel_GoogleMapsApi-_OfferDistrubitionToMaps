@@ -83,7 +83,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Add Offers</h5>
                         <hr>
-                        <form method="POST" action="{{ route('ship-add') }}">
+                        <form method="POST" action="/ship-add">
                             @csrf
                             <div class="form-group">
                                 <label>Company</label>
@@ -272,7 +272,7 @@
 
          static currencySymbols(currencyId) {
             return  $.ajax({
-                url: "{{ route('getCurrencySymbol') }}",
+                url: "/getCurrencySymbol",
                 type: "GET",
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -352,7 +352,7 @@
 
     async function getCurrencySellingValue(currencyId) {
         var selling = await $.ajax({
-            url: "{{ route('getCurrencySellingValue') }}",
+            url: "/getCurrencySellingValue",
             type: "GET",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -368,7 +368,7 @@
     function loadMap(map,subCircleFilterValue,currencyFilterValue) { // Load all maps proporties
         var cityId = $( "#showCities" ).val();
         $.ajax({
-            url: "{{ route('getOffers') }}",
+            url: "/getOffers",
             type: "GET",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -384,9 +384,7 @@
         });
         getCountries();
     }
-
     getDisplayExchangeRates();
-
 
     function printCurrency(response) {
         $('#currency').empty();
@@ -397,7 +395,7 @@
 
     function getDisplayExchangeRates() {
         $.ajax({
-            url: "{{ route('get-exchange-rate') }}",
+            url: "/getExchangeRate",
             type: "GET",
             success: function(response) {
 
@@ -412,7 +410,7 @@
 
     function getCountries() {
         $.ajax({
-            url: "{{ route('getCountries') }}",
+            url: "/getCountries",
             type: "GET",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -442,7 +440,7 @@
         document.getElementById("showCities").disabled = false;
 
         $.ajax({
-            url: "{{ route('getCities') }}",
+            url: "/getCities",
             type: "GET",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -484,6 +482,7 @@
 
         AddCircleMode();
     });
+
     function AddCircleMode() {
         var map = Create.createMap(map);
 
@@ -503,8 +502,6 @@
         var clicked = 0;
         var cityCircle;
         // Configure the click listener.
-
-//lat and lng is available in e object
 
         map.addListener("click", (event) => {
             clicked++;
@@ -541,7 +538,7 @@
                 $("#saveCircleButton").click(function() {
                     //save cityCirle to db
                     $.ajax({
-                        url: "{{ route('addOffer') }}",
+                        url: "/addOffer",
                         type: "GET",
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'

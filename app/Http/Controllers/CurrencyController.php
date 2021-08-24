@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Currency;
 use App\Models\CurrencyExchangeRate;
+use App\Services\ExchangeRateService;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -17,5 +18,12 @@ class CurrencyController extends Controller
     {
         $currencySellingValue =CurrencyExchangeRate::where('currency_id', '=',$request->currencyId)->latest('date')->first('selling');
         return response()->json($currencySellingValue);
+    }
+
+    public function getExchangeRate()
+    {
+        $service = new ExchangeRateService();
+        $load = $service->getExchangeRate();
+        return response()->json($load);
     }
 }

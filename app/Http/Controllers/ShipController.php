@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ShipCreateRequest;
-use Illuminate\Support\Facades\Http;
 use App\Models\CurrencyExchangeRate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Currency;
 use App\Models\Ship;
-use App\Services\ExchangeRateService;
 
 class ShipController extends Controller
 {
@@ -60,13 +58,6 @@ class ShipController extends Controller
 
         $payLoad = ['ships' => $ships, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
         return response()->json($payLoad);
-    }
-
-    public function getExchangeRate()
-    {
-        $service = new ExchangeRateService();
-        $load = $service->getExchangeRate();
-        return response()->json($load);
     }
 
     public function addCircle(Request $request){
