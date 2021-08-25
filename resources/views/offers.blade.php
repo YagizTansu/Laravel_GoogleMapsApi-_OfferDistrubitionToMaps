@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta id="api-token" name="api-token" content="{{ api_token() }}">
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -133,6 +134,13 @@
 </html>
 
 <script>
+    var meta_content = document.getElementById("api-token").getAttribute('content');
+    alert(meta_content);
+
+    $.ajaxSetup({
+        headers: {'api-token': meta_content }
+    });
+
     const hasMultiPrice = [];
      async function markersAndCircles(map, response,subCircleFilterValue,currencyFilterValue,currencySymbol='$') {
         map = Create.createMap(map); // create main map
@@ -274,9 +282,6 @@
             return  $.ajax({
                 url: "/getCurrencySymbol",
                 type: "GET",
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
                 data: {
                         currencyId: currencyId
                     },
@@ -354,9 +359,6 @@
         var selling = await $.ajax({
             url: "/getCurrencySellingValue",
             type: "GET",
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
             data: {
                     currencyId: currencyId
                 },
@@ -370,9 +372,6 @@
         $.ajax({
             url: "/getOffers",
             type: "GET",
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
             data: {
                     cityId: cityId
                 },
@@ -398,7 +397,6 @@
             url: "/getExchangeRate",
             type: "GET",
             success: function(response) {
-
                 $('#showCurrency').empty();
                 $.each(response['CurrencyExchangeRate'], function(key, exchange) {
                     $('#showCurrency').append('<option value=' + exchange.currency.id + '> ' + exchange.currency.name + '</option>');
@@ -412,9 +410,6 @@
         $.ajax({
             url: "/getCountries",
             type: "GET",
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
             success: function(response) {
                 $.each(response, function(key, country) {
                     $('#showCountries').append('<option value=' + country.id + '>' + country.name + '</option>');
@@ -442,9 +437,6 @@
         $.ajax({
             url: "/getCities",
             type: "GET",
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
             data: {
                     countryId: countryId
                 },
@@ -540,17 +532,13 @@
                     $.ajax({
                         url: "/addOffer",
                         type: "GET",
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
                         data: {
                             radius: cityCircle.getRadius(),
                             latitude: cityCircle.getCenter().lat(),
                             longitude: cityCircle.getCenter().lng()
 
                         },
-                        success: function(response) {
-                        }
+                        success: function(response) {}
                     });
                     clicked = 0;
                 });
