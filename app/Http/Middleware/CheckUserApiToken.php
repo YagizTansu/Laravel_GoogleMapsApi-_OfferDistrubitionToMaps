@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,13 @@ class CheckUserApiToken
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+
+        $users = User::get('api_token');
+        foreach ($users as $user) {
+            if ($request->header('api-token') == $user->api_token ) {
+                return $next($request);
+            }
+        }
+       // return redirect()->route('offers');
     }
 }

@@ -17,6 +17,7 @@
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <title>Offers</title>
 </head>
@@ -135,10 +136,10 @@
 
 <script>
     var api_token = document.getElementById("api-token").getAttribute('content');
-    alert(api_token);
+    //alert(api_token);
 
     $.ajaxSetup({
-        headers: {'api-token': api_token }
+        headers: {'api-token' : api_token }
     });
 
     const hasMultiPrice = [];
@@ -162,7 +163,7 @@
             var contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue); // create String for ship info window
             var totalElement = 1;
 
-            var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[7].selling,exchangeSellingValue);
+            var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[8].selling,exchangeSellingValue);
             //var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
 
             var totalPrice = offerPirce;
@@ -180,10 +181,10 @@
 
                     hasMultiPrice.push(offer.id);
                     hasMultiPrice.push(secondOffer.id);
-                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[7].selling,exchangeSellingValue));
+                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[8].selling,exchangeSellingValue));
 
                     var marker = Create.createMarker(map, offer,marker); // create Markers if coordinate has multi prices
-                    totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[7].selling,exchangeSellingValue);
+                    totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[8].selling,exchangeSellingValue);
                     contentString += InfoWindow.createContentString(secondOffer,currencySymbol,exchangeSellingValue);
 
                     marker.addListener("click", () => {
@@ -245,7 +246,7 @@
     class InfoWindow{
         static createContentString(offer,currencySymbols,exchangeCurrencySellingValue) {
             var contentString = "<strong>" + 'Company id: '+offer.company_id + "</strong>"  + "<br>" +
-                "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[7].selling,exchangeCurrencySellingValue).toFixed(2).toString() +' '+currencySymbols  +  " " +
+                "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[8].selling,exchangeCurrencySellingValue).toFixed(2).toString() +' '+currencySymbols  +  " " +
                 "<br>" + "<a href=/offer-detail/" + offer.id + " class='btn btn-sm btn-primary'> " + 'offer detail' + "</a>" +
                 "<br> <br>";
 
@@ -370,8 +371,9 @@
     function loadMap(map,subCircleFilterValue,currencyFilterValue) { // Load all maps proporties
         var cityId = $( "#showCities" ).val();
         $.ajax({
-            url: "/getOffers",
+            url: "/api/getOffers",
             type: "GET",
+            headers: {'api-token' : api_token },
             data: {
                     cityId: cityId
                 },
@@ -379,6 +381,9 @@
                 printCurrency(response);
                 var subCircleFilterValue = Filter.getSubCircleFilterValue();
                 markersAndCircles(map,response,subCircleFilterValue,currencyFilterValue);
+            },
+            error: function () {
+                swal( "Oops","Unexpected user action!","error");
             }
         });
         getCountries();

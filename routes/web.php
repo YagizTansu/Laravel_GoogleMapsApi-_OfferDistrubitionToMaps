@@ -12,6 +12,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckUserApiToken;
 use App\Models\Currency;
 
 Route::get('/', function () {
@@ -47,7 +48,7 @@ Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'
 Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');
 
 //offer Controller
-Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
+//Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
 Route::get('/offers-list', [OfferController::class, 'getOffersList'])->name('offers-list');
 Route::get('/addOffer', [OfferController::class, 'addOffer'])->name('addOffer');
 Route::get('offer-detail/{id}', [OfferController::class, 'detail'])->whereNumber('id')->name('detail');
@@ -55,8 +56,13 @@ Route::get('offer-detail/{id}', [OfferController::class, 'detail'])->whereNumber
 Route::get('offer-edit/{id}', [OfferController::class, 'edit'])->whereNumber('id')->name('edit');
 Route::get('offer-update/{id}', [AdminController::class, 'update'])->whereNumber('id')->name('offer-update');
 
-Route::get('/createApiToken', [UserController::class, 'createApiToken']);
 
-Route::get('/try', function () {
+
+/*Route::get('/try', function () {
+    return view('try');
+})->middleware(CheckUserApiToken::class);
+*/
+
+Route::get('try', function () {
     return view('try');
 });

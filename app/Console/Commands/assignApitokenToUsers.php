@@ -43,7 +43,7 @@ class assignApitokenToUsers extends Command
         $users = User::get('id');
         foreach ($users as $user) {
             $apitoken = bin2hex(random_bytes(16));
-            User::where('id',$user->id)->update(['apitoken'=>$apitoken]);
+            User::where('id',$user->id)->update(['api_token'=>$apitoken]);
         }
     }
 }
