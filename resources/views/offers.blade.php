@@ -134,11 +134,11 @@
 </html>
 
 <script>
-    var meta_content = document.getElementById("api-token").getAttribute('content');
-    alert(meta_content);
+    var api_token = document.getElementById("api-token").getAttribute('content');
+    alert(api_token);
 
     $.ajaxSetup({
-        headers: {'api-token': meta_content }
+        headers: {'api-token': api_token }
     });
 
     const hasMultiPrice = [];
