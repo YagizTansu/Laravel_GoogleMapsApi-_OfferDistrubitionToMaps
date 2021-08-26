@@ -65,16 +65,19 @@
                         <label class="form-check-label" for="flexCheckDefault">Show subcircle</label>
                         <br><br>
                         <label>Display Currency</label>
-                        <select id="showCurrency" class="form-select form-select-sm"aria-label=".form-select-sm example">
+                        <select id="showCurrency" class="form-select form-select-sm"
+                            aria-label=".form-select-sm example">
                         </select>
                         <br>
                         <label>Country</label>
-                        <select id="showCountries" class="form-select form-select-sm"aria-label=".form-select-sm example">
+                        <select id="showCountries" class="form-select form-select-sm"
+                            aria-label=".form-select-sm example">
                             <option value=''>Select Country</option>
                         </select>
                         <br>
                         <label>City</label>
-                        <select id="showCities" class="form-select form-select-sm"aria-label=".form-select-sm example" disabled>
+                        <select id="showCities" class="form-select form-select-sm" aria-label=".form-select-sm example"
+                            disabled>
                         </select>
 
                     </div>
@@ -135,17 +138,11 @@
 </html>
 
 <script>
-    var api_token = document.getElementById("api-token").getAttribute('content');
-
-    $.ajaxSetup({
-        headers: {'api-token' : api_token }
-    });
-
     var hasMultiPrice = [];
-     async function markersAndCircles(map, response,subCircleFilterValue,currencyFilterValue,currencySymbol='$') {
+    async function markersAndCircles(map, response, subCircleFilterValue, currencyFilterValue, currencySymbol = '$') {
         map = Create.createMap(map); // create main map
 
-        if(currencyFilterValue == null){
+        if (currencyFilterValue == null) {
             currencyFilterValue = 1;
         }
 
@@ -158,32 +155,40 @@
         var exchangeSellingValue = exchangeCurrencySellingValue.selling;
 
         $.each(response['offers'], function(key, offer) {
-            var contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue); // create String for ship info window
+            var contentString = InfoWindow.createContentString(offer, currencySymbol,
+            exchangeSellingValue); // create String for ship info window
             var totalElement = 1;
 
-            var offerPirce = changeCurrency(offer.price,offer.currency.currency_exchange_rates[9].selling,exchangeSellingValue);
+            var offerPirce = changeCurrency(offer.price, offer.currency.currency_exchange_rates[9].selling,
+                exchangeSellingValue);
             //var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
 
             var totalPrice = offerPirce;
             var priceArray = [offerPirce];
 
             $.each(response['offers'], function(key, secondOffer) {
-                var distance = calcDistance(offer.latitude, offer.longitude, secondOffer.latitude,secondOffer.longitude); // take distance between 2 offers
-                var sum = parseInt(distance)+parseInt(secondOffer.radius);
+                var distance = calcDistance(offer.latitude, offer.longitude, secondOffer.latitude,
+                    secondOffer.longitude); // take distance between 2 offers
+                var sum = parseInt(distance) + parseInt(secondOffer.radius);
 
-                if (sum < offer.radius  && distance !=0  && distance < offer.radius) {   // control block: if small circle included  big cicle
+                if (sum < offer.radius && distance != 0 && distance < offer
+                    .radius) { // control block: if small circle included  big cicle
 
-                    if(secondOffer.price != null ){
+                    if (secondOffer.price != null) {
                         totalElement++;
                     }
 
                     hasMultiPrice.push(offer.id);
                     hasMultiPrice.push(secondOffer.id);
-                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[9].selling,exchangeSellingValue));
+                    priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency
+                        .currency_exchange_rates[9].selling, exchangeSellingValue));
 
-                    var marker = Create.createMarker(map, offer,marker); // create Markers if coordinate has multi prices
-                    totalPrice += changeCurrency(secondOffer.price,secondOffer.currency.currency_exchange_rates[9].selling,exchangeSellingValue);
-                    contentString += InfoWindow.createContentString(secondOffer,currencySymbol,exchangeSellingValue);
+                    var marker = Create.createMarker(map, offer,
+                    marker); // create Markers if coordinate has multi prices
+                    totalPrice += changeCurrency(secondOffer.price, secondOffer.currency
+                        .currency_exchange_rates[9].selling, exchangeSellingValue);
+                    contentString += InfoWindow.createContentString(secondOffer, currencySymbol,
+                        exchangeSellingValue);
 
                     marker.addListener("click", () => {
                         infowindow.open(marker.get("map"), marker);
@@ -193,8 +198,10 @@
                 }
             });
 
-            const infowindow = new google.maps.InfoWindow({ // max min average value for each multi cirle info window
-                content: contentString + InfoWindow.createAveragePriceString(totalPrice,totalElement,priceArray,currencySymbol)
+            const infowindow = new google.maps
+        .InfoWindow({ // max min average value for each multi cirle info window
+                content: contentString + InfoWindow.createAveragePriceString(totalPrice,
+                    totalElement, priceArray, currencySymbol)
             });
 
             if (subCircleFilterValue == true) {
@@ -204,9 +211,10 @@
         });
 
         $.each(response['offers'], function(key, offer) {
-            if(hasMultiPrice.length == 0){
+            if (hasMultiPrice.length == 0) {
                 var marker = Create.createMarker(map, offer, marker);
-                var contentString = contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue);
+                var contentString = contentString = InfoWindow.createContentString(offer, currencySymbol,
+                    exchangeSellingValue);
 
                 const infowindow = new google.maps.InfoWindow({
                     content: contentString
@@ -216,56 +224,63 @@
                     infowindow.open(marker.get("map"), marker);
                 });
                 Create.createCirle(map, response, offer, 0.99, 3, 0.2);
-            }else{
-            let j = 0;
-            for (let i = 0; i < hasMultiPrice.length; i++) {
-                if (offer.id != parseInt(hasMultiPrice[i])) {
-                    j = j + 1;
-                    if (j == (hasMultiPrice.length)) {
-                        var marker = Create.createMarker(map, offer, marker);
-                        var contentString = contentString = InfoWindow.createContentString(offer,currencySymbol,exchangeSellingValue);
+            } else {
+                let j = 0;
+                for (let i = 0; i < hasMultiPrice.length; i++) {
+                    if (offer.id != parseInt(hasMultiPrice[i])) {
+                        j = j + 1;
+                        if (j == (hasMultiPrice.length)) {
+                            var marker = Create.createMarker(map, offer, marker);
+                            var contentString = contentString = InfoWindow.createContentString(offer,
+                                currencySymbol, exchangeSellingValue);
 
-                        const infowindow = new google.maps.InfoWindow({
-                            content: contentString
-                        });
+                            const infowindow = new google.maps.InfoWindow({
+                                content: contentString
+                            });
 
-                        marker.addListener("click", () => {
-                            infowindow.open(marker.get("map"), marker);
-                        });
+                            marker.addListener("click", () => {
+                                infowindow.open(marker.get("map"), marker);
+                            });
 
-                        Create.createCirle(map, response, offer, 0.99, 3, 0.2);
-                     }
-                 }
-             }
+                            Create.createCirle(map, response, offer, 0.99, 3, 0.2);
+                        }
+                    }
+                }
             }
         });
     }
 
-    class InfoWindow{
-        static createContentString(offer,currencySymbols,exchangeCurrencySellingValue) {
-            var contentString = "<strong>" + 'Company id: '+offer.company_id + "</strong>"  + "<br>" +
-                "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[9].selling,exchangeCurrencySellingValue).toFixed(2).toString() +' '+currencySymbols  +  " " +
-                "<br>" + "<a href=/offer-detail/" + offer.id + " class='btn btn-sm btn-primary'> " + 'offer detail' + "</a>" +
+    class InfoWindow {
+        static createContentString(offer, currencySymbols, exchangeCurrencySellingValue) {
+            var contentString = "<strong>" + 'Company id: ' + offer.company_id + "</strong>" + "<br>" +
+                "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency
+                    .currency_exchange_rates[9].selling, exchangeCurrencySellingValue).toFixed(2).toString() + ' ' +
+                currencySymbols + " " +
+                "<br>" + "<a href=/offer-detail/" + offer.id + " class='btn btn-sm btn-primary'> " +
+                'offer detail' + "</a>" +
                 "<br> <br>";
 
-        return contentString;
+            return contentString;
         }
 
-        static createAveragePriceString(totalPrice,totalElement,priceArray,currencySymbols) {
+        static createAveragePriceString(totalPrice, totalElement, priceArray, currencySymbols) {
             var contentString = " <strong class='text-warning' >" + " Average Price :" +
-                " </strong>" + (totalPrice /totalElement).toFixed(2)  + ' ' + currencySymbols+  "<br>" + " <strong class='text-success' >" +
-                " Min Price : " + " </strong>" + Math.min.apply(null, priceArray).toFixed(2) +' '+ currencySymbols +
-                "<br> " + " <strong class='text-danger' >" + " Max Price : " + " </strong>" + Math.max.apply(null, priceArray).toFixed(2) + ' ' + currencySymbols;
+                " </strong>" + (totalPrice / totalElement).toFixed(2) + ' ' + currencySymbols + "<br>" +
+                " <strong class='text-success' >" +
+                " Min Price : " + " </strong>" + Math.min.apply(null, priceArray).toFixed(2) + ' ' +
+                currencySymbols +
+                "<br> " + " <strong class='text-danger' >" + " Max Price : " + " </strong>" + Math.max.apply(null,
+                    priceArray).toFixed(2) + ' ' + currencySymbols;
 
-        return contentString;
+            return contentString;
         }
     }
 
-    class Filter{
+    class Filter {
         static updateFilter() {
             var subCircleFilterValue = Filter.getSubCircleFilterValue();
-            var currencyFilterValue  = Filter.getCurrencyFilterValue();
-            loadMap(map,subCircleFilterValue,currencyFilterValue);
+            var currencyFilterValue = Filter.getCurrencyFilterValue();
+            loadMap(map, subCircleFilterValue, currencyFilterValue);
         }
 
         static getSubCircleFilterValue() {
@@ -273,17 +288,17 @@
         }
 
         static getCurrencyFilterValue() {
-            return $( "#showCurrency" ).val();
+            return $("#showCurrency").val();
 
         }
 
-         static currencySymbols(currencyId) {
-            return  $.ajax({
+        static currencySymbols(currencyId) {
+            return $.ajax({
                 url: "/getCurrencySymbol",
                 type: "GET",
                 data: {
-                        currencyId: currencyId
-                    },
+                    currencyId: currencyId
+                },
                 success: function(response) {
 
                 }
@@ -291,7 +306,7 @@
         }
     }
 
-    class Create{
+    class Create {
         static createMap() { //create only map
 
             var map = new google.maps.Map(document.getElementById("map"), {
@@ -306,26 +321,27 @@
 
         static createCirle(map, response, offer, strokeOpacity, strokeWeight, fillOpacity) {
             const cityCircle = new google.maps.Circle({
-                strokeColor: ColorMap.priceToColor(response['priceMin'],response['priceMax'],offer.price),
+                strokeColor: ColorMap.priceToColor(response['priceMin'], response['priceMax'], offer.price),
                 strokeOpacity: strokeOpacity,
                 strokeWeight: strokeWeight,
-                fillColor: ColorMap.priceToColor(response['priceMin'],response['priceMax'],offer.price),
+                fillColor: ColorMap.priceToColor(response['priceMin'], response['priceMax'], offer.price),
                 fillOpacity: fillOpacity,
                 map,
-                center: new google.maps.LatLng(offer.latitude,offer.longitude),
-                radius: offer.radius*1 ,
+                center: new google.maps.LatLng(offer.latitude, offer.longitude),
+                radius: offer.radius * 1,
             });
         }
 
         static createMarker(map, offer, marker) {
             marker = new google.maps.Marker({
-                position: new google.maps.LatLng(offer.latitude, offer.longitude),map,
+                position: new google.maps.LatLng(offer.latitude, offer.longitude),
+                map,
             });
             return marker;
         }
     }
 
-    class ColorMap{
+    class ColorMap {
         static mapping(price, price_min, price_max) {
             return (price - price_min) * (100 - 0) / (price_max - price_min);
         }
@@ -347,7 +363,8 @@
     }
 
     function calcDistance(fromLat, fromLng, toLat, toLng) {
-        return google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(fromLat, fromLng),new google.maps.LatLng(toLat, toLng));
+        return google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(fromLat, fromLng),
+            new google.maps.LatLng(toLat, toLng));
     }
 
     function changeCurrency(price, currency, exchangeCurrency) {
@@ -359,29 +376,35 @@
             url: "/getCurrencySellingValue",
             type: "GET",
             data: {
-                    currencyId: currencyId
-                },
+                currencyId: currencyId
+            },
             success: function(response) {}
         });
         return selling;
     }
 
-    function loadMap(map,subCircleFilterValue,currencyFilterValue) { // Load all maps proporties
-        var cityId = $( "#showCities" ).val();
+    function loadMap(map, subCircleFilterValue, currencyFilterValue) { // Load all maps proporties
+
+        var api_token = document.getElementById("api-token").getAttribute('content');
+
+        $.ajaxSetup({
+            headers: {"api-token":api_token }
+        });
+
+        var cityId = $("#showCities").val();
         $.ajax({
             url: "/api/getOffers",
             type: "GET",
-            headers: {'api-token' : api_token },
             data: {
-                    cityId: cityId
-                },
+                cityId: cityId
+            },
             success: function(response) {
                 printCurrency(response);
                 var subCircleFilterValue = Filter.getSubCircleFilterValue();
-                markersAndCircles(map,response,subCircleFilterValue,currencyFilterValue);
+                markersAndCircles(map, response, subCircleFilterValue, currencyFilterValue);
             },
-            error: function () {
-                swal( "Oops","Unexpected user action!","error");
+            error: function() {
+                swal("Oops", "Unexpected user action!", "error");
             }
         });
         getCountries();
@@ -402,7 +425,8 @@
             success: function(response) {
                 $('#showCurrency').empty();
                 $.each(response['CurrencyExchangeRate'], function(key, exchange) {
-                    $('#showCurrency').append('<option value=' + exchange.currency.id + '> ' + exchange.currency.name + '</option>');
+                    $('#showCurrency').append('<option value=' + exchange.currency.id + '> ' +
+                        exchange.currency.name + '</option>');
                 });
             }
         });
@@ -415,8 +439,12 @@
             type: "GET",
             success: function(response) {
                 $.each(response, function(key, country) {
-                    $('#showCountries').append('<option value=' + country.id + '>' + country.name + '</option>');
+                    $('#showCountries').append('<option value=' + country.id + '>' + country.name +
+                        '</option>');
                 });
+            },
+            error: function() {
+                swal("Oops", "Unexpected user action!", "error");
             }
         });
     }
@@ -434,20 +462,21 @@
 
     var showCountries = document.getElementById("showCountries");
     showCountries.addEventListener('change', (event) => { //control country filter
-        var countryId = $( "#showCountries" ).val();
+        var countryId = $("#showCountries").val();
         document.getElementById("showCities").disabled = false;
 
         $.ajax({
             url: "/getCities",
             type: "GET",
             data: {
-                    countryId: countryId
-                },
+                countryId: countryId
+            },
             success: function(response) {
                 $('#showCities').empty();
                 $('#showCities').append('<option >Select City</option>');
                 $.each(response, function(key, city) {
-                    $('#showCities').append('<option value=' + city.id + '>' + city.name + '</option>');
+                    $('#showCities').append('<option value=' + city.id + '>' + city.name +
+                        '</option>');
                 });
             }
         });
@@ -467,7 +496,8 @@
         $('#floating-panel').empty();
 
         $('#floating-panel').append('<h5 class="text-success">Add Circle Mode</h5>');
-        $('#floating-panel').append('<a href="/offers" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
+        $('#floating-panel').append(
+            '<a href="/offers" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
         $('#floating-panel').append('<a id="delete-markers" class="btn btn-danger  mr-2"> Delete Markers</a>');
         $('#floating-panel').append('<a href="/offers" class="btn btn-warning mr-2 ">Exit</a>');
 
@@ -501,8 +531,8 @@
         map.addListener("click", (event) => {
             clicked++;
 
-            if (clicked == 1){
-            cityCircle = new google.maps.Circle({
+            if (clicked == 1) {
+                cityCircle = new google.maps.Circle({
                     strokeColor: "#FF0000",
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
@@ -522,7 +552,8 @@
                             firstX = event.domEvent.clientX;
                             firstY = event.domEvent.clientY;
                         }
-                        cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) *1000) - ((event.domEvent.clientY - firstY) * 1000));
+                        cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) * 1000) - ((
+                            event.domEvent.clientY - firstY) * 1000));
                     }
                 });
             }
@@ -546,10 +577,9 @@
             }
         });
     }
-
 </script>
 
 
 <script type="text/javascript"
-        src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMU4r64e98czgUSW1_V6ESAend_wpYY6Q&callback=loadMap">
+src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMU4r64e98czgUSW1_V6ESAend_wpYY6Q&callback=loadMap">
 </script>

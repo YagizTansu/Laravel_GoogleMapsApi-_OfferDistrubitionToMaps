@@ -27,17 +27,16 @@
     });
 
      function getApi() {
-        var token = $.ajax({
+         $.ajax({
             url: "/api/createApiToken",
             type: "GET",
             success: function(response) {
                 swal("Good job!", "You clicked the button!", "success");
             },
             error: function () {
-                swal ( "Oops" ,  "Something went wrong!" ,  "error" )
+                swal( "Oops" ,  "Something went wrong!" ,  "error" )
             }
         });
-        return token;
     }
  getApi();
 debugger
