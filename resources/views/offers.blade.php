@@ -92,12 +92,12 @@
                             @csrf
                             <div class="form-group">
                                 <label>Company</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Forwardie">
+                                <input type="text" class="form-control" id="company" name="company" placeholder="Forwardie">
                             </div>
                             @csrf
                             <div class="form-group">
                                 <label>City</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Paris">
+                                <input type="text" class="form-control" id="city" name="city" placeholder="Paris">
                             </div>
 
                             <div class="form-group">
@@ -144,6 +144,7 @@
 
 <script>
     var hasMultiPrice = [];
+
     async function markersAndCircles(map, response, subCircleFilterValue, currencyFilterValue, currencySymbol = '$') {
         map = Create.createMap(map); // create main map
 
@@ -229,7 +230,8 @@
                     infowindow.open(marker.get("map"), marker);
                 });
                 Create.createCirle(map, response, offer, 0.99, 3, 0.2);
-            } else {
+            }
+            else {
                 let j = 0;
                 for (let i = 0; i < hasMultiPrice.length; i++) {
                     if (offer.id != parseInt(hasMultiPrice[i])) {
@@ -299,7 +301,7 @@
 
         static currencySymbols(currencyId) {
             return $.ajax({
-                url: "/api/getCurrencySymbol",
+                url: "/getCurrencySymbol",
                 type: "GET",
                 data: {
                     currencyId: currencyId

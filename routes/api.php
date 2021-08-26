@@ -25,13 +25,12 @@ Route::group( ['middleware' => ['CheckUserApiToken']], function () {
 
     //offers
     Route::get('/createApiToken', [UserController::class, 'createApiToken']);
-    Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
 
+    Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
     //Country controller
     //Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
     Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
 
     //currency Controller
-    Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
     Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');
 });

@@ -30,6 +30,7 @@ Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCiti
 
 //currency Controller
 Route::get('/getExchangeRate', [CurrencyController::class, 'getExchangeRate'])->name('getExchangeRate');
+Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
 
 //offer Controller
 //Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
