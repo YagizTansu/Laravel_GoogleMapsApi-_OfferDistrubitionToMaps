@@ -51,7 +51,7 @@
             <div id="rightPanel" class="col-md-2">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Add</h5>
+                        <h5 class="card-title">Add Offer</h5>
                         <hr>
                         <button id="addCirleMode" class="btn btn-primary">Add Cirle</button>
                     </div>
@@ -92,7 +92,12 @@
                             @csrf
                             <div class="form-group">
                                 <label>Company</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Titanic">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Forwardie">
+                            </div>
+                            @csrf
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Paris">
                             </div>
 
                             <div class="form-group">

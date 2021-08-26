@@ -1,6 +1,4 @@
 <?php
-
-//use App\Http\Controllers\Admin\adminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CountryController;
