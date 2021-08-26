@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\CurrencyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,4 +30,8 @@ Route::group( ['middleware' => ['CheckUserApiToken']], function () {
     //Country controller
     //Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
     Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
+
+    //currency Controller
+    Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
+    Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');
 });

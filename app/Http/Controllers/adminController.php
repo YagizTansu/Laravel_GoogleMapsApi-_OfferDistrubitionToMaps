@@ -1,14 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
-use App\Models\Currency;
-use Illuminate\Support\Facades\DB;
-use App\Models\Ship;
 use App\Models\Offer;
-use App\Http\Requests\ShipCreateRequest;
-use Illuminate\Support\Facades\Auth;
 
 class adminController extends Controller
 {
@@ -19,8 +14,8 @@ class adminController extends Controller
      */
     public function index()
     {
-        $ships = Ship::get();
-        return view('Admin.Ships.ships',compact('ships'));
+        $offers = Offer::paginate(100);
+        return view('offers_list', compact('offers'));
     }
 
     /**
@@ -30,8 +25,7 @@ class adminController extends Controller
      */
     public function create()
     {
-        $currency = Currency::get();
-        return view('Admin.Ships.create',compact('currency'));
+        return view('create');
     }
 
     /**
@@ -40,20 +34,19 @@ class adminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ShipCreateRequest $request)
+    public function store(Request $request)
     {
-        $ship = new Ship;
-        $ship->user_id= Auth::id();
-        $ship->name=$request->name;
-        $ship->latitude=$request->latitude;
-        $ship->longitude=$request->longitude;
-        $ship->radius=$request->radius;
-        $ship->price=$request->price;
-        $ship->currency_id=$request->currency_id;
+        /*$offer = new Offer;
+        $offer->company_id =$request->latitude;
+        $offer->city_id = $request->latitude;
+        $offer->latitude =$request->latitude;
+        $offer->longitude = $request->longitude;
+        $offer->radius = $request->radius;
+        $offer->currency_id =$request->latitude;
+        $offer->price =$request->latitude;
 
-        $ship->save();
-
-         return redirect()-> route('ships.index')-> withSuccess('Adding Succesful');
+        $offer->save();*/
+        return redirect()->route('offers.index')->withSuccess('Offer Added Successfuly');
     }
 
     /**
@@ -75,8 +68,8 @@ class adminController extends Controller
      */
     public function edit($id)
     {
-        $ship = Ship::find($id) ?? abort(404,'ship do not found');
-        return view('Admin.Ships.edit',compact('ship'));
+        $offer =Offer::find($id);
+        return view('offer_edit',compact('offer'));
     }
 
     /**
@@ -88,8 +81,8 @@ class adminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Offer::Where('id',$id)->update($request->except(['_method','_token']));
-        return redirect()->view('offers_list');
+       // Offer::Where('id',$id)->update($request->except(['_method','_token']));
+        return redirect()->route('offers.index');
     }
 
     /**
@@ -100,7 +93,6 @@ class adminController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('ships')->where('id', '=', $id)->delete();
-        return redirect()->route('ships.index')-> withSuccess('Delete Succesful');
+        //
     }
 }

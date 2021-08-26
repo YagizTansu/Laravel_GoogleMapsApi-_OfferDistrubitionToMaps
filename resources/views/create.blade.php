@@ -13,51 +13,42 @@
                         @endforeach
                     </div>
                 @endif
-                <form method="POST" action="{{ route('ships.store') }}">
+                <form method="POST" action="" >
+                    @method('PUT')
                     @csrf
                     <div class="form-group">
-                        <label>Ship Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="ship name">
+                        <label>Company</label>
+                        <input type="text" class="form-control" id="latitude" name="latitude" >
                     </div>
-
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" id="latitude" name="latitude" }>
+                    </div>
                     <div class="form-group">
                         <label>Latitude</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="34.45">
+                        <input type="text" class="form-control" id="latitude" name="latitude" >
                     </div>
 
                     <div class="form-group">
                         <label>Longitude</label>
-                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="54.64">
+                        <input type="text" class="form-control" id="longitude" name="longitude">
                     </div>
 
                     <div class="form-group">
                         <label>Radius</label>
-                        <input type="text" class="form-control" id="radius" name="radius" placeholder="3.67">
+                        <input type="text" class="form-control" id="radius" name="radius" >
                     </div>
 
                     <div class="form-group">
                         <label>Price</label>
-                        <input type="text" class="form-control" id="price" name="price" placeholder="1000">
+                        <input type="text" class="form-control" id="price" name="price" >
                     </div>
-
                     <div class="form-group">
                         <label>Currency</label>
-                        <select class="form-select form-select-sm" name="currency_id"
-                            aria-label=".form-select-sm example">
-
-                            <?php
-                            foreach ($currency as $value) {
-                            ?>
-                            <option value="<?php echo $value['id'];?>"> <?php echo $value['name']; ?> </option>
-                            <?php
-                            }
-                            ?>
-
-                        </select>
+                        <input type="text" class="form-control" id="currency" name="currency" >
                     </div>
 
-                    <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Add</button></p>
-
+                    <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Update</button></p>
                 </form>
 
             </div>

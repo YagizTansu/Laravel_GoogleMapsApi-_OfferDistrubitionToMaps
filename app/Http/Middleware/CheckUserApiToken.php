@@ -17,17 +17,11 @@ class CheckUserApiToken
      */
     public function handle(Request $request, Closure $next)
     {
+        $doesExist=User::where('api_token',$request->header('api-token'))->exists();
 
-<<<<<<< HEAD
-        return $next($request);
-=======
-        $users = User::get('api_token');
-        foreach ($users as $user) {
-            if ($request->header('api-token') == $user->api_token ) {
+            if ($doesExist == true) {
                 return $next($request);
             }
         }
        // return redirect()->route('offers');
->>>>>>> api-token-middleware
-    }
 }

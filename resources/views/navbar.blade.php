@@ -10,7 +10,7 @@
           <a class="nav-link" href="/offers">Offers</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/offers-list">Panel</a>
+          <a class="nav-link" href="/panel/offers">Panel</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/user/profile">Settings</a>

@@ -12,12 +12,8 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('offers') }}" :active="request()->routeIs('ships')">
-                        {{ __('Ships') }}
-                    </x-jet-nav-link>
-
-                    <x-jet-nav-link href="{{ route('trucks') }}" :active="request()->routeIs('trucks')">
-                        {{ __('Trucks') }}
+                    <x-jet-nav-link href="{{ route('offers') }}" :active="request()->routeIs('offers')">
+                        {{ __('offers') }}
                     </x-jet-nav-link>
                 </div>
             </div>
@@ -100,9 +96,6 @@
                                 {{ __('Admin') }}
                             </div>
 
-                            <x-jet-dropdown-link href="{{ route('ships.index') }}">
-                                {{ __('Ships') }}
-                            </x-jet-dropdown-link>
 
                             <div class="block px-4 py-2 text-xs text-gray-400">
                                 {{ __('Manage Account') }}

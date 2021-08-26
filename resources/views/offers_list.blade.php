@@ -11,7 +11,7 @@
             @endif
 
 
-            <a href="{{ route('ships.create') }}" class="btn btn-primary mb-2">Create new Ships location </a>
+            <a href="{{route('offers.create')}}" class="btn btn-primary mb-2">Create new Ships location </a>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -37,8 +37,8 @@
                             <td>{{ $offer->price }}</td>
                             <td>{{ $offer->currency->name }}</td>
                             <td>
-                                <a href="{{ route('edit', $offer->id) }}" class="btn btn-primary">edit</a>
-                                <a href="{{ route('ships.destroy', $offer->id) }}" class="btn btn-danger">delete</a>
+                                <a href="{{ route('offers.edit', $offer->id) }}" class="btn btn-primary">edit</a>
+                                <a href="{{ route('offers', $offer->id) }}" class="btn btn-danger">delete</a>
                             </td>
                         </tr>
                     @endforeach

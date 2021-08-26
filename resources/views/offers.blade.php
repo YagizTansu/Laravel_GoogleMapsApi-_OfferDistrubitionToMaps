@@ -12,12 +12,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <!-- Styles -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <title>Offers</title>
 </head>
@@ -294,7 +294,7 @@
 
         static currencySymbols(currencyId) {
             return $.ajax({
-                url: "/getCurrencySymbol",
+                url: "/api/getCurrencySymbol",
                 type: "GET",
                 data: {
                     currencyId: currencyId
@@ -373,7 +373,7 @@
 
     async function getCurrencySellingValue(currencyId) {
         var selling = await $.ajax({
-            url: "/getCurrencySellingValue",
+            url: "/api/getCurrencySellingValue",
             type: "GET",
             data: {
                 currencyId: currencyId
@@ -388,7 +388,7 @@
         var api_token = document.getElementById("api-token").getAttribute('content');
 
         $.ajaxSetup({
-            headers: {"api-token":api_token }
+            headers: {"api-token":api_token}
         });
 
         var cityId = $("#showCities").val();

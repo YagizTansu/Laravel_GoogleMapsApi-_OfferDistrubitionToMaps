@@ -1,19 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\adminController;
+//use App\Http\Controllers\Admin\adminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use App\Models\Ship;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\TruckController;
-use App\Http\Controllers\ShipController;
-use App\Http\Controllers\CacheController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\OfferController;
-use App\Http\Controllers\UserController;
-use App\Http\Middleware\CheckUserApiToken;
-use App\Models\Currency;
+use App\Http\Controllers\adminController;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -38,19 +32,21 @@ Route::get('/', function () {
 Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
 
 //currency Controller
-Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
-Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');
 Route::get('/getExchangeRate', [CurrencyController::class, 'getExchangeRate'])->name('getExchangeRate');
 
 //offer Controller
 //Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
 Route::get('/offers', [OfferController::class, 'index'])->name('offers');
-Route::get('/offers-list', [OfferController::class, 'getOffersList'])->name('offers-list');
+
 Route::get('/addOffer', [OfferController::class, 'addOffer'])->name('addOffer');
 Route::get('offer-detail/{id}', [OfferController::class, 'detail'])->whereNumber('id')->name('detail');
 
 Route::get('offer-edit/{id}', [OfferController::class, 'edit'])->whereNumber('id')->name('edit');
-Route::get('offer-update/{id}', [AdminController::class, 'update'])->whereNumber('id')->name('offer-update');
+//Route::get('offer-update/{id}', [AdminController::class, 'update'])->whereNumber('id')->name('offer-update');
+
+Route::group( ['middleware' => ['auth:sanctum', 'verified'],'prefix' =>'panel'], function () {
+    Route::resource('offers',adminController::class);
+});
 
 
 //try
