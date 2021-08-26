@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\OfferController;
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group( ['middleware' => ['CheckUserApiToken']], function () {
 
+    //offers
     Route::get('/createApiToken', [UserController::class, 'createApiToken']);
     Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
+
+    //Country controller
+    //Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
+    Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
 });
