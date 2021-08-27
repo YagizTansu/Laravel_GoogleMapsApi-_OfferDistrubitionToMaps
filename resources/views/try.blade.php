@@ -13,16 +13,15 @@
 
     <style>
         table {
-            font: 11px/24px Verdana, Arial, Helvetica, sans-serif;
+            font: 16px/28px Verdana, Arial, Helvetica, sans-serif;
             border-collapse: collapse;
             width: 320px;
             }
 
         td {
-            border: 1px solid #CCC;
+            border: 3px solid rgb(194, 175, 175);
             padding: 0 0.5em;
             }
-
 
     </style>
 
@@ -39,7 +38,7 @@
 
 <script>
     let crypto_key = document.getElementById("crypto-key").getAttribute('content');
-    let matrix = JSON.parse(crypto_key)
+    let matrix = JSON.parse(crypto_key);
 
     class matrixDisplayer{
         static createTable(tableData) {

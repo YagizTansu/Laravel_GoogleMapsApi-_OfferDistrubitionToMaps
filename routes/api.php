@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\CurrencyController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
