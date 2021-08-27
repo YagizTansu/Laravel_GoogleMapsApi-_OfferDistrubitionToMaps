@@ -5,10 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta id="api-token" name="api-token" content="{{ api_token() }}">
+    <meta id="crypto-key" name="crypto_key" content="{{ crypto_key() }}">
 
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <style>
+        table {
+            font: 11px/24px Verdana, Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 320px;
+            }
+
+        td {
+            border: 1px solid #CCC;
+            padding: 0 0.5em;
+            }
+
+
+    </style>
 
     <title>Document</title>
 </head>
@@ -22,39 +38,33 @@
 </html>
 
 <script>
+    let crypto_key = document.getElementById("crypto-key").getAttribute('content');
+    let matrix = JSON.parse(crypto_key)
 
+    class matrixDisplayer{
+        static createTable(tableData) {
+            var table = document.createElement('table');
+            var tableBody = document.createElement('tbody');
 
-class matrixDisplayer{
-    static createTable(tableData) {
-        var table = document.createElement('table');
-        var tableBody = document.createElement('tbody');
+            tableData.forEach(function (rowData) {
+                var row = document.createElement('tr',);
 
-        tableData.forEach(function (rowData) {
-            var row = document.createElement('tr',);
+                rowData.forEach(function (cellData) {
+                    var cell = document.createElement('td');
+                    cell.appendChild(document.createTextNode(cellData));
+                    row.appendChild(cell);
+                    row.setAttribute("style","font-size:0.5rem;")
+                });
 
-            rowData.forEach(function (cellData) {
-                var cell = document.createElement('td');
-                cell.appendChild(document.createTextNode(cellData));
-                row.appendChild(cell);
-                row.setAttribute("style","font-size:0.5rem;")
+                tableBody.appendChild(row);
             });
 
-            tableBody.appendChild(row);
-        });
-
-        table.appendChild(tableBody);
-        return table;
+            table.appendChild(tableBody);
+            return table;
+        }
     }
-}
 
-$('#table').append( matrixDisplayer.createTable(activities));
-
-
-
-
-
-
-
+    $('#table').append( matrixDisplayer.createTable(matrix));
 
 
 

@@ -31,7 +31,8 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
-        "files": ["app/Helpers/api_token.php"]
+        "files":["app/Helpers/api_token.php","app/Helpers/crypto_key.php"]
+
     },
     "autoload-dev": {
         "psr-4": {
