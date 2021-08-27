@@ -13,7 +13,7 @@
                     </div>
                     <div class="form-group">
                         <label>City</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" value={{$offer->city->name}}>
+                        <input type="text" class="form-control" id="latitude" name="latitude" value={{$offer->city}}>
                     </div>
                     <div class="form-group">
                         <label>Latitude</label>
