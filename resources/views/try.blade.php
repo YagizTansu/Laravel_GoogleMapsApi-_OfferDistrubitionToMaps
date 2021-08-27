@@ -25,7 +25,7 @@
         headers: {"api-token":api_token }
     });
 
-     function getApi() {
+    function getApi() {
          $.ajax({
             url: "/api/createApiToken",
             type: "GET",
@@ -38,5 +38,4 @@
         });
     }
  getApi();
-debugger
 </script>

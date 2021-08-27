@@ -10,14 +10,14 @@ use Illuminate\Http\Request;
 class CurrencyController extends Controller
 {
     public function getCurrencySymbol(Request $request){
-        $currencySymbol = Currency::where('id', '=', $request->currencyId)->get('symbol');
-        return response()->json($currencySymbol);
+        $currencySymbol = Currency::where('id', $request->currencyId)->get('symbol');
+        return $currencySymbol;
     }
 
     public function getCurrencySellingValue(Request $request)
     {
-        $currencySellingValue =CurrencyExchangeRate::where('currency_id', '=',$request->currencyId)->latest('date')->first('selling');
-        return response()->json($currencySellingValue);
+        $currencySellingValue =CurrencyExchangeRate::where('currency_id',$request->currencyId)->latest('date')->first('selling');
+        return $currencySellingValue;
     }
 
     public function getExchangeRate()
