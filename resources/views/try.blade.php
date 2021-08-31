@@ -30,8 +30,11 @@
 <body>
 
     <div id="table">
-
+        <h3>zigzag + transpose</h3>
     </div>
+    <br>
+    <hr>
+    <br>
 
 </body>
 </html>
@@ -39,6 +42,7 @@
 <script>
     let crypto_key = document.getElementById("crypto-key").getAttribute('content');
     let matrix = JSON.parse(crypto_key);
+    debugger
 
     class matrixDisplayer{
         static createTable(tableData) {
