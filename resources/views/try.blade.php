@@ -69,7 +69,7 @@
     $('#table').append( matrixDisplayer.createTable(matrix));
 
 
-  /*  var api_token = document.getElementById("api-token").getAttribute('content');
+  /*var api_token = document.getElementById("api-token").getAttribute('content');
     alert(api_token);
 
     $.ajaxSetup({

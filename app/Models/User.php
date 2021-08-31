@@ -54,7 +54,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'crypt_api_token' => 'json',
+        'crypt_api_token' => 'array',
     ];
 
     /**
