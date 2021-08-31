@@ -19,7 +19,6 @@ function crypto_key()
         }
     }
 
-
     return json_encode(array_merge($matrix,transpose($matrix2,4,4)));
 
 }
