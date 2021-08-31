@@ -43,8 +43,6 @@ class assignChipherToUsersApiToken extends Command
             $apitoken = crypto_key();
             User::where('id',$user->id)->update(['crypt_api_token'=>$apitoken]);
         }
-
-
     }
 
     function crypto_key()
