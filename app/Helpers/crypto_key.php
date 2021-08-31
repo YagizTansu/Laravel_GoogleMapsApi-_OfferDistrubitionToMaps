@@ -20,10 +20,9 @@ function crypto_key()
     }
 
 
-    return json_encode( array_merge($matrix,transpose($matrix2,4)));
+    return json_encode(array_merge($matrix,transpose($matrix2,4,4)));
 
 }
-
 
 function zigZagMatrix($arr,$n, $m)
 {
@@ -33,13 +32,11 @@ function zigZagMatrix($arr,$n, $m)
 
     $array =array();
 
-	// Print matrix of lower
-	// half zig-zag pattern
+	// Print matrix of lower half zig-zag pattern
 	$mn = min($m, $n);
 	for ($len = 1;$len <= $mn; $len++)
 	{
-		for ($i = 0;
-			$i < $len; $i++)
+		for ($i = 0;$i < $len; $i++)
 		{
 			$array[] = $arr[$row][$col];
 
@@ -150,11 +147,10 @@ function zigZagMatrix($arr,$n, $m)
     return $array;
 }
 
-function transpose($arr,$n)
+function transpose($arr,$n,$m)
 {
-
     for ($i = 0; $i < $n; $i++){
-        for ($j = 0; $j < $n; $j++){
+        for ($j = 0; $j < $m; $j++){
             $transpose[$i][$j] = $arr[$j][$i];
         }
     }

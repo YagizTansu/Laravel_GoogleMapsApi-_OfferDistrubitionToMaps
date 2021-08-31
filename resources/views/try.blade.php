@@ -32,9 +32,8 @@
     <div id="table">
         <h3>zigzag + transpose</h3>
     </div>
-    <br>
+
     <hr>
-    <br>
 
 </body>
 </html>
