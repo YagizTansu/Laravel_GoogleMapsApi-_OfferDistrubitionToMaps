@@ -18,6 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+
     public function usertype()
     {
         return $this->belongsTo(Usertype::class);
@@ -53,6 +54,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'crypt_api_token' => 'json',
     ];
 
     /**

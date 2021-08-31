@@ -15,6 +15,7 @@ class CheckUserApiToken
      * @param  \Closure  $next
      * @return mixed
      */
+
     public function handle(Request $request, Closure $next)
     {
         $doesExist=User::where('api_token',$request->header('api-token'))->exists();
