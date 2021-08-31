@@ -47,6 +47,7 @@
                 <div id="map"> </div>
                 <div id="floating-panel"></div>
             </div>
+
             <div id="rightPanel" class="col-md-2">
                 <div class="card">
                     <div class="card-body">

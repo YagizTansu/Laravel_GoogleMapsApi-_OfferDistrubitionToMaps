@@ -55,7 +55,7 @@
                     var cell = document.createElement('td');
                     cell.appendChild(document.createTextNode(cellData));
                     row.appendChild(cell);
-                    row.setAttribute("style","font-size:0.5rem;")
+                    row.setAttribute("style","font-size:0.5rem;");
                 });
 
                 tableBody.appendChild(row);
