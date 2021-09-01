@@ -7,6 +7,7 @@ use App\Models\CurrencyExchangeRate;
 use Illuminate\Http\Request;
 use App\Models\Currency;
 use App\Models\Offer;
+use Illuminate\Support\Facades\Auth;
 
 class OfferController extends Controller
 {
@@ -42,13 +43,13 @@ class OfferController extends Controller
 
     public function addOffer(Request $request){
         $offer = new Offer;
-        $offer->city_id = 5;
-        $offer->company_id =3;
+        $offer->city_id = $request->cityId;
+        $offer->company_id = Auth::user()->company_id;
         $offer->latitude =$request->latitude;
         $offer->longitude = $request->longitude;
         $offer->radius = $request->radius;
         $offer->currency_id =1;
-        $offer->price =1000;
+        $offer->price =$request->offerPrice;
 
         $offer->save();
 

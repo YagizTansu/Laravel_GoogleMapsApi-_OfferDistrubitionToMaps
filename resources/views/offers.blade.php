@@ -70,8 +70,7 @@
                         </select>
                         <br>
                         <label>Country</label>
-                        <select id="showCountries" class="form-select form-select-sm"
-                            aria-label=".form-select-sm example">
+                        <select id="showCountries" class="form-select form-select-sm"aria-label=".form-select-sm example">
                             <option value=''>Select Country</option>
                         </select>
                         <br>

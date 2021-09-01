@@ -33,10 +33,11 @@ Route::get('/getExchangeRate', [CurrencyController::class, 'getExchangeRate'])->
 
 
 //offer Controller
+Route::get('/addOffer', [OfferController::class, 'addOffer'])->name('addOffer');
 //Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
 Route::get('/offers', [OfferController::class, 'index'])->name('offers');
 
-Route::get('/addOffer', [OfferController::class, 'addOffer'])->name('addOffer');
+//Route::get('/addOffer', [OfferController::class, 'addOffer'])->name('addOffer');
 Route::get('offer-detail/{id}', [OfferController::class, 'detail'])->whereNumber('id')->name('detail');
 
 Route::get('offer-edit/{id}', [OfferController::class, 'edit'])->whereNumber('id')->name('edit');

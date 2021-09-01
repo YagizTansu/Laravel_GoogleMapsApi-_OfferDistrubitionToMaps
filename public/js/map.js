@@ -163,7 +163,6 @@ class Filter {
                 currencyId: currencyId
             },
             success: function(response) {
-
             }
         });
     }
@@ -303,8 +302,7 @@ function getCountries() {
         type: "GET",
         success: function(response) {
             $.each(response, function(key, country) {
-                $('#showCountries').append('<option value=' + country.id + '>' + country.name +
-                    '</option>');
+                $('#showCountries').append('<option value=' + country.id + '>' + country.name +'</option>');
             });
         },
         error: function() {
@@ -312,6 +310,23 @@ function getCountries() {
         }
     });
 }
+
+function getCities(countryId) {
+    return $.ajax({
+        url: "/getCities",
+        type: "GET",
+        data: {
+            countryId: countryId
+        },
+        success: function(response) {
+            $('#showCities').empty();
+            $('#showCities').append('<option >Select City</option>');
+            $.each(response, function(key, city) {
+                $('#showCities').append('<option value=' + city.id + '>' + city.name +'</option>');
+            });
+        }
+    });
+  }
 
 const subCircle = document.querySelector("#subCircle");
 subCircle.addEventListener('change', function() { //control subcircle filter checkbox
@@ -328,22 +343,7 @@ var showCountries = document.getElementById("showCountries");
 showCountries.addEventListener('change', (event) => { //control country filter
     var countryId = $("#showCountries").val();
     document.getElementById("showCities").disabled = false;
-
-    $.ajax({
-        url: "/getCities",
-        type: "GET",
-        data: {
-            countryId: countryId
-        },
-        success: function(response) {
-            $('#showCities').empty();
-            $('#showCities').append('<option >Select City</option>');
-            $.each(response, function(key, city) {
-                $('#showCities').append('<option value=' + city.id + '>' + city.name +
-                    '</option>');
-            });
-        }
-    });
+    getCities(countryId);
 });
 
 var showCities = document.getElementById("showCities");
@@ -355,15 +355,21 @@ showCities.addEventListener('change', (event) => { //control cities filter
 
 // ADD CIRCLE PART
 $("#addCirleMode").click(function() {
-    $("#formCard").empty();
-    $("#filterCard").empty();
+
+    //clean unexpected forms
+    $("#formCard").remove();
+    $("#filterCard").remove();
     $('#floating-panel').empty();
 
     $('#floating-panel').append('<h5 class="text-success">Add Circle Mode</h5>');
-    $('#floating-panel').append(
-        '<a href="/offers" id="saveCircleButton" class="btn btn-primary mr-2 ">Save</a>');
+    $('#floating-panel').append('<select id="showCountries" class="form-select form-select-sm"aria-label=".form-select-sm example"><option>Select Country</option></select> <br>');
+    $('#floating-panel').append('<select id="showCities" class="form-select form-select-sm" aria-label=".form-select-sm example"></select> <br>');
+    $('#floating-panel').append('<input type="number" class="form-control" id="offerPrice" name="offerPrice" placeholder="Enter Price"></input> <br>');
+
+    //buttons
+    $('#floating-panel').append('<a href="/offers" id="saveCircleButton" class="btn btn-primary mr-2">Save</a>');
     $('#floating-panel').append('<a id="delete-markers" class="btn btn-danger  mr-2"> Delete Markers</a>');
-    $('#floating-panel').append('<a href="/offers" class="btn btn-warning mr-2 ">Exit</a>');
+    $('#floating-panel').append('<a href="/offers" class="btn btn-warning mr-2">Exit</a>');
 
     $("#delete-markers").click(function() {
         AddCircleMode(map);
@@ -391,11 +397,11 @@ function AddCircleMode() {
     var clicked = 0;
     var cityCircle;
     // Configure the click listener.
-
     map.addListener("click", (event) => {
         clicked++;
 
         if (clicked == 1) {
+            //create cirle on map with click event
             cityCircle = new google.maps.Circle({
                 strokeColor: "#FF0000",
                 strokeOpacity: 0.8,
@@ -408,6 +414,7 @@ function AddCircleMode() {
                 radius: 0,
             });
 
+            //control circle radius with mouse event
             var firstX = 0;
             var firstY = 0;
             google.maps.event.addListener(map, "mousemove", function(event) {
@@ -423,18 +430,32 @@ function AddCircleMode() {
         }
 
         if (clicked != 1) {
-            $("#saveCircleButton").click(function() {
-                //save cityCirle to db
+
+            getCountries();
+            let showCountriesForAdd = document.getElementById("showCountries");
+            showCountriesForAdd.addEventListener('change', (event) => { //control country filter
+                let  country_id = $("#showCountries").val();
+                //document.getElementById("showCities").disabled = false;
+                getCities(country_id);
+            });
+
+            document.getElementById("saveCircleButton").addEventListener("click", function() {
+                let city_id = $("#showCities").val();
+                let offerPrice = $("#offerPrice").val();
+                debugger
+
                 $.ajax({
                     url: "/addOffer",
                     type: "GET",
                     data: {
+                        offerPrice: offerPrice,
+                        cityId: city_id,
                         radius: cityCircle.getRadius(),
                         latitude: cityCircle.getCenter().lat(),
                         longitude: cityCircle.getCenter().lng()
-
                     },
-                    success: function(response) {}
+                    success: function(response) {
+                    }
                 });
                 clicked = 0;
             });
