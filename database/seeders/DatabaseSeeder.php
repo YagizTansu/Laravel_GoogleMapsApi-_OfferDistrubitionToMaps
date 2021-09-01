@@ -15,10 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //\App\Models\User::factory(10)->create();
+        //\App\Models\User::factory(400)->create();
         //\App\Models\Ship::factory(10000)->create();
         //\App\Models\City::factory(1000)->create();
-        \App\Models\Offer::factory(2000)->create();
+        //\App\Models\Offer::factory(2000)->create();
 
       /*  $this->call([
             CountrySeeder::class,

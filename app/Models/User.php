@@ -24,6 +24,11 @@ class User extends Authenticatable
         return $this->belongsTo(Usertype::class);
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
