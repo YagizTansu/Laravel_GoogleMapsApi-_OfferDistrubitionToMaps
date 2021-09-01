@@ -320,7 +320,7 @@ function getCities(countryId) {
         },
         success: function(response) {
             $('#showCities').empty();
-            $('#showCities').append('<option >Select City</option>');
+            $('#showCities').append('<option>Select City</option>');
             $.each(response, function(key, city) {
                 $('#showCities').append('<option value=' + city.id + '>' + city.name +'</option>');
             });
@@ -363,11 +363,11 @@ $("#addCirleMode").click(function() {
 
     $('#floating-panel').append('<h5 class="text-success">Add Circle Mode</h5>');
     $('#floating-panel').append('<select id="showCountries" class="form-select form-select-sm"aria-label=".form-select-sm example"><option>Select Country</option></select> <br>');
-    $('#floating-panel').append('<select id="showCities" class="form-select form-select-sm" aria-label=".form-select-sm example"></select> <br>');
+    $('#floating-panel').append('<select id="showCities" class="form-select form-select-sm" aria-label=".form-select-sm example" disabled></select> <br>');
     $('#floating-panel').append('<input type="number" class="form-control" id="offerPrice" name="offerPrice" placeholder="Enter Price"></input> <br>');
 
     //buttons
-    $('#floating-panel').append('<a href="/offers" id="saveCircleButton" class="btn btn-primary mr-2">Save</a>');
+    $('#floating-panel').append('<a id="saveCircleButton" class="btn btn-primary mr-2">Save</a>');
     $('#floating-panel').append('<a id="delete-markers" class="btn btn-danger  mr-2"> Delete Markers</a>');
     $('#floating-panel').append('<a href="/offers" class="btn btn-warning mr-2">Exit</a>');
 
@@ -423,8 +423,7 @@ function AddCircleMode() {
                         firstX = event.domEvent.clientX;
                         firstY = event.domEvent.clientY;
                     }
-                    cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) * 1000) - ((
-                        event.domEvent.clientY - firstY) * 1000));
+                    cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) * 1000) - ((event.domEvent.clientY - firstY) * 1000));
                 }
             });
         }
@@ -435,14 +434,14 @@ function AddCircleMode() {
             let showCountriesForAdd = document.getElementById("showCountries");
             showCountriesForAdd.addEventListener('change', (event) => { //control country filter
                 let  country_id = $("#showCountries").val();
-                //document.getElementById("showCities").disabled = false;
+                document.getElementById("showCities").disabled = false;
                 getCities(country_id);
             });
 
             document.getElementById("saveCircleButton").addEventListener("click", function() {
+
                 let city_id = $("#showCities").val();
                 let offerPrice = $("#offerPrice").val();
-                debugger
 
                 $.ajax({
                     url: "/addOffer",
@@ -455,6 +454,28 @@ function AddCircleMode() {
                         longitude: cityCircle.getCenter().lng()
                     },
                     success: function(response) {
+                        swal("Offer added succesfully!","","success",
+                        {
+                           buttons: {
+                             stay: "Stay",
+                             turn: "Turn to Offer Page",
+                           },
+                         })
+                         .then((value) => {
+                           switch (value) {
+
+                             case "stay":
+                               window.location.href = "#";
+                               break;
+
+                             case "turn":
+                               window.location.href = "http://localhost:8000/offers";
+                               break;
+                           }
+                       });
+                    },
+                    error: function () {
+                        swal("Something wrong", "please check offer info!", "error")
                     }
                 });
                 clicked = 0;
