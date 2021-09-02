@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">Add offer</x-slot>
+    <x-slot name="header">Offer List</x-slot>
 
     <div class="card">
         <div class="card-body">
@@ -10,8 +10,6 @@
                 </div>
             @endif
 
-
-            <a href="{{route('offers.create')}}" class="btn btn-primary mb-2">Create new Offer location </a>
             <table class="table table-bordered">
                 <thead>
                     <tr>

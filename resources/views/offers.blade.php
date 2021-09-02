@@ -140,9 +140,6 @@
 
 </html>
 
-
-
-
 <script src="{{ asset('js/map.js')}}"></script>
 <script type="text/javascript"
 src="http://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyBMU4r64e98czgUSW1_V6ESAend_wpYY6Q&callback=loadMap">

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
 use Illuminate\Support\Facades\Cache;
 use App\Models\CurrencyExchangeRate;
 use Illuminate\Http\Request;
