@@ -26,4 +26,9 @@ class CurrencyController extends Controller
         $load = $service->getExchangeRate();
         return response()->json($load);
     }
+    public function getCurrency()
+    {
+        $currencies = Currency::get();
+        return $currencies;
+    }
 }

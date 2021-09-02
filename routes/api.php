@@ -38,3 +38,5 @@ Route::group( ['middleware' => ['CheckUserApiToken']], function () {
 //Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
 Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
 Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
+
+Route::get('/getCurrency', [CurrencyController::class, 'getCurrency']);

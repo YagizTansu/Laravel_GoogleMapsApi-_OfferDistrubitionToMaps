@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Support\Facades\Cache;
 use App\Models\CurrencyExchangeRate;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class OfferController extends Controller
             $payLoad = ['offers' => $offers, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
             return response()->json($payLoad);
         }else{
-            $offers = Offer::where('city_id', '=',$cityId)->with('currency','currency.currencyExchangeRates')->get();
+            $offers = Offer::where('city_id', '=',$cityId)->with('currency','currency.currencyExchangeRates','company')->get();
             json_encode($offers);
             Cache::put($cityId , $offers, 6000);
 

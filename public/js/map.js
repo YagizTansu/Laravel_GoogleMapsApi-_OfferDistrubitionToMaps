@@ -60,8 +60,7 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
             }
         });
 
-        const infowindow = new google.maps
-    .InfoWindow({ // max min average value for each multi cirle info window
+        const infowindow = new google.maps.InfoWindow({ // max min average value for each multi cirle info window
             content: contentString + InfoWindow.createAveragePriceString(totalPrice,
                 totalElement, priceArray, currencySymbol)
         });
@@ -115,7 +114,7 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
 
 class InfoWindow {
     static createContentString(offer, currencySymbols, exchangeCurrencySellingValue) {
-        var contentString = "<strong>" + 'Company id: ' + offer.company_id + "</strong>" + "<br>" +
+        var contentString = "<strong>" + 'Company : '+ "</strong>" + offer.company['name']  + "<br>" +
             "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency
                 .currency_exchange_rates[9].selling, exchangeCurrencySellingValue).toFixed(2).toString() + ' ' +
             currencySymbols + " " +
@@ -326,7 +325,7 @@ function getCities(countryId) {
             });
         }
     });
-  }
+}
 
 const subCircle = document.querySelector("#subCircle");
 subCircle.addEventListener('change', function() { //control subcircle filter checkbox
@@ -364,7 +363,7 @@ $("#addCirleMode").click(function() {
     $('#floating-panel').append('<h5 class="text-success">Add Circle Mode</h5>');
     $('#floating-panel').append('<select id="showCountries" class="form-select form-select-sm"aria-label=".form-select-sm example"><option>Select Country</option></select> <br>');
     $('#floating-panel').append('<select id="showCities" class="form-select form-select-sm" aria-label=".form-select-sm example" disabled></select> <br>');
-    $('#floating-panel').append('<input type="number" class="form-control" id="offerPrice" name="offerPrice" placeholder="Enter Price"></input> <br>');
+    $('#floating-panel').append('<input type="number" class="form-control" id="offerPrice" name="offerPrice" placeholder="Enter Price ($)"></input> <br>');
 
     //buttons
     $('#floating-panel').append('<a id="saveCircleButton" class="btn btn-primary mr-2">Save</a>');

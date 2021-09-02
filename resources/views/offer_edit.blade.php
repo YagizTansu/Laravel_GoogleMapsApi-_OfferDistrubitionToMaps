@@ -9,11 +9,11 @@
                     @csrf
                     <div class="form-group">
                         <label>Company</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" value={{$offer->company->name}}>
+                        <input type="text" class="form-control" id="latitude" name="latitude" value={{$offer->company->name}} readonly>
                     </div>
                     <div class="form-group">
                         <label>City</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" value={{$offer->city}}>
+                        <input type="text" class="form-control" id="latitude" name="latitude" value={{$offer->city->name}} readonly >
                     </div>
                     <div class="form-group">
                         <label>Latitude</label>
@@ -34,9 +34,11 @@
                         <label>Price</label>
                         <input type="text" class="form-control" id="price" name="price" value={{$offer->price}}>
                     </div>
+
                     <div class="form-group">
                         <label>Currency</label>
-                        <input type="text" class="form-control" id="currency" name="currency" value={{$offer->currency->name}}>
+                        <select name="currency_id" id="currency_id" class="form-select form-select-sm"aria-label=".form-select-sm example">
+                        </select>
                     </div>
 
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Update</button></p>
@@ -45,4 +47,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function getCurrency() {
+            return $.ajax({
+                url: "/api/getCurrency",
+                type: "GET",
+                success: function(response) {
+                    $('#currency_id').empty();
+                    $.each(response, function(key, currency) {
+                        $('#currency_id').append('<option id="currency_id" value=' + currency.id + '>' + currency.name +'</option>');
+                    });
+                }
+            });
+        }
+
+        getCurrency();
+
+
+    </script>
 </x-app-layout>

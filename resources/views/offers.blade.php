@@ -124,8 +124,7 @@
 
                             <div class="form-group">
                                 <label>Currency</label>
-                                <select id="currency" class="form-select form-select-sm" name="currency_id"
-                                    aria-label=".form-select-sm example">
+                                <select id="currency" class="form-select form-select-sm" name="currency_id"aria-label=".form-select-sm example">
                                 </select>
                             </div>
 

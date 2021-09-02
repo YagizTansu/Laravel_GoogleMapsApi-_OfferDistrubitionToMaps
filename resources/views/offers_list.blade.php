@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">Ships</x-slot>
+    <x-slot name="header">Add offer</x-slot>
 
     <div class="card">
         <div class="card-body">
@@ -11,12 +11,13 @@
             @endif
 
 
-            <a href="{{route('offers.create')}}" class="btn btn-primary mb-2">Create new Ships location </a>
+            <a href="{{route('offers.create')}}" class="btn btn-primary mb-2">Create new Offer location </a>
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">id</th>
                         <th scope="col">Company</th>
+                        <th scope="col">City</th>
                         <th scope="col">latitude</th>
                         <th scope="col">longitude</th>
                         <th scope="col">radius</th>
@@ -31,6 +32,7 @@
                         <tr>
                             <td>{{ $offer->id }}</td>
                             <td>{{ $offer->company->name }}</td>
+                            <td>{{ isset($offer->city->name) ? $offer->city->name : ''}}</td>
                             <td>{{ $offer->latitude }}</td>
                             <td>{{ $offer->longitude }}</td>
                             <td>{{ $offer->radius }}</td>
@@ -38,7 +40,7 @@
                             <td>{{ $offer->currency->name }}</td>
                             <td>
                                 <a href="{{ route('offers.edit', $offer->id) }}" class="btn btn-primary">edit</a>
-                                <a href="{{ route('offers', $offer->id) }}" class="btn btn-danger">delete</a>
+                                <a href="{{ route('offers.destroy', $offer->id) }}" class="btn btn-danger">delete</a>
                             </td>
                         </tr>
                     @endforeach

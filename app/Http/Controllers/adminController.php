@@ -57,7 +57,8 @@ class adminController extends Controller
      */
     public function show($id)
     {
-        //
+        Offer::where('id',$id)->delete();
+        return redirect()->route('offers.index');
     }
 
     /**
@@ -81,7 +82,7 @@ class adminController extends Controller
      */
     public function update(Request $request, $id)
     {
-       // Offer::Where('id',$id)->update($request->except(['_method','_token']));
+        Offer::Where('id',$id)->update($request->except(['_method','_token']));
         return redirect()->route('offers.index');
     }
 
@@ -93,6 +94,6 @@ class adminController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }
