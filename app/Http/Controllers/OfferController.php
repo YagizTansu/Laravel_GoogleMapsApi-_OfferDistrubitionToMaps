@@ -63,4 +63,18 @@ class OfferController extends Controller
         return view('offer_detail', compact('offer'));
     }
 
+    public function offerAddManully(Request $request)
+    {
+        $offer = new Offer;
+        $offer->city_id = $request->city_id;
+        $offer->company_id = Auth::user()->company_id;
+        $offer->latitude =$request->latitude;
+        $offer->longitude = $request->longitude;
+        $offer->radius = $request->radius;
+        $offer->currency_id =1;
+        $offer->price =$request->price;
+
+        $offer->save();
+    }
+
 }

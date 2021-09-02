@@ -85,18 +85,18 @@
 
                 <div id="formCard" class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Add Offers</h5>
+                        <h5 class="card-title">Add Offers Manually</h5>
                         <hr>
-                        <form method="POST" action="/ship-add">
+                        <form method="POST" action="/offerAddManully">
                             @csrf
                             <div class="form-group">
                                 <label>Company</label>
-                                <input type="text" class="form-control" id="company" name="company" placeholder="Forwardie">
+                                <input type="text" class="form-control" id="company_id" name="company_id" value={{auth()->user()->company->name}} readonly>
                             </div>
-                            @csrf
+
                             <div class="form-group">
                                 <label>City</label>
-                                <input type="text" class="form-control" id="city" name="city" placeholder="Paris">
+                                <input type="text" class="form-control" id="city_id" name="city_id" placeholder="Paris">
                             </div>
 
                             <div class="form-group">
@@ -124,7 +124,7 @@
 
                             <div class="form-group">
                                 <label>Currency</label>
-                                <select id="currency" class="form-select form-select-sm" name="currency_id"aria-label=".form-select-sm example">
+                                <select id="currency" class="form-select form-select-sm" name="currency"aria-label=".form-select-sm example">
                                 </select>
                             </div>
 

@@ -52,3 +52,6 @@ Route::group( ['middleware' => ['auth:sanctum', 'verified'],'prefix' =>'panel'],
 Route::get('try', function () {
     return view('try');
 });
+
+
+Route::post('/offerAddManully', [OfferController::class, 'offerAddManully'])->name('offerAddManully');
