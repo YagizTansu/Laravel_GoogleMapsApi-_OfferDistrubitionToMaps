@@ -14,7 +14,7 @@
 
                     <div class="form-group">
                         <label>Destination</label>
-                        <input type="text" class="form-control" id="latitude" name="latitude" value="{{ $offer->city->name }}" readonly>
+                        <input type="text" class="form-control" id="latitude" name="latitude" value="{{ isset($offer->city->name) ? $offer->city->name : '' }}" readonly>
                     </div>
 
 
