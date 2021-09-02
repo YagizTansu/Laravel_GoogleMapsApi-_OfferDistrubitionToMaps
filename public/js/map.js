@@ -42,8 +42,7 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
 
                 hasMultiPrice.push(offer.id);
                 hasMultiPrice.push(secondOffer.id);
-                priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency
-                    .currency_exchange_rates[9].selling, exchangeSellingValue));
+                priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[9].selling, exchangeSellingValue));
 
                 var marker = Create.createMarker(map, offer,
                 marker); // create Markers if coordinate has multi prices
@@ -114,7 +113,7 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
 
 class InfoWindow {
     static createContentString(offer, currencySymbols, exchangeCurrencySellingValue) {
-        var contentString = "<strong>" + 'Company : '+ "</strong>" + offer.company['name']  + "<br>" +
+        var contentString = "<strong>" + 'Company : '+ "</strong>" + offer.company_id  + "<br>" +
             "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency
                 .currency_exchange_rates[9].selling, exchangeCurrencySellingValue).toFixed(2).toString() + ' ' +
             currencySymbols + " " +
@@ -245,7 +244,7 @@ async function getCurrencySellingValue(currencyId) {
     return selling;
 }
 
-function loadMap(map, subCircleFilterValue, currencyFilterValue) { // Load all maps proporties
+ async function loadMap(map, subCircleFilterValue, currencyFilterValue) { // Load all maps proporties
 
     var api_token = document.getElementById("api-token").getAttribute('content');
 
@@ -254,7 +253,8 @@ function loadMap(map, subCircleFilterValue, currencyFilterValue) { // Load all m
     });
 
     var cityId = $("#showCities").val();
-    $.ajax({
+
+    await $.ajax({
         url: "/api/getOffers",
         type: "GET",
         data: {
@@ -269,6 +269,7 @@ function loadMap(map, subCircleFilterValue, currencyFilterValue) { // Load all m
             swal("Oops", "Unexpected user action!", "error");
         }
     });
+
     getCountries();
 }
 getDisplayExchangeRates();
