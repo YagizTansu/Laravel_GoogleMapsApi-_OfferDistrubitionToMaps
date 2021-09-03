@@ -16,7 +16,7 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
         let contentString = InfoWindow.createContentString(offer, currencySymbol,exchangeSellingValue); // create String for offer info window
         let totalElement = 1;
 
-        let offerPirce = changeCurrency(offer.price, offer.currency.currency_exchange_rates[9].selling,exchangeSellingValue);
+        let offerPirce = changeCurrency(offer.price, offer.currency.currency_exchange_rates[17].selling,exchangeSellingValue);
         //let secondOfferownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
 
         let totalPrice = offerPirce;
@@ -34,10 +34,10 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
 
                 hasMultiPrice.push(offer.id);
                 hasMultiPrice.push(secondOffer.id);
-                priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[9].selling, exchangeSellingValue));
+                priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[17].selling, exchangeSellingValue));
 
                 var marker = Create.createMarker(map, offer,marker); // create Markers if coordinate has multi prices
-                totalPrice += changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[9].selling, exchangeSellingValue);
+                totalPrice += changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[17].selling, exchangeSellingValue);
                 contentString += InfoWindow.createContentString(secondOffer, currencySymbol,exchangeSellingValue);
 
                 marker.addListener("click", () => {
@@ -100,7 +100,7 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
 class InfoWindow {
     static createContentString(offer, currencySymbols, exchangeCurrencySellingValue) {
         var contentString = "<strong>" + 'Company : '+ "</strong>" + offer.company.name  + "<br>" +
-            "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[9].selling, exchangeCurrencySellingValue).toFixed(2).toString() + ' ' +
+            "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[17].selling, exchangeCurrencySellingValue).toFixed(2).toString() + ' ' +
             currencySymbols + " " +
             "<br>" + "<a href=/offer-detail/" + offer.id + " class='btn btn-sm btn-primary'> " +
             'offer detail' + "</a>" +
@@ -242,8 +242,8 @@ async function loadMap(map, subCircleFilterValue, currencyFilterValue) { // Load
 }
 getDisplayExchangeRates();
 
-async function getOffers(map,cityId,subCircleFilterValue,currencyFilterValue) {
-    await $.ajax({
+function getOffers(map,cityId,subCircleFilterValue,currencyFilterValue) {
+    $.ajax({
         url: "/api/getOffers",
         type: "GET",
         data: {
