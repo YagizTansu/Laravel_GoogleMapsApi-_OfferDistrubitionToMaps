@@ -37,8 +37,7 @@
 
                     <div class="form-group">
                         <label>Currency</label>
-                        <select name="currency_id" id="currency_id" class="form-select form-select-sm"aria-label=".form-select-sm example">
-                        </select>
+                        <select name="currency_id" id="currency_id" class="form-select form-select-sm"aria-label=".form-select-sm example"></select>
                     </div>
 
                     <p class="text-center"><button id="addButton" class="btn btn-primary mt-2">Update</button></p>

@@ -48,7 +48,7 @@ class OfferController extends Controller
         $offer->latitude =$request->latitude;
         $offer->longitude = $request->longitude;
         $offer->radius = $request->radius;
-        $offer->currency_id =1;
+        $offer->currency_id =$request->currencyId;
         $offer->price =$request->offerPrice;
 
         $offer->save();
