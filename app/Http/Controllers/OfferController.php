@@ -34,7 +34,7 @@ class OfferController extends Controller
         }else{
             $offers = Offer::where('city_id', '=',$cityId)->with('company','currency','currency.currencyExchangeRates')->get();
             json_encode($offers);
-            Cache::put($cityId , $offers, 10000);
+            Cache::put($cityId , $offers, 1000);
 
             $payLoad = ['offers' => $offers, 'priceMax' => $priceMax, 'priceMin' => $priceMin, 'currency' => $currency,'defaultCurrency'=>$defaultCurrency,'currencyExchangeRate'=>$CurrencyExchangeRate];
             return response()->json($payLoad);
@@ -74,6 +74,7 @@ class OfferController extends Controller
         $offer->price =$request->price;
 
         $offer->save();
+        return redirect()->route('offers');
     }
 
 }

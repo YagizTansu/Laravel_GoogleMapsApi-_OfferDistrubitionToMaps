@@ -1,3 +1,16 @@
+function getCurrency() {
+    return $.ajax({
+        url: "/api/getCurrency",
+        type: "GET",
+        success: function(response) {
+            $('#currency_id').empty();
+            $.each(response, function(key, currency) {
+                $('#currency_id').append('<option id="currency_id" value=' + currency.id + '>' + currency.name +'</option>');
+            });
+        }
+    });
+}
+
 // ADD CIRCLE PART
 $("#addCirleMode").click(function() {
 

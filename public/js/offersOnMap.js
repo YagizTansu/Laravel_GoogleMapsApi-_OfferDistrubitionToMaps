@@ -1,40 +1,32 @@
-var hasMultiPrice = [];
+let hasMultiPrice = [];
 
-async function markersAndCircles(map, response, subCircleFilterValue, currencyFilterValue, currencySymbol = '$') {
+async function markersAndCircles(map, response, subCircleFilterValue, currencyFilterValue = 1, currencySymbol = '$') {
 
     map = Create.createMap(map); // create main map
 
-    if (currencyFilterValue == null) {
-        currencyFilterValue = 1;
-    }
-
-    //display symbol
-    let symbol = await Filter.currencySymbols(currencyFilterValue);
+    //get display symbol
+    let symbol = await Filter.getCurrencySymbol(currencyFilterValue);
     currencySymbol = symbol[0].symbol;
 
-    //display currency today Rate
+    //get currency with todays Rate
     let exchangeCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
-    var exchangeSellingValue = exchangeCurrencySellingValue.selling;
+    let exchangeSellingValue = exchangeCurrencySellingValue.selling;
 
     $.each(response['offers'], function(key, offer) {
-        var contentString = InfoWindow.createContentString(offer, currencySymbol,
-        exchangeSellingValue); // create String for ship info window
-        var totalElement = 1;
+        let contentString = InfoWindow.createContentString(offer, currencySymbol,exchangeSellingValue); // create String for offer info window
+        let totalElement = 1;
 
-        var offerPirce = changeCurrency(offer.price, offer.currency.currency_exchange_rates[9].selling,
-            exchangeSellingValue);
-        //var ownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
+        let offerPirce = changeCurrency(offer.price, offer.currency.currency_exchange_rates[9].selling,exchangeSellingValue);
+        //let secondOfferownCurrencySellingValue = await getCurrencySellingValue(currencyFilterValue);
 
-        var totalPrice = offerPirce;
-        var priceArray = [offerPirce];
+        let totalPrice = offerPirce;
+        let priceArray = [offerPirce];
 
         $.each(response['offers'], function(key, secondOffer) {
-            var distance = calcDistance(offer.latitude, offer.longitude, secondOffer.latitude,
-                secondOffer.longitude); // take distance between 2 offers
-            var sum = parseInt(distance) + parseInt(secondOffer.radius);
+            let distance = calcDistance(offer.latitude, offer.longitude, secondOffer.latitude,secondOffer.longitude); // take distance between 2 offers
+            let sum = parseInt(distance) + parseInt(secondOffer.radius);
 
-            if (sum < offer.radius && distance != 0 && distance < offer
-                .radius) { // control block: if small circle included  big cicle
+            if (sum < offer.radius && distance != 0 && distance < offer.radius) { // control block: if small circle included  big cicle
 
                 if (secondOffer.price != null) {
                     totalElement++;
@@ -44,12 +36,9 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
                 hasMultiPrice.push(secondOffer.id);
                 priceArray.push(changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[9].selling, exchangeSellingValue));
 
-                var marker = Create.createMarker(map, offer,
-                marker); // create Markers if coordinate has multi prices
-                totalPrice += changeCurrency(secondOffer.price, secondOffer.currency
-                    .currency_exchange_rates[9].selling, exchangeSellingValue);
-                contentString += InfoWindow.createContentString(secondOffer, currencySymbol,
-                    exchangeSellingValue);
+                var marker = Create.createMarker(map, offer,marker); // create Markers if coordinate has multi prices
+                totalPrice += changeCurrency(secondOffer.price, secondOffer.currency.currency_exchange_rates[9].selling, exchangeSellingValue);
+                contentString += InfoWindow.createContentString(secondOffer, currencySymbol,exchangeSellingValue);
 
                 marker.addListener("click", () => {
                     infowindow.open(marker.get("map"), marker);
@@ -60,8 +49,7 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
         });
 
         const infowindow = new google.maps.InfoWindow({ // max min average value for each multi cirle info window
-            content: contentString + InfoWindow.createAveragePriceString(totalPrice,
-                totalElement, priceArray, currencySymbol)
+            content: contentString + InfoWindow.createAveragePriceString(totalPrice,totalElement, priceArray, currencySymbol)
         });
 
         if (subCircleFilterValue == true) {
@@ -72,9 +60,8 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
 
     $.each(response['offers'], function(key, offer) {
         if (hasMultiPrice.length == 0) {
-            var marker = Create.createMarker(map, offer, marker);
-            var contentString = contentString = InfoWindow.createContentString(offer, currencySymbol,
-                exchangeSellingValue);
+            let marker = Create.createMarker(map, offer, marker);
+            let contentString = contentString = InfoWindow.createContentString(offer, currencySymbol,exchangeSellingValue);
 
             const infowindow = new google.maps.InfoWindow({
                 content: contentString
@@ -92,8 +79,7 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
                     j = j + 1;
                     if (j == (hasMultiPrice.length)) {
                         var marker = Create.createMarker(map, offer, marker);
-                        var contentString = contentString = InfoWindow.createContentString(offer,
-                            currencySymbol, exchangeSellingValue);
+                        var contentString = contentString = InfoWindow.createContentString(offer,currencySymbol, exchangeSellingValue);
 
                         const infowindow = new google.maps.InfoWindow({
                             content: contentString
@@ -113,9 +99,8 @@ async function markersAndCircles(map, response, subCircleFilterValue, currencyFi
 
 class InfoWindow {
     static createContentString(offer, currencySymbols, exchangeCurrencySellingValue) {
-        var contentString = "<strong>" + 'Company : '+ "</strong>" + offer.company_id  + "<br>" +
-            "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency
-                .currency_exchange_rates[9].selling, exchangeCurrencySellingValue).toFixed(2).toString() + ' ' +
+        var contentString = "<strong>" + 'Company : '+ "</strong>" + offer.company.name  + "<br>" +
+            "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[9].selling, exchangeCurrencySellingValue).toFixed(2).toString() + ' ' +
             currencySymbols + " " +
             "<br>" + "<a href=/offer-detail/" + offer.id + " class='btn btn-sm btn-primary'> " +
             'offer detail' + "</a>" +
@@ -139,8 +124,8 @@ class InfoWindow {
 
 class Filter {
     static updateFilter() {
-        var subCircleFilterValue = Filter.getSubCircleFilterValue();
-        var currencyFilterValue = Filter.getCurrencyFilterValue();
+        let subCircleFilterValue = Filter.getSubCircleFilterValue();
+        let currencyFilterValue = Filter.getCurrencyFilterValue();
         loadMap(map, subCircleFilterValue, currencyFilterValue);
     }
 
@@ -153,7 +138,7 @@ class Filter {
 
     }
 
-    static currencySymbols(currencyId) {
+    static getCurrencySymbol(currencyId) {
         return $.ajax({
             url: "/api/getCurrencySymbol",
             type: "GET",
@@ -168,7 +153,6 @@ class Filter {
 
 class Create {
     static createMap() { //create only map
-
         var map = new google.maps.Map(document.getElementById("map"), {
             center: {
                 lat: 47.5162,
@@ -203,12 +187,12 @@ class Create {
 
 class ColorMap {
     static mapping(price, price_min, price_max) {
-        return (price - price_min) * (100 - 0) / (price_max - price_min);
+        return (price - price_min) *100 / (price_max - price_min);
     }
 
     static priceToColor(min, max, price) {
-        var mapped = ColorMap.mapping(price, min, max);
-        var r, g, b = 0;
+        let mapped = ColorMap.mapping(price, min, max);
+        let r, g, b = 0;
         if (mapped < 50) {
             g = 255;
             r = Math.round(5.1 * mapped);
@@ -216,24 +200,23 @@ class ColorMap {
             r = 255;
             g = Math.round(510 - 5.10 * mapped);
         }
-        var h = r * 0x10000 + g * 0x100 + b * 0x1;
+        let h = r * 0x10000 + g * 0x100 + b * 0x1;
 
         return '#' + ('000000' + h.toString(16)).slice(-6);
     }
 }
 
 function calcDistance(fromLat, fromLng, toLat, toLng) {
-    return google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(fromLat, fromLng),
-        new google.maps.LatLng(toLat, toLng));
+    return google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(fromLat, fromLng),new google.maps.LatLng(toLat, toLng));
 }
 
-function changeCurrency(price, currency, exchangeCurrency) {
-    return (price * currency) / exchangeCurrency;
+function changeCurrency(price, offerCurrency, exchangeCurrency) {
+    return (price * offerCurrency) / exchangeCurrency;
 }
 
 async function getCurrencySellingValue(currencyId) {
 
-    var selling = await $.ajax({
+    let selling = await $.ajax({
         url: "/api/getCurrencySellingValue",
         type: "GET",
         data: {
@@ -244,16 +227,22 @@ async function getCurrencySellingValue(currencyId) {
     return selling;
 }
 
- async function loadMap(map, subCircleFilterValue, currencyFilterValue) { // Load all maps proporties
 
-    var api_token = document.getElementById("api-token").getAttribute('content');
+async function loadMap(map, subCircleFilterValue, currencyFilterValue) { // Load all maps proporties
+
+    let api_token = document.getElementById("api-token").getAttribute('content');
+    let cityId = $("#showCities").val();
 
     $.ajaxSetup({
         headers: {"api-token":api_token}
     });
 
-    var cityId = $("#showCities").val();
+    await getOffers(map,cityId,subCircleFilterValue,currencyFilterValue);
+    getCountries();
+}
+getDisplayExchangeRates();
 
+async function getOffers(map,cityId,subCircleFilterValue,currencyFilterValue) {
     await $.ajax({
         url: "/api/getOffers",
         type: "GET",
@@ -261,35 +250,22 @@ async function getCurrencySellingValue(currencyId) {
             cityId: cityId
         },
         success: function(response) {
-            printCurrency(response);
-            var subCircleFilterValue = Filter.getSubCircleFilterValue();
             markersAndCircles(map, response, subCircleFilterValue, currencyFilterValue);
         },
         error: function() {
             swal("Oops", "Unexpected user action!", "error");
         }
     });
-
-    getCountries();
-}
-getDisplayExchangeRates();
-
-function printCurrency(response) {
-    $('#currency').empty();
-    $.each(response['currency'], function(key, currency) {
-        $('#currency').append('<option value=' + currency.id + '>' + currency.name + '</option>');
-    });
 }
 
 function getDisplayExchangeRates() {
-    $.ajax({
+    return $.ajax({
         url: "/getExchangeRate",
         type: "GET",
         success: function(response) {
             $('#showCurrency').empty();
             $.each(response['CurrencyExchangeRate'], function(key, exchange) {
-                $('#showCurrency').append('<option value=' + exchange.currency.id + '> ' +
-                    exchange.currency.name + '</option>');
+                $('#showCurrency').append('<option value=' + exchange.currency.id + '> ' +exchange.currency.name + '</option>');
             });
         }
     });
@@ -297,7 +273,7 @@ function getDisplayExchangeRates() {
 
 
 function getCountries() {
-    $.ajax({
+    return $.ajax({
         url: "/api/getCountries",
         type: "GET",
         success: function(response) {
@@ -361,7 +337,6 @@ showCountries.addEventListener('change', (event) => { //control country filter
 
 var showCities = document.getElementById("showCities");
 showCities.addEventListener('change', (event) => { //control cities filter
-    document.getElementById("showCities").disabled = false;
     loadMap();
 });
 

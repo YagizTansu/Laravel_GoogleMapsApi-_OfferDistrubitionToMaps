@@ -7,13 +7,9 @@
             <div class="col">
                 <form method="POST" action="">
                     @csrf
-                    <div class="form-group">
-                        <label>Offer Id</label>
-                        <input type="text" class="form-control" id="name" name="name"  value="{{ $offer->company_id }}" readonly>
-                    </div>
 
                     <div class="form-group">
-                        <label>Destination</label>
+                        <label>Departure Point</label>
                         <input type="text" class="form-control" id="latitude" name="latitude" value="{{ isset($offer->city->name) ? $offer->city->name : '' }}" readonly>
                     </div>
 
