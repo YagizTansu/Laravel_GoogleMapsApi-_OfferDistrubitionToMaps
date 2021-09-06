@@ -47,7 +47,7 @@ function AddCircleMode() {
 
     // Create the initial InfoWindow.
     let infoWindow = new google.maps.InfoWindow({
-        content: "Click the map to add Circle",
+        content: "<h5>1. Please click map to add new offer region </h4>" + "<h5>2. Fill your offer information correctly</h5> ",
         position: myLatlng,
     });
     infoWindow.open(map);
