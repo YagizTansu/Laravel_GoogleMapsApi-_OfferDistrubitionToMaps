@@ -81,4 +81,11 @@ class OfferController extends Controller
         return redirect()->route('offers');
     }
 
+    public function getOffer(Request $request)
+    {
+        $cityId = $request->cityId;
+        $offers = Offer::where('city_id', '=',$cityId)->with('company','currency','currency.currencyExchangeRates')->get();
+        return $offers;
+    }
+
 }

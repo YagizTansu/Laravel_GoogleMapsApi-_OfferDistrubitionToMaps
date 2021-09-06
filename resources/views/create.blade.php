@@ -31,17 +31,19 @@
 </html>
 <script>
 
-    class Cirle{
+    class Circle{
+        static circlesArray = [];
 
-        constructor(centerPoint,radius, fillColor="#FF0000" ,fillOpacity=0.35,array) {
+        constructor(centerPoint,radius, fillColor="#FF0000" ,fillOpacity=0.35) {
             this.centerPoint = centerPoint;
             this.radius = radius;
             this.fillColor = fillColor;
             this.fillOpacity = fillOpacity;
 
+            Circle.circlesArray.push(this);
         }
 
-        createCirleOnMap(map){
+        createCircleOnMap(map){
             let cityCircle = new google.maps.Circle({
                 strokeColor: this.fillColor,
                 strokeOpacity: 0.99,
@@ -65,6 +67,41 @@
         getLng(){
             return this.centerPoint.getLng();
         }
+
+                    //check given point inside the circle or not
+        isInside(point) {
+            let inside = false;
+            let distance = this.#dist(point);
+
+            if(this.getRadius() > distance ){
+                inside = true;
+            }
+            return inside;
+        }
+                //calculate distance between given point to circle boundry if point is not inside circle
+        calcDistance(point,toCenter) {
+            let distance = this.#dist(point);
+            if(toCenter == false){
+                distance = distance - circle.getRadius();
+            }
+            return distance;
+        }
+
+        //calculate distance between given point to circle center if point is not inside circle
+        #dist(point){
+        let R = 6378000; // meter
+        let dLat = (point.getLat()-this.getLat())* Math.PI / 180;
+        let dLon = (point.getLng()-this.getLng())* Math.PI / 180;
+
+        let lat1 = (this.getLat())* Math.PI / 180;
+        let lat2 = (point.getLat())* Math.PI / 180;
+
+        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        let distance = R * c;
+
+        return distance;
+        }
     }
 
     class Point{
@@ -82,75 +119,38 @@
 
     }
 
-    //check given point inside the cirle or not
-    function isInside(cirle,point) {
-        let inside = false;
-        let distance = dist(cirle,point);
-
-        if(cirle.getRadius() > distance ){
-            inside = true;
-        }
-        return inside;
-    }
-
-    // calculate distance between circle center  point to given point
-    function dist(cirle,point)
-    {
-      let R = 6378000; // meter
-      let dLat = toRad(point.getLat()-cirle.getLat());
-      let dLon = toRad(point.getLng()-cirle.getLng());
-
-      let lat1 = toRad(cirle.getLat());
-      let lat2 = toRad(point.getLat());
-
-      let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      let distance = R * c;
-
-      return distance;
-    }
-
-    // Converts numeric degrees to radians
-    function toRad(Value)
-    {
-        return Value * Math.PI / 180;
-    }
-
-    //calculate distance between given point to circle boundry if point is not inside circle
-    function calcDistance(cirle,point) {
-        let distance = dist(cirle,point);
-        if(isInside(cirle,point) == false){
-            distance = distance - cirle.getRadius();
-        }
-        return distance;
-    }
-
-
-
-
-
-    function loadMap() {
+    async function loadMap() {
         let  map = new google.maps.Map(document.getElementById("map"), {
             center: {lat: 47.5162,lng: 14.5501},
             zoom: 4.8,
         });
 
-        let point = new Point(49.75,14);
-        let cirle = new Cirle(new Point(47,14),300000);
+        //let array = await getOffers();
+        debugger
 
-        new google.maps.Marker({
-            position: point,
-            map,
-        });
+        let point2 = new Point(47,14);
+        circle = new Circle(point2,300000);
+        circle.createCircleOnMap(map);
 
-        cirle.createCirleOnMap(map);
+        let point = new Point(50,14);
+        new google.maps.Marker({position: point,map});
 
-        alert(calcDistance(cirle,point));
-        alert(isInside(cirle,point));
-
-
+        alert(circle.calcDistance(point,true));
+        alert(circle.isInside(point));
 
     }
+
+    function getOffers() {
+        return $.ajax({
+            url: "/api/getOffer",
+            type: "GET",
+            data: {
+                cityId: 1001
+            },
+            success: function(response) {
+            }
+        });
+      }
 
 </script>
 
