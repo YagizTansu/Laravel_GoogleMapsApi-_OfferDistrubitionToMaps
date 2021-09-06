@@ -55,19 +55,6 @@
                 radius: this.radius,
             });
         }
-
-        getRadius(){
-            return this.radius;
-        }
-
-        getLat(){
-            return this.centerPoint.getLat();
-        }
-
-        getLng(){
-            return this.centerPoint.getLng();
-        }
-
                     //check given point inside the circle or not
         isInside(point) {
             let inside = false;
@@ -89,18 +76,29 @@
 
         //calculate distance between given point to circle center if point is not inside circle
         #dist(point){
-        let R = 6378000; // meter
-        let dLat = (point.getLat()-this.getLat())* Math.PI / 180;
-        let dLon = (point.getLng()-this.getLng())* Math.PI / 180;
+            let R = 6378000; // meter
+            let dLat = (point.getLat()-this.getLat())* Math.PI / 180;
+            let dLon = (point.getLng()-this.getLng())* Math.PI / 180;
 
-        let lat1 = (this.getLat())* Math.PI / 180;
-        let lat2 = (point.getLat())* Math.PI / 180;
+            let lat1 = (this.getLat())* Math.PI / 180;
+            let lat2 = (point.getLat())* Math.PI / 180;
 
-        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        let distance = R * c;
+            let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+            let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            let distance = R * c;
 
-        return distance;
+            return distance;
+        }
+        getRadius(){
+            return this.radius;
+        }
+
+        getLat(){
+            return this.centerPoint.getLat();
+        }
+
+        getLng(){
+            return this.centerPoint.getLng();
         }
     }
 
