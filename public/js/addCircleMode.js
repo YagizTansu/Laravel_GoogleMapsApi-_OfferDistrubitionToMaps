@@ -12,7 +12,7 @@ function getCurrency() {
 }
 
 // ADD CIRCLE PART
-$("#addCirleMode").click(function() {
+document.getElementById("addCirleMode").addEventListener("click", function() {
 
     //clean unexpected forms
     $("#formCard").remove();
@@ -30,8 +30,8 @@ $("#addCirleMode").click(function() {
     $('#floating-panel').append('<a id="delete-markers" class="btn btn-danger  mr-2"> Delete Markers</a>');
     $('#floating-panel').append('<a href="/offers" class="btn btn-warning mr-2">Exit</a>');
 
-    $("#delete-markers").click(function() {
-        AddCircleMode(map);
+    document.getElementById("delete-markers").addEventListener("click", function() {
+        AddCircleMode();
     });
 
     AddCircleMode();
