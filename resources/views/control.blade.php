@@ -62,6 +62,28 @@
 
 </html>
 <script>
+    class OfferFilter{
+        #subCirle;
+        #currency_id;
+        #city_id;
+
+        constructor() {
+            this.subCirle = getSubCircleFilter();
+            this.currency_id = getCurrencyFilter();
+            this.city_id = getCityFilter();
+        }
+
+        getSubCircleFilter(){
+            return document.getElementById("subCircle").checked;
+        }
+        getCurrencyFilter(){
+            return $("#currencies").val();
+        }
+        getCityFilter(){
+            let cityId = $("#showCities").val();
+            return cityId;
+        }
+    }
 
     class Circle{
         static circlesArray = [];
