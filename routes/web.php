@@ -58,5 +58,10 @@ Route::get('/create', function () {
     return view('create');
 });
 
+//try
+Route::get('/control', function () {
+    return view('control');
+});
+
 
 Route::post('/offerAddManully', [OfferController::class, 'offerAddManully'])->name('offerAddManully');

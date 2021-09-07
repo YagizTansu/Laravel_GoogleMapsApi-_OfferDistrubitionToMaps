@@ -43,6 +43,7 @@
             Circle.circlesArray.push(this);
         }
 
+        // set cirle on given map
         createCircleOnMap(map){
             let cityCircle = new google.maps.Circle({
                 strokeColor: this.fillColor,
@@ -55,26 +56,35 @@
                 radius: this.radius,
             });
         }
-                    //check given point inside the circle or not
+
+        //check given point inside the circle or not
         isInside(point) {
             let inside = false;
             let distance = this.#dist(point);
 
-            if(this.getRadius() > distance ){
+            if(this.radius > distance ){
                 inside = true;
             }
             return inside;
         }
-                //calculate distance between given point to circle boundry if point is not inside circle
-        calcDistance(point,toCenter) {
-            let distance = this.#dist(point);
-            if(toCenter == false){
-                distance = distance - circle.getRadius();
+
+        //calculate distance between given point to circle boundry
+        distToBoundry(point){
+            let distance = this.#dist(point) - this.radius;
+
+            if (distance < 0) {
+                distance = 0;
             }
             return distance;
         }
 
-        //calculate distance between given point to circle center if point is not inside circle
+        //calculate distance between given point to circle center
+        distToCenter(point) {
+            let distance = this.#dist(point);
+            return distance;
+        }
+
+        // private function calculate distance between given point to circle center
         #dist(point){
             let R = 6378000; // meter
             let dLat = (point.getLat()-this.getLat())* Math.PI / 180;
@@ -89,19 +99,20 @@
 
             return distance;
         }
+
+        //getters
         getRadius(){
             return this.radius;
         }
-
         getLat(){
             return this.centerPoint.getLat();
         }
-
         getLng(){
             return this.centerPoint.getLng();
         }
     }
 
+    // lat lng object
     class Point{
         constructor(lat,lng) {
             this.lat = lat;
@@ -117,30 +128,44 @@
 
     }
 
+
+    // main function
     async function loadMap() {
+
+        //initilaize map
         let  map = new google.maps.Map(document.getElementById("map"), {
             center: {lat: 47.5162,lng: 14.5501},
             zoom: 4.8,
         });
 
-        //let array = await getOffers();
-        debugger
+        let circles = await getOffers(); // get offers from db
 
-        let point2 = new Point(47,14);
-        circle = new Circle(point2,300000);
+
+        /*circles.forEach(circle => {
+            //debugger
+            let point =new Point(parseFloat(circle.latitude),parseFloat(circle.longitude));
+            let cir = new Circle(point,parseFloat(circle.radius));
+            cir.createCircleOnMap(map);
+        });*/
+
+
+        circle = new Circle(new Point(47.30498,14),300000);
         circle.createCircleOnMap(map);
+
 
         let point = new Point(50,14);
         new google.maps.Marker({position: point,map});
 
-        alert(circle.calcDistance(point,true));
+        alert(circle.distToBoundry(point));
         alert(circle.isInside(point));
 
     }
 
-    function getOffers() {
-        return $.ajax({
-            url: "/api/getOffer",
+
+
+    async function getOffers() {
+        return await $.ajax({
+            url: "/api/getOffers",
             type: "GET",
             data: {
                 cityId: 1001
