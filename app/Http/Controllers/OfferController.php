@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class OfferController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         return view('offers');
     }
 
@@ -59,8 +58,7 @@ class OfferController extends Controller
         return redirect()->route('offers')->withSuccess('Offer Added Successfuly');
     }
 
-    public function detail($id)
-    {
+    public function detail($id){
         $offer = Offer::find($id);
         return view('offer_detail', compact('offer'));
     }
@@ -78,14 +76,6 @@ class OfferController extends Controller
         $offer->save();
         return redirect()->route('offers');
     }
-
-    public function getOffer(Request $request)
-    {
-        $cityId = $request->cityId;
-        $offers = Offer::where('city_id', '=',$cityId)->with('company','currency','currency.currencyExchangeRates')->get();
-        return $offers;
-    }
-
 
 
     public function offerAjax(Request $request){

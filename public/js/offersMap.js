@@ -326,7 +326,7 @@ function getCountries() { // get countries
 }
 async function getCities(countryId) { //get selected country cities
     return await $.ajax({
-        url: "/getCities",
+        url: "/api/getCities",
         type: "GET",
         data: {
             countryId: countryId
