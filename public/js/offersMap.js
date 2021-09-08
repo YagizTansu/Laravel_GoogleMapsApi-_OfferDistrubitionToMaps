@@ -1,3 +1,4 @@
+
 class OfferFilter{
     #subCircle = null;
     #currency_id = null;
@@ -275,12 +276,22 @@ function offersAjax(offerFilter) {
 }
 
 async function loadOffers(offerFilter){
+    let api_token = document.getElementById("api-token").getAttribute('content');
+    $.ajaxSetup({
+        headers: {"api-token":api_token}
+    });
+
     Circle.circlesArray = [];
     await offersAjax(offerFilter);
     loadMap(offerFilter.getSubCircle());
 }
 
 async function main() {
+    let api_token = document.getElementById("api-token").getAttribute('content');
+    $.ajaxSetup({
+        headers: {"api-token":api_token}
+    });
+
     await getCurrencies();
     await getCountries();
     loadMap();
@@ -300,18 +311,18 @@ function getCurrencies() { // get currency name and value
     });
 }
 function getCountries() { // get countries
-        return $.ajax({
-            url: "/api/getCountries",
-            type: "GET",
-            success: function(response) {
-                $.each(response, function(key, country) {
-                    $('#showCountries').append('<option value=' + country.id + '>' + country.name +'</option>');
-                });
-            },
-            error: function() {
-                swal("Oops", "Unexpected user action!", "error");
-            }
-        });
+    return $.ajax({
+        url: "/api/getCountries",
+        type: "GET",
+        success: function(response) {
+            $.each(response, function(key, country) {
+                $('#showCountries').append('<option value=' + country.id + '>' + country.name +'</option>');
+            });
+        },
+        error: function() {
+            swal("Oops", "Unexpected user action!", "error");
+        }
+    });
 }
 async function getCities(countryId) { //get selected country cities
     return await $.ajax({

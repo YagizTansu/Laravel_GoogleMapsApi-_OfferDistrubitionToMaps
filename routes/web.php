@@ -54,11 +54,6 @@ Route::get('try', function () {
 });
 
 //try
-Route::get('/create', function () {
-    return view('create');
-});
-
-//try
 Route::get('/control', function () {
     return view('control');
 });

@@ -25,20 +25,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group( ['middleware' => ['CheckUserApiToken']], function () {
     Route::get('/createApiToken', [UserController::class, 'createApiToken']);
 
-    //offers
-    //Country controller
-
-    //Currency Controller
-    Route::get('/getCurrencySellingValue', [CurrencyController::class, 'getCurrencySellingValue'])->name('getCurrencySellingValue');
-    Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
+    // important apis
+    Route::get('/offerAjax', [OfferController::class, 'offerAjax'])->name('offerAjax');
 
 });
-
-//Route::get('/getCurrencySymbol', [CurrencyController::class, 'getCurrencySymbol'])->name('getCurrencySymbol');
-Route::get('/getOffers', [OfferController::class, 'getOffers'])->name('getOffers');
-Route::get('/offerAjax', [OfferController::class, 'offerAjax'])->name('offerAjax');
-
-Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
-Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
-Route::get('/getOffer', [OfferController::class, 'getOffer'])->name('getOffer');
+//use
 Route::get('/getCurrency', [CurrencyController::class, 'getCurrency']);
+Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
+Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
+
+
