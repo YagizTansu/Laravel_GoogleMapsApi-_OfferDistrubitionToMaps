@@ -54,6 +54,8 @@
                         disabled>
                     </select>
 
+                    <p class="text-center"><button id="searchButton" class="btn btn-primary mt-2">Search</button></p>
+
                 </div>
             </div>
         </div>
@@ -63,38 +65,50 @@
 </html>
 <script>
     class OfferFilter{
-        #subCirle;
-        #currency_id;
-        #city_id;
+        #subCircle = null;
+        #currency_id = null;
+        #city_id = null;
 
         constructor() {
-            this.subCirle = getSubCircleFilter();
-            this.currency_id = getCurrencyFilter();
-            this.city_id = getCityFilter();
+            this.#subCircle = this.#getSubCircleFilter();
+            this.#currency_id = this.#getCurrencyFilter();
+            this.#city_id = this.#getCityFilter();
         }
 
-        getSubCircleFilter(){
+        #getSubCircleFilter(){
             return document.getElementById("subCircle").checked;
         }
-        getCurrencyFilter(){
+        #getCurrencyFilter(){
             return $("#currencies").val();
         }
-        getCityFilter(){
-            let cityId = $("#showCities").val();
-            return cityId;
+        #getCityFilter(){
+            return $("#showCities").val();
         }
+
+        getSubCircle(){
+            return this.#subCircle;
+        }
+        getCurrencyId(){
+            return this.#currency_id;
+        }
+        getcityId(){
+            return this.#city_id;
+        }
+
+
     }
 
     class Circle{
         static circlesArray = [];
         static id = 0;
 
-        constructor(centerPoint,radius, fillColor="#FF0000" ,fillOpacity=0.35) {
+        constructor(centerPoint,radius, fillColor="#FF0000" ,fillOpacity=0.35,offer) {
             this.id = Circle.id++;
             this.centerPoint = centerPoint;
             this.radius = radius;
             this.fillColor = fillColor;
             this.fillOpacity = fillOpacity;
+            this.offer = offer;
 
             Circle.circlesArray.push(this);
         }
@@ -113,14 +127,15 @@
             });
         }
 
-        createMarkerOnMap(map,contentString){
+        //set marker for circle
+        createMarkerOnMap(map){
             let marker = new google.maps.Marker({
                 position: this.centerPoint,
                 map,
             });
 
             const infowindow = new google.maps.InfoWindow({
-                content: contentString,
+                content: InfoWindow.createContentString(this.offer),
             })
 
             marker.addListener("click", () => {
@@ -135,7 +150,7 @@
         //check given point inside the circle or not
         isInside(point) {
             let inside = false;
-            let distance = this.#dist(point);
+            let distance = this._dist(point);
 
             if(this.radius > distance ){
                 inside = true;
@@ -145,7 +160,7 @@
 
         //calculate distance between given point to circle boundry
         distToBoundry(point){
-            let distance = this.#dist(point) - this.radius;
+            let distance = this._dist(point) - this.radius;
 
             if (distance < 0) {
                 distance = 0;
@@ -155,12 +170,12 @@
 
         //calculate distance between given point to circle center
         distToCenter(point) {
-            let distance = this.#dist(point);
+            let distance = this._dist(point);
             return distance;
         }
 
         // private function calculate distance between given point to circle center
-        #dist(point){
+        _dist(point){
             let R = 6378000; // meter
             let dLat = (point.getLat()-this.getLat())* Math.PI / 180;
             let dLon = (point.getLng()-this.getLng())* Math.PI / 180;
@@ -206,22 +221,6 @@
 
     }
 
-    class Filter {
-        static updateFilter() {
-            let subCircleFilterValue = Filter.getSubCircleFilterValue();
-            let currencyFilterValue = Filter.getCurrencyFilterValue();
-            loadMap(subCircleFilterValue, currencyFilterValue);
-        }
-
-        static getSubCircleFilterValue() {
-            return document.getElementById("subCircle").checked;
-        }
-
-        static getCurrencyFilterValue() {
-            return $("#currencies").val();
-        }
-    }
-
     class Point{
         constructor(lat,lng) {
             this.lat = lat;
@@ -259,10 +258,10 @@
     }
 
     class InfoWindow {
-        static createContentString(offer, currencySymbols, exchangeCurrencySellingValue) {
+        static createContentString(offer) {
             var contentString = "<strong>" + 'Company : '+ "</strong>" + offer.company.name  + "<br>" +
-                "<strong>" + 'Offer Price: ' + "</strong>" + changeCurrency(offer.price, offer.currency.currency_exchange_rates[17].selling, exchangeCurrencySellingValue).toFixed(2).toString() + ' ' +
-                currencySymbols + " " +
+                "<strong>" + 'Offer Price: ' + "</strong>" + offer.desired_price.toFixed(2) + ' ' +
+                offer.desired_currency_symbol + " " +
                 "<br>" + "<a href=/offer-detail/" + offer.id + " class='btn btn-sm btn-primary'> " +
                 'offer detail' + "</a>" +
                 "<br> <br>";
@@ -284,7 +283,7 @@
     }
 
     // main function
-    function loadMap(subCircleFilterValue,currencyFilterValue) {
+    function loadMap(subCircleFilterValue) {
         let hasMultiCircles = [];// save circle id which is inside in big circle
 
         //initilaize map
@@ -317,25 +316,45 @@
         }
     }
 
-    //ajax api's
-    async function getOffers(cityId) { // get offers from city Id
-        return await $.ajax({
-            url: "/api/getOffers",
+    function offersAjax(offerFilter) {
+        let cityId = offerFilter.getcityId();
+        let currencyId = offerFilter.getCurrencyId();
+
+        return  $.ajax({
+            url: "/api/offerAjax",
             type: "GET",
             data: {
-                cityId:cityId
+                cityId: cityId,
+                currencyId:currencyId
             },
             success: function(response) {
 
-                response['offers'].forEach(circle => {
-                    let point =new Point(parseFloat(circle.latitude),parseFloat(circle.longitude));
-                    let cir = new Circle(point,parseFloat(circle.radius));
+                response['offers'].forEach(offer => {
+                    //let infoWindowString = InfoWindow.createContentString(offer,response['symbol']);
+                    //alert(infoWindowString);
+
+                    let point =new Point(parseFloat(offer.latitude),parseFloat(offer.longitude));
+                    let circle = new Circle(point,parseFloat(offer.radius),ColorMap.priceToColor(response['priceMin'],response['priceMax'],offer.price),0.30,offer);
                 });
             }
         });
     }
-    async function getCurrencies() { // get currency name and value
-        return await $.ajax({
+
+    async function loadOffers(offerFilter){
+        Circle.circlesArray = [];
+        await offersAjax(offerFilter);
+        loadMap(offerFilter.getSubCircle());
+    }
+
+    async function main() {
+        await getCurrencies();
+        await getCountries();
+        loadMap();
+    }
+
+    //ajax api's
+    function getCurrencies() { // get currency name and value
+        return  $.ajax({
             url: "/api/getCurrency",
             type: "GET",
             success: function(response) {
@@ -360,8 +379,8 @@
                 }
             });
     }
-    function getCities(countryId) { //get selected country cities
-        return $.ajax({
+    async function getCities(countryId) { //get selected country cities
+        return await $.ajax({
             url: "/getCities",
             type: "GET",
             data: {
@@ -378,18 +397,10 @@
     }
     //ajax api's end
 
-    function changeCurrency(price, offerCurrency, exchangeCurrency) {
-        return (price * offerCurrency) / exchangeCurrency;
-    }
-
-    let subCircle = document.querySelector("#subCircle");
-    subCircle.addEventListener('change', function() { //control subcircle filter checkbox
-        Filter.updateFilter();
-    });
-
-    let currencyValue = document.querySelector('#currencies');
-    currencyValue.addEventListener('change', (event) => { //control display currency filter
-        Filter.updateFilter();
+    let searchButton = document.querySelector("#searchButton");
+    searchButton.addEventListener('click', function() { //control subcircle filter checkbox
+        let offerFilter = new OfferFilter();
+        loadOffers(offerFilter);
     });
 
     let showCountries = document.getElementById("showCountries");
@@ -398,23 +409,6 @@
         document.getElementById("showCities").disabled = false;
         getCities(countryId);
     });
-
-    let showCities = document.getElementById("showCities");
-    showCities.addEventListener('change', (event) => { //control cities filter
-        main();
-    });
-
-    async function main(){
-        Circle.circlesArray = [];
-        let cityId = $("#showCities").val();
-        await getCurrencies();
-        await getCountries();
-        await getOffers(cityId);
-
-        let subCircleFilterValue = Filter.getSubCircleFilterValue();
-        let currencyFilterValue = Filter.getCurrencyFilterValue();
-        loadMap(subCircleFilterValue, currencyFilterValue);
-    }
 
 </script>
 

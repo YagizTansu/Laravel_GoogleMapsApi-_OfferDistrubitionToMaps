@@ -16,8 +16,7 @@ class OfferController extends Controller
         return view('offers');
     }
 
-    public function getOffers(Request $request)
-    {
+    public function getOffers(Request $request){
         $priceMax = Offer::max('price');
         $priceMin = Offer::min('price');
         $currency = Currency::get();
@@ -66,8 +65,7 @@ class OfferController extends Controller
         return view('offer_detail', compact('offer'));
     }
 
-    public function offerAddManully(Request $request)
-    {
+    public function offerAddManully(Request $request){
         $offer = new Offer;
         $offer->city_id = $request->city_id;
         $offer->company_id = Auth::user()->company_id;
@@ -88,4 +86,48 @@ class OfferController extends Controller
         return $offers;
     }
 
+
+
+    public function offerAjax(Request $request){
+        //request
+        $cityId = $request->cityId;
+        $currencyId = $request->currencyId;
+
+        //price min max for circle color
+        $priceMax = Offer::where('city_id', '=',$cityId)->max('price');
+        $priceMin = Offer::where('city_id', '=',$cityId)->min('price');
+        $currencySymbol = Currency::where('id',$currencyId)->value('symbol');
+
+        //for display currency filter
+        $currencySellingValue = CurrencyExchangeRate::orderBy('date','desc')->take(3)->get();
+
+        foreach ($currencySellingValue as $key) {
+            if ($key->currency_id == $currencyId) {
+                $exchangeSellingValue = $key->selling;
+            }
+        }
+
+        //offers
+        $offers = Offer::where('city_id', '=',$cityId)->with('company','currency','currency.currencyExchangeRates')->get();
+
+        //add new attribute desired_price
+        $offerAddedAttributes = $offers->map(function ($item, $key) use ($currencyId,$exchangeSellingValue,$currencySellingValue,$currencySymbol) {
+
+            foreach ($currencySellingValue as $key) {
+                if ($key->currency_id == $item->currency_id) {
+                    $sellingValue = $key->selling;
+                }
+            }
+
+            $item['desired_price'] = (($item->price)*$sellingValue)/$exchangeSellingValue;
+            $item['desired_currencyId'] = $currencyId;
+            $item['desired_currency_symbol'] = $currencySymbol;
+
+            return $item;
+        });
+
+        $payLoad = ['offers' => $offerAddedAttributes, 'priceMax' => $priceMax, 'priceMin' => $priceMin];
+        return $payLoad;
+
+    }
 }
