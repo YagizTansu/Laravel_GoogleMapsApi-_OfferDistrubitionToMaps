@@ -38,7 +38,13 @@ document.getElementById("addCirleMode").addEventListener("click", function() {
 });
 
 function AddCircleMode() {
-    var map = Create.createMap(map);
+    var map = new google.maps.Map(document.getElementById("map"), {
+        center: {
+            lat: 47.5162,
+            lng: 14.5501
+        },
+        zoom: 4.8,
+    });
 
     const myLatlng = {
         lat: 47.5162,
