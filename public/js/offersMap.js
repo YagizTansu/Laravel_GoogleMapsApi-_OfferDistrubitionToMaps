@@ -341,13 +341,15 @@ async function getCities(countryId) { //get selected country cities
 }
 //ajax api's end
 
-//event Listener -> search button and country input
+//event Listener -> search button
 let searchButton = document.querySelector("#searchButton");
 searchButton.addEventListener('click', function() { //control subcircle filter checkbox
     let offerFilter = new OfferFilter();
     loadOffers(offerFilter);
 });
 
+
+//event Listener ->country input
 let showCountries = document.getElementById("showCountries");
 showCountries.addEventListener('change', (event) => { //control country filter
     let countryId = $("#showCountries").val();
