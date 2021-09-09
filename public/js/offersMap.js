@@ -290,7 +290,7 @@ async function loadOffers(offerFilter){ // running after click search button
 async function main() { // first running function when google maps api initialize
     await getCurrencies();
     await getCountries();
-    loadMap();
+    loadMap(false);
 }
 
 //ajax api's
