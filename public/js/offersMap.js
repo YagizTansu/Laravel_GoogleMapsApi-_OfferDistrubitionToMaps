@@ -266,9 +266,6 @@ function offersAjax(offerFilter) { // apis get offer related choosen cityId
         },
         success: function(response) {
             response['offers'].forEach(offer => {
-                //let infoWindowString = InfoWindow.createContentString(offer,response['symbol']);
-                //alert(infoWindowString);
-
                 let point =new Point(parseFloat(offer.latitude),parseFloat(offer.longitude));
                 let circle = new Circle(point,parseFloat(offer.radius),ColorMap.priceToColor(response['priceMin'],response['priceMax'],offer.price),0.30,offer);
             });
