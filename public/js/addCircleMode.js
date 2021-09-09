@@ -1,5 +1,5 @@
-function getCurrency() {
-    return $.ajax({
+async function getCurrency() {
+    return  await $.ajax({
         url: "/api/getCurrency",
         type: "GET",
         success: function(response) {
@@ -38,35 +38,28 @@ document.getElementById("addCirleMode").addEventListener("click", function() {
 });
 
 function AddCircleMode() {
-    var map = new google.maps.Map(document.getElementById("map"), {
-        center: {
-            lat: 47.5162,
-            lng: 14.5501
-        },
+    let mapLatlng = new Point(47.5162,14.5501);
+    let map = new google.maps.Map(document.getElementById("map"), {
+        center: mapLatlng,
         zoom: 4.8,
     });
-
-    const myLatlng = {
-        lat: 47.5162,
-        lng: 14.5501
-    };
 
     // Create the initial InfoWindow.
     let infoWindow = new google.maps.InfoWindow({
         content: "<h5>1. Please click map to add new offer region </h4>" + "<h5>2. Fill your offer information correctly</h5> ",
-        position: myLatlng,
+        position: mapLatlng,
     });
     infoWindow.open(map);
 
 
-    var clicked = 0;
-    var cityCircle;
+    let clicked = 0;
+    let cityCircle;
     // Configure the click listener.
     map.addListener("click", (event) => {
         clicked++;
 
         if (clicked == 1) {
-            //create cirle on map with click event
+            //create cirle on map with click event for new offer
             cityCircle = new google.maps.Circle({
                 strokeColor: "#FF0000",
                 strokeOpacity: 0.8,
@@ -80,17 +73,12 @@ function AddCircleMode() {
             });
 
             //control circle radius with mouse event
-            var firstX = 0;
-            var firstY = 0;
             google.maps.event.addListener(map, "mousemove", function(event) {
                 if (clicked == 1) {
-                    if (firstX == 0) {
-                        firstX = event.domEvent.clientX;
-                        firstY = event.domEvent.clientY;
-                    }
-                    cityCircle.set('radius', (firstX * 100) + ((event.domEvent.clientX) * 1000) - ((event.domEvent.clientY - firstY) * 1000));
+                    cityCircle.set('radius',((event.domEvent.clientX-10) * 1000) - ((event.domEvent.clientY - 10) * 1000));
                 }
             });
+
         }
 
         if (clicked != 1) {
@@ -104,50 +92,54 @@ function AddCircleMode() {
                 document.getElementById("showCities").disabled = false;
                 getCities(country_id);
             });
+
             document.getElementById("saveCircleButton").addEventListener("click", function() {
-
-                let city_id = $("#showCities").val();
-                let currencyId = $("#currency_id").val();
-                let offerPrice = $("#offerPrice").val();
-
-                $.ajax({
-                    url: "/addOffer",
-                    type: "GET",
-                    data: {
-                        currencyId :currencyId,
-                        offerPrice: offerPrice,
-                        cityId: city_id,
-                        radius: cityCircle.getRadius(),
-                        latitude: cityCircle.getCenter().lat(),
-                        longitude: cityCircle.getCenter().lng()
-                    },
-                    success: function(response) {
-                        swal("Offer added succesfully!","","success",
-                        {
-                           buttons: {
-                             stay: "Stay",
-                             turn: "Turn to Offer Page",
-                           },
-                         })
-                         .then((value) => {
-                           switch (value) {
-
-                             case "stay":
-                               window.location.href = "#";
-                               break;
-
-                             case "turn":
-                               window.location.href = "http://localhost:8000/offers";
-                               break;
-                           }
-                       });
-                    },
-                    error: function () {
-                        swal("Something wrong", "please check offer info!", "error")
-                    }
-                });
+                addOffer(cityCircle);
                 clicked = 0;
             });
         }
     });
 }
+
+function addOffer(cityCircle){
+    let city_id = $("#showCities").val();
+    let currencyId = $("#currency_id").val();
+    let offerPrice = $("#offerPrice").val();
+
+    $.ajax({
+        url: "/addOffer",
+        type: "GET",
+        data: {
+            currencyId :currencyId,
+            offerPrice: offerPrice,
+            cityId: city_id,
+            radius: cityCircle.getRadius(),
+            latitude: cityCircle.getCenter().lat(),
+            longitude: cityCircle.getCenter().lng()
+        },
+        success: function(response) {
+            swal("Offer added succesfully!","","success",{
+               buttons: {
+                 stay: "Stay",
+                 turn: "Turn to Offer Page",
+               },
+             }).then((value) => {
+               switch (value) {
+
+                 case "stay":
+                   window.location.href = "#";
+                   break;
+
+                 case "turn":
+                   window.location.href = "http://localhost:8000/offers";
+                   break;
+               }
+           });
+        },
+        error: function () {
+            swal("Something wrong", "please check offer info!", "error")
+        }
+    });
+}
+
+

@@ -265,7 +265,6 @@ function offersAjax(offerFilter) { // apis get offer related choosen cityId
             currencyId:currencyId
         },
         success: function(response) {
-            debugger
             response['offers'].forEach(offer => {
                 //let infoWindowString = InfoWindow.createContentString(offer,response['symbol']);
                 //alert(infoWindowString);
@@ -273,6 +272,9 @@ function offersAjax(offerFilter) { // apis get offer related choosen cityId
                 let point =new Point(parseFloat(offer.latitude),parseFloat(offer.longitude));
                 let circle = new Circle(point,parseFloat(offer.radius),ColorMap.priceToColor(response['priceMin'],response['priceMax'],offer.price),0.30,offer);
             });
+        },
+        error: function() {
+            swal("Oops", "Unexpected user action!", "error");
         }
     });
 }
@@ -289,7 +291,6 @@ async function loadOffers(offerFilter){ // running after click search button
 }
 
 async function main() { // first running function when google maps api initialize
-
     await getCurrencies();
     await getCountries();
     loadMap();
@@ -340,7 +341,7 @@ async function getCities(countryId) { //get selected country cities
 }
 //ajax api's end
 
-//event Listener search button and country input
+//event Listener -> search button and country input
 let searchButton = document.querySelector("#searchButton");
 searchButton.addEventListener('click', function() { //control subcircle filter checkbox
     let offerFilter = new OfferFilter();
