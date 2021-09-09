@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group( ['middleware' => ['CheckUserApiToken']], function () {
     Route::get('/createApiToken', [UserController::class, 'createApiToken']);
 
-    // important apis
+    // get offfers
     Route::get('/offerAjax', [OfferController::class, 'offerAjax'])->name('offerAjax');
 
 });
@@ -33,5 +33,4 @@ Route::group( ['middleware' => ['CheckUserApiToken']], function () {
 Route::get('/getCurrency', [CurrencyController::class, 'getCurrency']);
 Route::get('/getCities', [CountryController::class, 'getCities'])->name('getCities');
 Route::get('/getCountries', [CountryController::class, 'getCountries'])->name('getCountries');
-
 

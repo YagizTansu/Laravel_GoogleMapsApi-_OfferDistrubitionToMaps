@@ -19,7 +19,7 @@
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
 
-    <title>Create</title>
+    <title>Offers</title>
 </head>
 
 <body>
@@ -40,30 +40,30 @@
                     </div>
                 </div>
                 <br>
-            <div id="filterCard" class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Filters</h5>
-                    <hr>
-                    <input class="form-check-input" type="checkbox" value="" id="subCircle">
-                    <label class="form-check-label" for="flexCheckDefault">Show subcircle</label>
-                    <br><br>
-                    <label>Display Currency</label>
-                    <select id="currencies" class="form-select form-select-sm"
-                        aria-label=".form-select-sm example">
-                    </select>
-                    <br>
-                    <label>Country</label>
-                    <select id="showCountries" class="form-select form-select-sm"aria-label=".form-select-sm example">
-                        <option value=''>Select Country</option>
-                    </select>
-                    <br>
-                    <label>City</label>
-                    <select id="showCities" class="form-select form-select-sm" aria-label=".form-select-sm example"
-                        disabled>
-                    </select>
+                <div id="filterCard" class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filters</h5>
+                        <hr>
+                        <input class="form-check-input" type="checkbox" value="" id="subCircle">
+                        <label class="form-check-label" for="flexCheckDefault">Show subcircle</label>
+                        <br><br>
+                        <label>Display Currency</label>
+                        <select id="currencies" class="form-select form-select-sm"
+                            aria-label=".form-select-sm example">
+                        </select>
+                        <br>
+                        <label>Country</label>
+                        <select id="showCountries" class="form-select form-select-sm"aria-label=".form-select-sm example">
+                            <option value=''>Select Country</option>
+                        </select>
+                        <br>
+                        <label>City</label>
+                        <select id="showCities" class="form-select form-select-sm" aria-label=".form-select-sm example"
+                            disabled>
+                        </select>
 
-                    <p class="text-center"><button id="searchButton" class="btn btn-primary mt-2">Search</button></p>
-
+                        <p class="text-center"><button id="searchButton" class="btn btn-primary mt-2">Search</button></p>
+                    </div>
                 </div>
             </div>
         </div>

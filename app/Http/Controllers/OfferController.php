@@ -89,28 +89,25 @@ class OfferController extends Controller
         $currencySymbol = Currency::where('id',$currencyId)->value('symbol');
 
         //for display currency filter
-        $currencySellingValue = CurrencyExchangeRate::orderBy('date','desc')->take(3)->get();
-
-        foreach ($currencySellingValue as $key) {
-            if ($key->currency_id == $currencyId) {
-                $exchangeSellingValue = $key->selling;
-            }
-        }
+        $currencySellingValue = CurrencyExchangeRate::orderBy('date','desc')->limit(3)->get();
+        //$deneme = CurrencyExchangeRate::groupBy('currency_id');
 
         //offers
         $offers = Offer::where('city_id', '=',$cityId)->with('company','currency','currency.currencyExchangeRates')->get();
 
         //add new attribute desired_price
-        $offerAddedAttributes = $offers->map(function ($item, $key) use ($currencyId,$exchangeSellingValue,$currencySellingValue,$currencySymbol) {
+        $offerAddedAttributes = $offers->map(function ($item) use ($currencyId,$currencySellingValue,$currencySymbol) {
 
             foreach ($currencySellingValue as $key) {
+                if ($key->currency_id == $currencyId) {
+                    $exchangeSellingValue = $key->selling;
+                }
                 if ($key->currency_id == $item->currency_id) {
                     $sellingValue = $key->selling;
                 }
             }
 
             $item['desired_price'] = (($item->price)*$sellingValue)/$exchangeSellingValue;
-            $item['desired_currencyId'] = $currencyId;
             $item['desired_currency_symbol'] = $currencySymbol;
 
             return $item;
@@ -118,6 +115,5 @@ class OfferController extends Controller
 
         $payLoad = ['offers' => $offerAddedAttributes, 'priceMax' => $priceMax, 'priceMin' => $priceMin];
         return $payLoad;
-
     }
 }

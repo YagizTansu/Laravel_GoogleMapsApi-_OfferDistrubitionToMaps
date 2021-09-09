@@ -1,33 +1,33 @@
 
 class OfferFilter{
-    #subCircle = null;
-    #currency_id = null;
-    #city_id = null;
+    _subCircle = null;
+    _currency_id = null;
+    _city_id = null;
 
     constructor() {
-        this.#subCircle = this.#getSubCircleFilter();
-        this.#currency_id = this.#getCurrencyFilter();
-        this.#city_id = this.#getCityFilter();
+        this._subCircle = this._getSubCircleFilter();
+        this._currency_id = this._getCurrencyFilter();
+        this._city_id = this._getCityFilter();
     }
 
-    #getSubCircleFilter(){
+    _getSubCircleFilter(){
         return document.getElementById("subCircle").checked;
     }
-    #getCurrencyFilter(){
+    _getCurrencyFilter(){
         return $("#currencies").val();
     }
-    #getCityFilter(){
+    _getCityFilter(){
         return $("#showCities").val();
     }
 
     getSubCircle(){
-        return this.#subCircle;
+        return this._subCircle;
     }
     getCurrencyId(){
-        return this.#currency_id;
+        return this._currency_id;
     }
     getcityId(){
-        return this.#city_id;
+        return this._city_id;
     }
 
 
@@ -172,12 +172,12 @@ class Point{
 }
 
 class ColorMap {
-    static mapping(price, price_min, price_max) {
+    static _mapping(price, price_min, price_max) {
         return (price - price_min) *100 / (price_max - price_min);
     }
 
     static priceToColor(min, max, price) {
-        let mapped = ColorMap.mapping(price, min, max);
+        let mapped = ColorMap._mapping(price, min, max);
         let r, g, b = 0;
         if (mapped < 50) {
             g = 255;
@@ -227,6 +227,7 @@ function loadMap(subCircleFilterValue) {
         zoom: 4.8,
     });
 
+    //control circle has subcircles then write subcircle id to hasMultiCirle array
     Circle.circlesArray.forEach(circle1 => {
         Circle.circlesArray.forEach(circle2 => {
             let point2 =new Point(parseFloat(circle2.getLat()),parseFloat(circle2.getLng()));
@@ -236,6 +237,7 @@ function loadMap(subCircleFilterValue) {
         });
     });
 
+    //check subcircle filter if true put all circles else put circles without subcirles
     if (subCircleFilterValue) {
         Circle.circlesArray.forEach(circle => {
             circle.createCircleOnMap(map);
@@ -251,7 +253,7 @@ function loadMap(subCircleFilterValue) {
     }
 }
 
-function offersAjax(offerFilter) {
+function offersAjax(offerFilter) { // apis get offer related choosen cityId
     let cityId = offerFilter.getcityId();
     let currencyId = offerFilter.getCurrencyId();
 
@@ -263,7 +265,7 @@ function offersAjax(offerFilter) {
             currencyId:currencyId
         },
         success: function(response) {
-
+            debugger
             response['offers'].forEach(offer => {
                 //let infoWindowString = InfoWindow.createContentString(offer,response['symbol']);
                 //alert(infoWindowString);
@@ -275,7 +277,7 @@ function offersAjax(offerFilter) {
     });
 }
 
-async function loadOffers(offerFilter){
+async function loadOffers(offerFilter){ // running after click search button
     let api_token = document.getElementById("api-token").getAttribute('content');
     $.ajaxSetup({
         headers: {"api-token":api_token}
@@ -286,11 +288,7 @@ async function loadOffers(offerFilter){
     loadMap(offerFilter.getSubCircle());
 }
 
-async function main() {
-    let api_token = document.getElementById("api-token").getAttribute('content');
-    $.ajaxSetup({
-        headers: {"api-token":api_token}
-    });
+async function main() { // first running function when google maps api initialize
 
     await getCurrencies();
     await getCountries();
@@ -342,6 +340,7 @@ async function getCities(countryId) { //get selected country cities
 }
 //ajax api's end
 
+//event Listener search button and country input
 let searchButton = document.querySelector("#searchButton");
 searchButton.addEventListener('click', function() { //control subcircle filter checkbox
     let offerFilter = new OfferFilter();
