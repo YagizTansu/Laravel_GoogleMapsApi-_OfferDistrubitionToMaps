@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\adminController;
 
@@ -26,8 +25,4 @@ Route::get('try', function () {
     return view('try');
 });
 
-//try
-Route::get('/control', function () {
-    return view('control');
-});
 
