@@ -241,13 +241,13 @@ function loadMap(subCircleFilterValue) {
     if (subCircleFilterValue) {
         Circle.circlesArray.forEach(circle => {
             circle.createCircleOnMap(map);
-            circle.createMarkerOnMap(map,"offer");
+            circle.createMarkerOnMap(map);
         });
     }else{
         Circle.circlesArray.forEach(circle => {
             if (!hasMultiCircles.includes(circle.id)) {
                 circle.createCircleOnMap(map);
-                circle.createMarkerOnMap(map,"offer");
+                circle.createMarkerOnMap(map);
             }
         });
     }
